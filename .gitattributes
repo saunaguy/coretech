@@ -1,0 +1,3 @@
+logs/*.jsonl merge=union
+logs/**/*.jsonl merge=union
+
