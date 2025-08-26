@@ -1,0 +1,1 @@
+{"id": "d95e9390-1f05-4a4f-8459-01bc2cac05c4", "ts": 1756171016, "agent": "gpt", "role": "assistant", "content": "README 충돌 해결, 백엔드/프론트 최소 스캐폴딩, 포매터/린트/CI 추가 및 .env.example 확장 완료", "tags": ["setup", "readme", "backend", "frontend", "ci", "env"]}
