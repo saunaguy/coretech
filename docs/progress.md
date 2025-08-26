@@ -16,7 +16,9 @@
 | 2025-08-26 | CI 워크플로 추가 | GPT | CI | 완료 | `.github/workflows/ci.yml` | Python/Node 린트+빌드+테스트 |
 | 2025-08-26 | 환경 변수 예시 확장 | GPT | 설정 | 완료 | `.env.example` | `BACKEND_PORT`, `FRONTEND_PORT` 추가 |
 | 2025-08-26 | 협업 노트 생성 | GPT | 문서 | 완료 | `AI_NOTES_GPT.md` | 스냅샷/다음 단계 기록 |
+| 2025-08-26 | ESLint v9 flat config 도입 | GPT | 품질 | 완료 | `eslint.config.js` | Node 린트 CI 통과 |
+| 2025-08-26 | Vite 설정/플러그인 보완 | GPT | 프론트 | 완료 | `vite.config.js`, `package.json` | 빌드/프리뷰 OK |
+| 2025-08-26 | CORS 허용(5173) | GPT | 백엔드 | 완료 | `src/backend/app/main.py` | 프론트→API 호출 허용 |
 
 ---
 문서 위치: `docs/progress.md`
-
