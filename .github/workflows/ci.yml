@@ -35,11 +35,14 @@ jobs:
           cache: 'npm'
       - name: Install deps
         run: |
-          npm ci || true # allow no-lock / skeleton
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
       - name: Lint
         run: |
           npx eslint --version || true
           npm run lint --if-present
       - name: Build
         run: npm run build --if-present
-

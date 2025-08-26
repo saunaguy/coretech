@@ -3,7 +3,7 @@ import argparse
 import glob
 import json
 import os
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 
 def load_lines(paths: List[str]) -> List[Dict[str, Any]]:
@@ -27,7 +27,9 @@ def load_lines(paths: List[str]) -> List[Dict[str, Any]]:
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Aggregate and sort logs by ts across agents and rooms")
+    ap = argparse.ArgumentParser(
+        description="Aggregate and sort logs by ts across agents and rooms"
+    )
     ap.add_argument("--date", required=True, help="YYYY-MM-DD")
     ap.add_argument("--room", default=None, help="specific room (without 'room-' prefix)")
     ap.add_argument("--out", default=None, help="optional output file; prints to stdout if omitted")
@@ -60,4 +62,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -40,4 +40,3 @@ def get_question(qid: int) -> Question:
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
     return q
-

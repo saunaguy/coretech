@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 import argparse
-import json
 import os
 import re
 import shlex
 import subprocess
 import sys
 from pathlib import Path
-
 
 ALLOWED_TYPES = (
     "feat",
@@ -53,7 +51,8 @@ def run_cmd(cmd: str) -> subprocess.CompletedProcess:
 def ensure_commit_policy(message: str):
     if not COMMIT_RE.match(message or ""):
         raise ValueError(
-            "Commit message must follow Conventional Commits and include [GPT]|[Gemini]|[Human] prefix"
+            "Commit message must follow Conventional Commits and include "
+            "[GPT]|[Gemini]|[Human] prefix"
         )
 
 
@@ -103,7 +102,13 @@ def tool_append_log(agent: str, role: str, content: str, tags=None, room: str | 
         cmd += ["--tags", *tags]
     if room:
         cmd += ["--room", room]
-    res = subprocess.run(cmd, cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    res = subprocess.run(
+        cmd,
+        cwd=str(ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
     return {"ok": res.returncode == 0, "stdout": res.stdout, "stderr": res.stderr}
 
 
@@ -117,7 +122,13 @@ def tool_aggregate_logs(date: str, room: str | None = None, out: str | None = No
         if ROOT not in out_path.parents and out_path != ROOT:
             return {"ok": False, "stderr": "out path must be inside repo"}
         cmd += ["--out", str(out_path)]
-    res = subprocess.run(cmd, cwd=str(ROOT), stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    res = subprocess.run(
+        cmd,
+        cwd=str(ROOT),
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
     return {"ok": res.returncode == 0, "stdout": res.stdout, "stderr": res.stderr}
 
 
@@ -126,7 +137,10 @@ def serve_mcp():
         from mcp.server import Server
         from mcp.server.stdio import stdio_server
     except Exception as e:
-        print("MCP package missing. Install with: pip install -r scripts/mcp/requirements.txt", file=sys.stderr)
+        print(
+            "MCP package missing. Install with: pip install -r scripts/mcp/requirements.txt",
+            file=sys.stderr,
+        )
         print(f"Import error: {e}", file=sys.stderr)
         sys.exit(1)
 
@@ -151,7 +165,13 @@ def serve_mcp():
         return tool_git_add_commit_push(message, remote, branch)
 
     @server.tool()
-    def append_log(agent: str, role: str, content: str, tags: list[str] | None = None, room: str | None = None) -> dict:
+    def append_log(
+        agent: str,
+        role: str,
+        content: str,
+        tags: list[str] | None = None,
+        room: str | None = None,
+    ) -> dict:
         """Append a log line (per-agent-per-day, optional room)."""
         return tool_append_log(agent, role, content, tags, room)
 
@@ -208,7 +228,10 @@ def main():
             p = par.parse_args(rest)
             print(tool_aggregate_logs(p.date, p.room, p.out))
         else:
-            print("Unknown CLI tool. Use one of: git_status, git_pull_rebase, git_add_commit_push, append_log, aggregate_logs")
+            print(
+                "Unknown CLI tool. Use one of: "
+                "git_status, git_pull_rebase, git_add_commit_push, append_log, aggregate_logs"
+            )
         return
 
     print("Unknown mode; use 'serve' or 'cli'", file=sys.stderr)
@@ -217,4 +240,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

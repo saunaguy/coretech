@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+
 from .api.v1 import api_v1
 
 app = FastAPI(title="CoreTech API", version="0.1.0")

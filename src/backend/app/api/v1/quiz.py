@@ -27,8 +27,18 @@ router = APIRouter()
 @router.get("/sample", response_model=List[QuizQuestion])
 def get_sample_quiz() -> List[QuizQuestion]:
     return [
-        QuizQuestion(id="q1", prompt="리눅스에서 루트 디렉터리는?", options=["/root", "/", "/home"], answer_index=1),
-        QuizQuestion(id="q2", prompt="Docker 이미지 빌드 명령은?", options=["docker run", "docker build", "docker ps"], answer_index=1),
+        QuizQuestion(
+            id="q1",
+            prompt="리눅스에서 루트 디렉터리는?",
+            options=["/root", "/", "/home"],
+            answer_index=1,
+        ),
+        QuizQuestion(
+            id="q2",
+            prompt="Docker 이미지 빌드 명령은?",
+            options=["docker run", "docker build", "docker ps"],
+            answer_index=1,
+        ),
     ]
 
 
@@ -44,4 +54,3 @@ def submit_quiz(payload: QuizSubmission) -> QuizResult:
         if ok:
             correct += 1
     return QuizResult(total=len(answer_key), correct=correct, detail=detail)
-

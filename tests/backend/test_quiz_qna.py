@@ -1,14 +1,5 @@
-import os
-import sys
-
-CURRENT_DIR = os.path.dirname(__file__)
-BACKEND_SRC = os.path.abspath(os.path.join(CURRENT_DIR, "..", "..", "src", "backend"))
-if BACKEND_SRC not in sys.path:
-    sys.path.insert(0, BACKEND_SRC)
-
-from fastapi.testclient import TestClient  # type: ignore
 from app.main import app
-
+from fastapi.testclient import TestClient  # type: ignore
 
 client = TestClient(app)
 
@@ -42,4 +33,3 @@ def test_qna_crud_minimal():
     r_get = client.get(f"/api/v1/qna/questions/{qid}")
     assert r_get.status_code == 200
     assert r_get.json()["title"] == "SSH 포트 변경"
-
