@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "coretech-git": {
+      "command": "python",
+      "args": ["scripts/mcp/server.py", "serve"],
+      "cwd": "C:/Users/user/coretech",
+      "env": {
+        "MCP_ROOT": "C:/Users/user/coretech",
+        "MCP_ALLOW": "git,logs"
+      }
+    }
+  }
+}
+
