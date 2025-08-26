@@ -11,12 +11,14 @@ export default [
       ecmaVersion: 2021,
       sourceType: 'module',
       globals: { ...globals.browser, ...globals.es2021 },
+      parserOptions: { ecmaFeatures: { jsx: true } },
     },
     plugins: { react },
     rules: {
       'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'warn',
+      'react/jsx-uses-vars': 'warn',
     },
     settings: { react: { version: 'detect' } },
   },
 ];
-

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import Quiz from "./Quiz.jsx";
 import QnA from "./QnA.jsx";
