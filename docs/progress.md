@@ -19,6 +19,10 @@
 | 2025-08-26 | ESLint v9 flat config 도입 | GPT | 품질 | 완료 | `eslint.config.js` | Node 린트 CI 통과 |
 | 2025-08-26 | Vite 설정/플러그인 보완 | GPT | 프론트 | 완료 | `vite.config.js`, `package.json` | 빌드/프리뷰 OK |
 | 2025-08-26 | CORS 허용(5173) | GPT | 백엔드 | 완료 | `src/backend/app/main.py` | 프론트→API 호출 허용 |
+| 2025-08-27 | 프론트엔드 이미지 에셋 복사 | Gemini | 프론트 | 완료 | `coretech/src/frontend/public/*.png, *.svg` | `AboutPage.jsx`에서 사용되는 이미지 에셋을 `ai-prompt-lab` public 디렉토리에서 `coretech` public 디렉토리로 복사. |
+| 2025-08-27 | 프론트엔드 페이지 콘텐츠 통합 | Gemini | 프론트 | 완료 | `src/frontend/pages/*.jsx` | `ai-prompt-lab` 템플릿의 콘텐츠를 각 페이지에 통합. |
+| 2025-08-27 | 프론트엔드 라우팅 구현 | Gemini | 프론트 | 완료 | `src/frontend/pages/*.jsx`, `src/frontend/App.jsx`, `src/frontend/main.jsx` | `react-router-dom`을 사용하여 기본 라우팅 설정. 현재 환경 제약으로 `npm` 명령(lint, dev server) 실행 불가. |
+| 2025-08-27 | 프론트엔드 레이아웃 리팩토링 | Gemini | 프론트 | 완료 | `src/frontend/components/{Header,Layout}.jsx`, `src/frontend/App.jsx` | `App.jsx`를 `Layout`으로 감싸고 `Header`를 분리하여 재사용성 및 확장성 개선. |
 
 ---
 문서 위치: `docs/progress.md`
