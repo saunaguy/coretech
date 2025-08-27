@@ -56,3 +56,5 @@
 ## 📄 문서 링크
 - 요구사항 분석표: `docs/requirements.md`
 - 진행상황 기록: `docs/progress.md`
+- 고도화 전략(로드맵): `docs/roadmap.md`
+- TODO 체크리스트: `docs/todos.md`
