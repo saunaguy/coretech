@@ -22,3 +22,17 @@
 
 ---
 문서 위치: `docs/progress.md`
+
+
+## 2025-08-27 — 프론트 최소 구성 적용
+- 홈 화면과 Linux 정보 페이지로 단순화.
+- `Linux.jsx` 추가, `main.jsx`에서 기본 탭을 `home`으로 설정하고 다른 기능(Quiz/Q&A) 주석 처리.
+- `index.html` 타이틀을 "CoreTech — Linux 학습"으로 변경.
+- 목적: MVP 확인을 위한 최소 라우팅(클릭으로 Linux 진입) 준비.
+
+
+## 2025-08-27 — 학습자료(lessons) 추가
+- `pdf/` 내 왕초보/초급/중급/고급 디렉토리의 MD를 lessons로 복사.
+- 경로: `src/frontend/public/content/lessons/{absolute-beginner,beginner,intermediate,advanced}`
+- `pdf/plan.md`를 `public/content/lessons/plan.md`로 배치, `index.json` 매니페스트 추가.
+- 디렉토리명은 ASCII 슬러그를 사용(한글 파일명은 유지). URL/호환성 안정성 확보 목적.

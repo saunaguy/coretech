@@ -87,4 +87,5 @@
 
 ---
 문서 위치: `docs/requirements.md`
+<!-- INACTIVE for MVP: 본 문서는 향후 단계에서 재검토/적용 예정입니다. 현재 범위: 홈 → Linux 페이지 최소 기능. -->
 

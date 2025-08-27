@@ -34,4 +34,5 @@
 
 ---
 문서 위치: `docs/todos.md`
+<!-- INACTIVE for MVP: 현재 린(lean) 범위에서 제외. 필요 시 복구하여 사용합니다. -->
 
