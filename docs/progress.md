@@ -23,7 +23,20 @@
 | 2025-08-27 | 프론트엔드 페이지 콘텐츠 통합 | Gemini | 프론트 | 완료 | `src/frontend/pages/*.jsx` | `ai-prompt-lab` 템플릿의 콘텐츠를 각 페이지에 통합. |
 | 2025-08-27 | 프론트엔드 라우팅 구현 | Gemini | 프론트 | 완료 | `src/frontend/pages/*.jsx`, `src/frontend/App.jsx`, `src/frontend/main.jsx` | `react-router-dom`을 사용하여 기본 라우팅 설정. 현재 환경 제약으로 `npm` 명령(lint, dev server) 실행 불가. |
 | 2025-08-27 | 프론트엔드 레이아웃 리팩토링 | Gemini | 프론트 | 완료 | `src/frontend/components/{Header,Layout}.jsx`, `src/frontend/App.jsx` | `App.jsx`를 `Layout`으로 감싸고 `Header`를 분리하여 재사용성 및 확장성 개선. |
-
+| 2025-08-28 | 프론트 전환: Next.js(ai-prompt-lab) 루트 포팅 | GPT | 프론트 | 완료 | `app/`, `components/`, `lib/`, `next.config.mjs`, `tsconfig.json` | 디자인 토큰/컴포넌트(Button/Card/Textarea) 이식, 홈/리눅스 라우트 추가 |
+| 2025-08-28 | Vite 정리 및 스크립트/CI 업데이트 | GPT | CI/문서 | 완료 | `package.json`, `.github/workflows/ci.yml`, `README.md` | 루트 스크립트(next dev/build/start)로 변경, Node CI 루트 기준 빌드 |
+| 2025-08-28 | ai-prompt-lab 유지(참조) 및 콘텐츠 이전 계획 | GPT | 문서 | 진행 | `docs/roadmap.md`, `docs/todos.md` | 콘텐츠 표준화(content/) 및 Markdown 렌더링 차기 작업 |
+| 2025-08-28 | 강의자료 동기화 스크립트 추가 및 레슨 라우트 | GPT | 프론트/콘텐츠 | 완료 | `scripts/sync_lessons.mjs`, `app/lessons/**` | `npm run content:sync`로 `content/lessons` 복사, `/lessons/*` Markdown 렌더 |
+| 2025-08-28 | Linux 페이지에 강의자료 진입 동선 추가 | GPT | 프론트 | 완료 | `app/linux/page.tsx`, `app/linux/lessons/**` | 사이드바에 `/lessons`, `/lessons/plan` 버튼, `/linux/lessons/*` → `/lessons/*` 리다이렉트 |
+| 2025-08-28 | 레슨 인덱스 개선: 파일 기반 목록/링크 | GPT | 프론트/콘텐츠 | 완료 | `app/lessons/page.tsx` | `content/lessons/<group>/*.md`를 읽어 제목 생성·클릭 이동 |
+| 2025-08-28 | 그룹 인덱스/네비게이션 추가 | GPT | 프론트 | 완료 | `app/lessons/[group]/page.tsx`, `app/linux/page.tsx` | Linux → 4개 과정 카드(왕초보/초급/중급/고급), 각 그룹 목록 페이지 연결 |
+| 2025-08-28 | 레슨 뷰 개선: TOC/코드 복사 버튼 | GPT | 프론트/콘텐츠 | 완료 | `lib/markdown.ts`, `components/lesson/MarkdownArticle.tsx` | heading→목차, 코드블록 Copy 버튼(hover) 추가 |
+| 2025-08-28 | 링크/인코딩/404 보완 | GPT | 프론트 | 완료 | `app/lessons/**` | 한글 파일명 링크 `encodeURI`, notFound 경로 로깅, 그룹 표기 "왕초보 - 01 ..." |
+| 2025-08-28 | Next 15 params 비동기 대응 | GPT | 프론트 | 완료 | `app/lessons/[...slug]/page.tsx`, `app/lessons/[group]/page.tsx` | `params` await 적용 + slug `decodeURIComponent`로 파일 경로 정상화 |
+| 2025-08-28 | 공통 헤더 레이아웃 적용 | GPT | 프론트 | 완료 | `components/site/Header.tsx`, `app/layout.tsx` | 모든 페이지에서 헤더 유지, 개별 페이지 헤더 제거(home/linux) |
+| 2025-08-28 | 레슨 목록 가독성(간격) 개선 | GPT | 프론트/UI | 완료 | `app/lessons/page.tsx`, `app/lessons/[group]/page.tsx` | 항목 간 `space-y-3` 및 `py-1` 적용으로 단원별 간격 확대 |
+| 2025-08-28 | 과정 카드/본문 간격 개선 | GPT | 프론트/UI | 완료 | `app/linux/page.tsx`, `app/globals.css` | 카드 그리드 `gap-6`, 패딩 확대(`p-6`), Markdown 헤더/문단/리스트 여백 조정 |
+| 2025-08-28 | 구분선(HR) 가독성 개선 | GPT | 프론트/UI | 완료 | `app/globals.css` | Markdown `---` → `<hr>` 상·하 간격(1.25rem) 및 색상 적용 |
 ---
 문서 위치: `docs/progress.md`
 
@@ -40,3 +53,8 @@
 - 경로: `src/frontend/public/content/lessons/{absolute-beginner,beginner,intermediate,advanced}`
 - `pdf/plan.md`를 `public/content/lessons/plan.md`로 배치, `index.json` 매니페스트 추가.
 - 디렉토리명은 ASCII 슬러그를 사용(한글 파일명은 유지). URL/호환성 안정성 확보 목적.
+## 2025-08-28 — Next.js 루트 포팅 및 디자인 적용
+- 목적: ai-prompt-lab 디자인/컴포넌트를 coretech 루트에 포팅하여 단일 앱으로 실행 단순화.
+- 변경: `app/`(홈/리눅스), `components/ui`(Button/Card/Textarea), `app/globals.css`(OKLCH 토큰), `lib/utils.ts`, `next.config.mjs`, `tsconfig.json` 추가.
+- 정리: Vite 관련 설정(루트 config 및 `src/frontend` 런타임 파일) 비활성화/정리. CI는 루트에서 설치/빌드.
+- 실행: 루트에서 `npm install && npm run dev` → http://localhost:3000

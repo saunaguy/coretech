@@ -8,13 +8,14 @@
 - 실습 및 교육 자료를 한 곳에 정리하여 재사용 가능하도록 구성
 
 ## ⚙️ 기술 스택(점진 도입)
-- Frontend: React (+ Vite)
+- Frontend: Next.js (ai-prompt-lab, Tailwind v4 + shadcn/ui 스타일)
 - Backend: FastAPI (Python)
 - 데이터: SQLite → 향후 Postgres 확장
 - 협업 툴: GitHub
 
 ## 📂 Repository 구조
-- `src/frontend/`, `src/backend/` : 각 스택 코드(초기 템플릿)
+- `ai-prompt-lab/` : Next.js 프론트엔드(디자인/컴포넌트/페이지)
+- `src/backend/` : FastAPI 백엔드
 - `tests/` : `src/` 미러 구조의 테스트 폴더
 - `docs/design.md` : 설계/결정 기록
 - `logs/` : 날짜·에이전트별 대화/결정 로그(JSONL)
@@ -44,14 +45,21 @@
 3) 자주 `git pull --rebase`로 동기화(로그 충돌 최소화)
 
 ## 🧪 Stack Commands (예시)
-- Node: `npm ci` · `npm run dev` · `npm test` · `npm run build`
+- Frontend(Next.js): `npm run dev` · `npm run build` · `npm start`
+  - 루트에서 프록시 스크립트 사용: `npm run dev` → `ai-prompt-lab` 실행
+  - 또는 `cd ai-prompt-lab && npm ci && npm run dev`
 - Python: `pip install -r requirements.txt` · `uvicorn app.main:app --reload` · `pytest -q`
+
+### Content sync
+- 레슨 소스: `src/frontend/public/content/lessons` (초기 위치)
+- 표준 경로: `content/lessons` (Next.js 서버에서 읽음)
+- 동기화: `npm run content:sync`
 
 ## 🔐 Security
 - 비밀/PII는 로그와 코드에 금지. `.env`는 커밋 금지, `.env.example`만 유지.
 
 ## ✅ Next Steps
-- 프론트/백 최소 템플릿 반영, 기본 테스트/CI 구성
+- ai-prompt-lab 디자인 유지하며 콘텐츠 렌더/퀴즈/진도 기능 통합
 
 ## 📄 문서 링크
 - 요구사항 분석표: `docs/requirements.md`

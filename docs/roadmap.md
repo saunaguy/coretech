@@ -1,25 +1,43 @@
 # 고도화 전략 및 로드맵
 
-본 문서는 Linux/Network/Docker 학습 사이트의 단계별 고도화 전략을 정의합니다. Gemini가 정리 중인 노션 콘텐츠를 소스로 삼아, 프론트/백/콘텐츠/운영을 병행합니다.
+본 문서는 Linux/Network/Docker 학습 사이트의 단계별 고도화 전략을 정의합니다. 프론트엔드는 ai‑prompt‑lab(Next.js)을 주 애플리케이션으로 채택합니다.
 
 ## 원칙
 - 콘텐츠 우선: 레슨/퀴즈가 학습 흐름을 끊지 않게 단순하고 빠르게 동작
 - 점진적 설계: MVP → 개선 → 확장, 리스크 높은 실습 랩은 별도 PoC 후 도입
 - 측정 가능: 완료 기준(DoD)과 간단 지표를 각 작업에 부여
 
+## 디자인 베이스라인(ai‑prompt‑lab, Next.js)
+- 토큰: OKLCH 기반 컬러 토큰과 radius 변수 적용(`app/globals.css` 스타일 이식)
+- 컴포넌트: shadcn/ui 패턴(`cva` + `cn` 유틸)에서 필요한 최소 컴포넌트부터 포팅(Button, Card, Sidebar, Tabs 등)
+- 테마: `next-themes` 유사 다크모드 토글은 MVP에선 간소화(클래스 토글)로 대체 가능
+- 빌드: Tailwind v4 + PostCSS 설정은 Next.js 환경에 맞춰 유지
+
 ## 아키텍처 개요
-- 프론트: React + Vite, 라우팅(SPA), 마크다운 렌더, 퀴즈/Q&A UI
+- 프론트: Next.js 15 + Tailwind v4(ai‑prompt‑lab), Markdown 렌더, 퀴즈/Q&A UI
 - 백엔드: FastAPI, `/api/v1`(콘텐츠/퀴즈/Q&A/진도), SQLite(개발), Postgres(운영)
-- 콘텐츠: `content/<track>/<module>/<lesson>.md` + 메타(front‑matter)
+- 콘텐츠: `content/<track>/<module>/<lesson>.md` + front‑matter, 빌드 시/런타임 변환
 - 검색: 초기엔 클라이언트/간단 서버 검색 → 이후 색인
 
-## Phase 1 — 학습 MVP
-- UI 프레임: 헤더/사이드바/본문 레이아웃, 라우팅
-- 콘텐츠 파이프라인: Markdown → HTML(코드 하이라이트, TOC), 목차/이전·다음
-- 퀴즈: 레슨 단위 객관식/단답 제출(클라이언트 채점 또는 단순 서버 채점)
-- Q&A: 목록/생성/조회 + SQLite 영속화(간단 CRUD)
-- 검색/태그: 제목/태그/본문 검색(간단), 태그 필터
-- 진도(로컬): 완료/점수 localStorage, UI 배지
+## Phase 1 — 학습 MVP(Next.js 기반)
+- 디자인 통합(주요):
+  - 컬러/레이디우스 토큰과 base layer 이식(Tailwind 설정/글로벌 CSS 정합화)
+  - `cn` 유틸, `class-variance-authority`, `clsx`, `tailwind-merge` 도입
+  - 컴포넌트 포팅 1차: Button, Card, Sidebar, Tabs, Alert
+  - 레이아웃: Header/Sidebar/Layout 프레임 구성(홈→Linux 최소 흐름 유지)
+- 콘텐츠 파이프라인:
+  - 소스 경로 표준화: `content/<track>/<module>/<lesson>.md`를 단일 소스로 채택
+  - Markdown → HTML(코드 하이라이트, TOC), 이전/다음 네비게이션
+- 학습 기능:
+  - 퀴즈: 레슨 단위 객관식/단답(클라이언트 채점 우선)
+  - 진도: 완료/점수 `localStorage` 저장 및 UI 배지
+  - 검색/태그: 제목/태그/본문 간단 검색과 태그 필터
+
+### Phase 1 DoD
+- Next.js 앱(ai‑prompt‑lab)에서 레이아웃·토큰·핵심 컴포넌트 1차 반영
+- `content/`의 Markdown이 렌더되고 TOC/코드 하이라이트 동작
+- 레슨별 퀴즈와 로컬 진도 저장이 UI에 반영
+- 린트/포맷/테스트 통과, 간단 문서(README 실행 가이드, 디자인 통합 노트) 업데이트
 
 ## Phase 2 — 협업/운영화
 - 인증/권한: GitHub OAuth, 에디터/관리자 권한
@@ -38,5 +56,4 @@
 
 ---
 문서 위치: `docs/roadmap.md`
-<!-- INACTIVE for MVP: 본 문서는 향후 단계에서 재검토/적용 예정입니다. 현재는 최소 학습 페이지 검증에 집중합니다. -->
 
