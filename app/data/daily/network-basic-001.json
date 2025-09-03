@@ -1,0 +1,9 @@
+{
+  "title": "네트워크 — 진단/기초",
+  "category": "network",
+  "questions": [
+    { "id": "q1", "question": "ping이 사용하는 프로토콜은?", "options": ["TCP", "UDP", "ICMP", "ARP"], "answer": 2 },
+    { "id": "q2", "question": "DNS 기본 포트는?", "options": ["22", "53", "80", "443"], "answer": 1 }
+  ]
+}
+

@@ -1,38 +1,31 @@
-import { marked, Renderer } from 'marked'
+export type TocItem = { id: string; text: string; depth: number }
 
-export type TocItem = { depth: number; id: string; text: string }
-
-function slugify(text: string) {
+function slugify(text: string): string {
   return text
     .toLowerCase()
+    .replace(/[^a-z0-9\s-_]/g, "")
     .trim()
-    .replace(/[^\p{L}\p{N}\s-]/gu, '')
-    .replace(/\s+/g, '-')
+    .replace(/[\s_]+/g, "-")
 }
 
 export async function renderMarkdownWithToc(md: string): Promise<{ html: string; toc: TocItem[] }> {
+  const { marked } = await import("marked")
+  const tokens = marked.lexer(md)
   const toc: TocItem[] = []
-  const renderer = new Renderer()
-
-  renderer.heading = (text: string, level: number) => {
-    const id = slugify(text)
-    toc.push({ depth: level, id, text })
-    return `<h${level} id="${id}">${text}</h${level}>`
-  }
-
-  renderer.code = (code: string, infostring?: string) => {
-    const lang = (infostring || '').split(/\s+/)[0]
-    const escaped = code.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    return `
-<div class="relative group">
-  <pre class="bg-slate-900 text-green-400 p-4 rounded-lg text-sm font-mono overflow-x-auto"><code${lang ? ` class="language-${lang}"` : ''}>${escaped}</code></pre>
-  <button class="copy-btn opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2 h-8 px-2 text-xs rounded-md border bg-background/70">Copy</button>
-  </div>
-`
-  }
-
-  marked.setOptions({ renderer, gfm: true, breaks: false, mangle: false, headerIds: false })
-  const html = marked.parse(md) as string
+  // Collect TOC for h2/h3
+  tokens.forEach((t: any) => {
+    if (t.type === "heading" && (t.depth === 2 || t.depth === 3)) {
+      const id = slugify(String(t.text || ""))
+      toc.push({ id, text: String(t.text || ""), depth: t.depth })
+    }
+  })
+  let html = marked.parse(md) as string
+  // Inject ids into h2/h3 headings for anchor links
+  toc.forEach((item) => {
+    const esc = item.text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    const reH2 = new RegExp(`<h${item.depth}>(\\s*)${esc}(\\s*)</h${item.depth}>`, "g")
+    html = html.replace(reH2, `<h${item.depth} id="${item.id}">$1${item.text}$2</h${item.depth}>`)
+  })
   return { html, toc }
 }
 

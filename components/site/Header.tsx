@@ -10,15 +10,11 @@ export default function Header() {
           </div>
           <nav className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link href="/" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                홈
-              </Link>
-              <Link href="/linux" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                Linux
-              </Link>
-              <Link href="/lessons" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">
-                강의자료
-              </Link>
+              <Link href="/linux" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">Linux 기초</Link>
+              <Link href="/board" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">게시판</Link>
+              <Link href="/qna" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">Q&A</Link>
+              <Link href="/about" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">소개</Link>
+              <Link href="/login" className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors">로그인</Link>
             </div>
           </nav>
         </div>
@@ -26,4 +22,3 @@ export default function Header() {
     </header>
   )
 }
-

@@ -46,9 +46,27 @@
 
 ## 🧪 Stack Commands (예시)
 - Frontend(Next.js): `npm run dev` · `npm run build` · `npm start`
-  - 루트에서 프록시 스크립트 사용: `npm run dev` → `ai-prompt-lab` 실행
-  - 또는 `cd ai-prompt-lab && npm ci && npm run dev`
-- Python: `pip install -r requirements.txt` · `uvicorn app.main:app --reload` · `pytest -q`
+  - 루트에서 실행: `cd coretech && npm ci && npm run dev`
+  - 게시판: `http://localhost:3000/board` (검색/정렬/페이지네이션·스켈레톤 로딩 포함)
+- Backend(FastAPI): `pip install -r requirements.txt` · `uvicorn app.main:app --reload --port 8000` · `pytest -q`
+  - API 엔드포인트: `GET /health`, `GET/POST /api/v1/content/*`, `GET/POST /api/v1/quiz/*`, `GET/POST /api/v1/qna/*`
+  - 데일리 테스트(DB): `GET /api/v1/daily/tests`, `GET /api/v1/daily/tests/{id}`, `POST /api/v1/daily/tests`, `POST /api/v1/daily/tests/{id}/submit`
+  - CORS: `http://localhost:3000` 허용(프론트 개발용)
+  - 인증(초안): `POST /api/v1/auth/register`, `POST /api/v1/auth/login` (JWT)
+  - 환경: `.env`(예시: `.env.example`)에서 `SECRET_KEY`, `DATABASE_URL`, `CORS_ORIGINS`, `JWT_EXPIRE_MINUTES` 설정
+
+### Docker (계획)
+### Docker
+- 목표: 프론트/백/DB를 `docker-compose`로 로컬 통합 실행 → 이후 레지스트리 배포
+- 포함 파일: `Dockerfile.frontend`, `Dockerfile.backend`, `docker-compose.yml`, `.dockerignore`
+- 실행:
+  - 환경: `.env` 생성(예시는 `.env.example` 참고)
+  - 빌드/실행: `docker compose up -d --build`
+  - 접근: 프론트 `http://localhost:3000`, API `http://localhost:8000`
+- 서비스 구성:
+  - `frontend`: Next.js 빌드 후 `next start`
+  - `backend`: FastAPI(`uvicorn`) 실행, `DATABASE_URL`/`SECRET_KEY`/`CORS_ORIGINS` 사용
+  - `db`: Postgres 16-alpine, 볼륨 `pgdata` 지속화
 
 ### Content sync
 - 레슨 소스: `src/frontend/public/content/lessons` (초기 위치)
@@ -60,6 +78,12 @@
 
 ## ✅ Next Steps
 - ai-prompt-lab 디자인 유지하며 콘텐츠 렌더/퀴즈/진도 기능 통합
+
+## 🧩 Daily Tests 시드
+- 소스 파일: `app/data/daily/*.json`
+- 백엔드 시작 시 자동 머지 시드(제목 중복 방지). 실행 중 추가로 넣으려면:
+  - API로 주입: `python scripts/seed_daily_from_files.py --base http://localhost:8000`
+  - 또는 서버 재시작(시작 훅에서 새 파일만 삽입)
 
 ## 📄 문서 링크
 - 요구사항 분석표: `docs/requirements.md`
