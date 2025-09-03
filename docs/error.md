@@ -1,75 +1,99 @@
-6.283 Import trace for requested module:
-6.283 ./app/page.tsx
-6.283
-6.297
-6.297 > Build failed because of webpack errors
-6.318 npm notice
-6.318 npm notice New major version of npm available! 10.8.2 -> 11.5.2
-6.318 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.5.2
-6.318 npm notice To update run: npm install -g npm@11.5.2
-6.318 npm notice
-------
-Dockerfile.frontend:14
+INFO:     172.22.0.1:58230 - "OPTIONS /api/v1/board/posts HTTP/1.1" 400 Bad Request
 
---------------------
+INFO:     172.22.0.1:58230 - "OPTIONS /api/v1/board/posts HTTP/1.1" 400 Bad Request
 
-  12 |     # Ensure optional dirs exist so COPY in runner doesn't fail
+INFO:     172.22.0.1:58230 - "OPTIONS /api/v1/board/posts HTTP/1.1" 400 Bad Request
 
-  13 |     RUN mkdir -p lib content
+INFO:     172.22.0.1:58230 - "OPTIONS /api/v1/board/posts HTTP/1.1" 400 Bad Request
 
-  14 | >>> RUN npm run build
+INFO:     172.22.0.1:58230 - "OPTIONS /api/v1/board/posts HTTP/1.1" 400 Bad Request
 
-  15 |
+INFO:     172.22.0.4:60250 - "GET /api/v1/qna/questions HTTP/1.1" 200 OK
 
-  16 |     FROM node:20-bullseye-slim AS runner
+INFO:     172.22.0.1:41796 - "OPTIONS /api/v1/qna/questions HTTP/1.1" 400 Bad Request
 
---------------------
+INFO:     172.22.0.1:41796 - "OPTIONS /api/v1/qna/questions HTTP/1.1" 400 Bad Request
 
-target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
-   ▲ Next.js 15.2.4
+INFO:     172.22.0.1:41796 - "OPTIONS /api/v1/qna/questions HTTP/1.1" 400 Bad Request
 
-   Creating an optimized production build ...
- ✓ Compiled successfully
-   Skipping validation of types
-   Skipping linting
-   Collecting page data ...
-   Generating static pages (0/13) ...
-   Generating static pages (3/13) 
-   Generating static pages (6/13) 
-   Generating static pages (9/13) 
- ✓ Generating static pages (13/13)
-   Finalizing page optimization ...
-   Collecting build traces ...
-
-Route (app)                                 Size  First Load JS  Revalidate  Expire
-┌ ○ /                                      181 B         104 kB         30s      1y
-├ ○ /_not-found                            977 B         102 kB
-├ ○ /about                                 139 B         101 kB
-├ ○ /board                               10.6 kB         114 kB
-├ ƒ /board/[id]                            920 B         104 kB
-├ ƒ /board/[id]/edit                     1.43 kB         102 kB
-├ ○ /board/new                           1.41 kB         102 kB
-├ ƒ /community                             181 B         104 kB
-├ ƒ /daily                                 191 B         104 kB
-├ ƒ /daily/[id]                          1.44 kB         102 kB
-├ ○ /lessons                               191 B         104 kB
-├ ƒ /lessons/[...slug]                     191 B         104 kB
-├ ○ /linux                                 181 B         104 kB         30s      1y
-├ ○ /login                                 139 B         101 kB
-├ ○ /network                               191 B         104 kB
-├ ƒ /notice                                191 B         104 kB
-├ ƒ /notice/[id]                           191 B         104 kB
-├ ƒ /qna                                   181 B         104 kB
-├ ƒ /qna/[id]                              191 B         104 kB
-├ ƒ /qna/[id]/edit                       1.55 kB         102 kB
-├ ○ /qna/new                             1.39 kB         102 kB
-└ ○ /server                                191 B         104 kB
-+ First Load JS shared by all             101 kB
-  ├ chunks/4bd1b696-a62f61bda70fe583.js  53.2 kB
-  ├ chunks/684-3e5ad0b717469485.js       45.3 kB
-  └ other shared chunks (total)          1.99 kB
+INFO:     172.22.0.4:55942 - "GET /api/v1/qna/questions HTTP/1.1" 200 OK
 
 
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
 
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+
+waiting for server to shut down....2025-09-03 02:00:38.775 UTC [41] LOG:  received fast shutdown request
+
+2025-09-03 02:00:38.789 UTC [41] LOG:  aborting any active transactions
+
+2025-09-03 02:00:38.791 UTC [41] LOG:  background worker "logical replication launcher" (PID 47) exited with exit code 1
+
+2025-09-03 02:00:38.792 UTC [42] LOG:  shutting down
+
+2025-09-03 02:00:38.803 UTC [42] LOG:  checkpoint starting: shutdown immediate
+
+2025-09-03 02:00:38.989 UTC [42] LOG:  checkpoint complete: wrote 926 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.049 s, sync=0.085 s, total=0.198 s; sync files=301, longest=0.025 s, average=0.001 s; distance=4272 kB, estimate=4272 kB; lsn=0/191E928, redo lsn=0/191E928
+
+2025-09-03 02:00:38.998 UTC [41] LOG:  database system is shut down
+
+ done
+
+server stopped
+
+
+PostgreSQL init process complete; ready for start up.
+
+
+2025-09-03 02:00:39.122 UTC [1] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+
+2025-09-03 02:00:39.122 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+
+2025-09-03 02:00:39.122 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+
+2025-09-03 02:00:39.152 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+
+2025-09-03 02:00:39.182 UTC [57] LOG:  database system was shut down at 2025-09-03 02:00:38 UTC
+
+2025-09-03 02:00:39.198 UTC [1] LOG:  database system is ready to accept connections
+
+2025-09-03 02:03:17.818 UTC [175] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:18.874 UTC [176] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:18.877 UTC [184] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:18.883 UTC [185] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:23.923 UTC [187] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:23.929 UTC [186] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:23.935 UTC [188] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:53.968 UTC [212] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:53.972 UTC [213] LOG:  invalid length of startup packet
+
+2025-09-03 02:03:53.982 UTC [214] LOG:  invalid length of startup packet
+
+2025-09-03 02:04:18.192 UTC [1] LOG:  received fast shutdown request
+
+2025-09-03 02:04:18.208 UTC [1] LOG:  aborting any active transactions
+
+2025-09-03 02:04:18.211 UTC [1] LOG:  background worker "logical replication launcher" (PID 60) exited with exit code 1
+
+2025-09-03 02:04:18.211 UTC [55] LOG:  shutting down
+
+2025-09-03 02:04:18.228 UTC [55] LOG:  checkpoint starting: shutdown immediate
+
+2025-09-03 02:04:18.371 UTC [55] LOG:  checkpoint complete: wrote 123 buffers (0.8%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.031 s, sync=0.056 s, total=0.160 s; sync files=83, longest=0.014 s, average=0.001 s; distance=579 kB, estimate=579 kB; lsn=0/19AF548, redo lsn=0/19AF548
+
+2025-09-03 02:04:18.386 UTC [1] LOG:  database system is shut down
+
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+
+2025-09-03 02:04:19.391 UTC [1] LOG:  starting PostgreSQL 16.10 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit

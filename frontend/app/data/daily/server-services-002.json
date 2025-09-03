@@ -1,0 +1,10 @@
+{
+  "title": "서버 — systemd 서비스 심화",
+  "category": "server",
+  "questions": [
+    { "id": "q1", "question": "서비스 로그를 확인하는 표준 명령은?", "options": ["journalctl", "syslogctl", "logcat", "dmesgctl"], "answer": 0 },
+    { "id": "q2", "question": "서비스 유닛 파일의 기본 경로는?", "options": ["/etc/systemd/system", "/usr/lib/systemd/user", "/var/lib/systemd", "/etc/init.d"], "answer": 0 },
+    { "id": "q3", "question": "daemon-reload가 필요한 경우는?", "options": ["로그 회전", "유닛 파일 변경", "커널 업데이트", "방화벽 규칙 변경"], "answer": 1 }
+  ]
+}
+

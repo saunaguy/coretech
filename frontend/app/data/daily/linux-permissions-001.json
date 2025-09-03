@@ -1,0 +1,10 @@
+{
+  "title": "리눅스 권한 — 숫자 표기 익히기",
+  "category": "linux",
+  "questions": [
+    { "id": "q1", "question": "chmod 754의 권한 조합은? (u,g,o)", "options": ["rwx, r-x, r--", "rwx, rw-, r--", "rw-, r--, r--", "rwx, r-x, ---"], "answer": 0 },
+    { "id": "q2", "question": "디렉토리 접근을 막으려면 가장 먼저 제한할 권한은?", "options": ["r", "w", "x", "s"], "answer": 2 },
+    { "id": "q3", "question": "기본 생성 권한에 영향을 주는 값은?", "options": ["umask", "passwd", "chattr", "getenforce"], "answer": 0 }
+  ]
+}
+
