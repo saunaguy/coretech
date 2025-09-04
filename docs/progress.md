@@ -16,3 +16,5 @@
 | 2025-09-03 | 공지 라우트 구현(목록/상세) | 프론트 | 완료 | `app/notice/page.tsx`, `app/notice/[id]/page.tsx` |
 | 2025-09-03 | Next.js 빌드 오류 수정: 루트 레이아웃 추가 | 프론트 | 완료 | `app/layout.tsx`, `app/globals.css` |
 | 2025-09-03 | 헤더 복원 및 네비 정리 | 프론트 | 완료 | `components/site/Header.tsx`, `app/layout.tsx` |
+
+| 2025-09-04 16:20 | 실습 랜딩/상세 연결, 전역 헤더 정리, 노션 링크 적용 | 프론트 | 완료 | app/practice/page.tsx, app/practice/linux-exam1/page.tsx, components/ui/*, next.config.mjs |
