@@ -16,5 +16,9 @@ export function CardTitle({ className = "", ...props }: React.HTMLAttributes<HTM
   return <div className={`text-lg font-semibold ${className}`} {...props} />
 }
 
+export function CardDescription({ className = "", ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={`text-sm text-muted-foreground ${className}`} {...props} />
+}
+
 export default Card
 

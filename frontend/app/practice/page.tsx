@@ -5,6 +5,7 @@ import { BookOpen, Clock, Star, Filter, Search, Play, CheckCircle, Lock } from "
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 // removed local header; rely on global header in layout
@@ -21,8 +22,7 @@ export default function PracticePage() {
       category: "linux",
       difficulty: "초급",
       duration: "30분",
-      progress: 100,
-      status: "completed",
+      status: "in-progress",
       tasks: ["디렉토리 생성 및 이동", "파일 복사 및 이동", "권한 설정 및 확인", "프로세스 관리"],
     },
     {
@@ -32,7 +32,6 @@ export default function PracticePage() {
       category: "server",
       difficulty: "중급",
       duration: "45분",
-      progress: 60,
       status: "in-progress",
       tasks: ["Apache 설치 및 시작", "기본 설정 파일 수정", "가상 호스트 설정", "SSL 인증서 적용"],
     },
@@ -43,8 +42,7 @@ export default function PracticePage() {
       category: "network",
       difficulty: "중급",
       duration: "40분",
-      progress: 0,
-      status: "locked",
+      status: "in-progress",
       tasks: ["iptables 기본 규칙 설정", "ufw 방화벽 구성", "포트 포워딩 설정", "로그 분석"],
     },
     {
@@ -54,8 +52,7 @@ export default function PracticePage() {
       category: "server",
       difficulty: "고급",
       duration: "60분",
-      progress: 0,
-      status: "available",
+      status: "in-progress",
       tasks: ["Docker 설치 및 설정", "이미지 빌드 및 실행", "볼륨 마운트", "Docker Compose 사용"],
     },
     {
@@ -65,7 +62,6 @@ export default function PracticePage() {
       category: "network",
       difficulty: "초급",
       duration: "25분",
-      progress: 80,
       status: "in-progress",
       tasks: ["기본 연결 테스트", "경로 추적", "포트 스캔", "패킷 캡처"],
     },
@@ -76,9 +72,19 @@ export default function PracticePage() {
       category: "server",
       difficulty: "중급",
       duration: "50분",
-      progress: 0,
-      status: "available",
+      status: "in-progress",
       tasks: ["MySQL 설치 및 보안 설정", "데이터베이스 생성", "사용자 권한 관리", "백업 및 복원"],
+    },
+    {
+      id: 7,
+      title: "Apache-Tomcat-Mariadb 3TIER",
+      description: "Ubuntu에서 Apache 웹서버를 설치하고 가상 호스트를 설정합니다.",
+      category: "linux",
+      difficulty: "중급",
+      duration: "45분",
+      status: "in-progress",
+      tasks: ["Apache", "Tomcat", "Mysql", "jdk"],
+      href: "/practice/linux-exam1",
     },
   ]
 
@@ -215,15 +221,6 @@ export default function PracticePage() {
                     </Badge>
                   </div>
 
-                  {practice.progress > 0 && (
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>진행률</span>
-                        <span>{practice.progress}%</span>
-                      </div>
-                      <Progress value={practice.progress} className="h-2" />
-                    </div>
-                  )}
 
                   <div className="space-y-2">
                     <h4 className="font-medium text-sm">실습 과제:</h4>
@@ -237,19 +234,38 @@ export default function PracticePage() {
                     </ul>
                   </div>
 
-                  <Button
-                    className="w-full"
-                    disabled={practice.status === "locked"}
-                    variant={practice.status === "completed" ? "outline" : "default"}
-                  >
-                    {practice.status === "completed"
-                      ? "다시 풀기"
-                      : practice.status === "in-progress"
-                        ? "이어하기"
-                        : practice.status === "locked"
-                          ? "잠김"
-                          : "시작하기"}
-                  </Button>
+                  {"href" in practice && practice.href ? (
+                    <Button
+                      asChild
+                      className="w-full"
+                      disabled={practice.status === "locked"}
+                      variant={practice.status === "completed" ? "outline" : "default"}
+                    >
+                      <Link href={practice.href}>
+                        {practice.status === "completed"
+                          ? "다시 풀기"
+                          : practice.status === "in-progress"
+                            ? "시작하기"
+                            : practice.status === "locked"
+                              ? "잠김"
+                              : "시작하기"}
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-full"
+                      disabled={practice.status === "locked"}
+                      variant={practice.status === "completed" ? "outline" : "default"}
+                    >
+                      {practice.status === "completed"
+                        ? "다시 풀기"
+                        : practice.status === "in-progress"
+                          ? "시작하기"
+                          : practice.status === "locked"
+                            ? "잠김"
+                            : "시작하기"}
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
