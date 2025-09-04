@@ -40,8 +40,43 @@ async function loadIntro(): Promise<{ html: string; toc: TocItem[] }> {
   return { html: "", toc: [] }
 }
 
+type LinuxGroup = { slug: string; title: string; path?: string }
+async function loadLinuxGroups(): Promise<LinuxGroup[]> {
+  try {
+    const p = path.join(process.cwd(), "content", "lessons", "linux", "index.json")
+    const raw = await fs.readFile(p, "utf-8")
+    const j = JSON.parse(raw)
+    return (j.groups || []) as LinuxGroup[]
+  } catch {
+    // Fallback to common defaults
+    return [
+      { slug: "absolute-beginner", title: "왕초보" },
+      { slug: "beginner", title: "초급" },
+      { slug: "intermediate", title: "중급" },
+      { slug: "advanced", title: "고급" },
+    ]
+  }
+}
+
+function resolveGroupDir(g: LinuxGroup) {
+  const raw = g.path || path.join("content", "lessons", g.slug)
+  const trimmed = raw.replace(/^\/+/, "")
+  return path.join(process.cwd(), trimmed)
+}
+
+async function countGroupLessons(g: LinuxGroup): Promise<number> {
+  const dir = resolveGroupDir(g)
+  try {
+    const items = await fs.readdir(dir)
+    return items.filter((f) => f.toLowerCase().endsWith(".md")).length
+  } catch {
+    return 0
+  }
+}
+
 export default async function LinuxPage() {
-  const [daily, intro] = await Promise.all([fetchDaily(), loadIntro()])
+  const [daily, intro, groups] = await Promise.all([fetchDaily(), loadIntro(), loadLinuxGroups()])
+  const counts = await Promise.all(groups.map((g) => countGroupLessons(g)))
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -62,6 +97,31 @@ export default async function LinuxPage() {
                 <Link href="/daily?category=linux">데일리 테스트</Link>
               </Button>
             </div>
+          </div>
+        </section>
+
+        {/* Learning Paths */}
+        <section>
+          <h2 className="text-xl font-semibold mb-4">학습 경로</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {groups.map((g, idx) => (
+              <div key={g.slug} className="rounded-xl border bg-card text-card-foreground hover:shadow-sm transition-shadow">
+                <div className="p-4 space-y-2">
+                  <div className="text-sm text-muted-foreground">Linux</div>
+                  <h3 className="text-lg font-medium">
+                    <Link href={`/lessons/${g.slug}`} className="hover:underline">
+                      {g.title}
+                    </Link>
+                  </h3>
+                  <div className="text-sm text-muted-foreground">강의 {counts[idx] ?? 0}개</div>
+                  <div>
+                    <Link href={`/lessons/${g.slug}`} className="text-sm underline hover:no-underline">
+                      바로 보기 →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 

@@ -14,17 +14,41 @@ function humanizeFull(name: string) {
 function listLessons(group: string) {
   const dir = path.join(CONTENT_ROOT, group)
   if (!fs.existsSync(dir)) return []
-  return fs
-    .readdirSync(dir)
-    .filter((f) => f.toLowerCase().endsWith('.md'))
-    .sort((a, b) => a.localeCompare(b, 'en'))
-    .map((file) => {
-      const base = baseName(file)
-      return {
-        slug: `${group}/${base}`,
-        title: humanizeFull(base),
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true })
+
+  // Collect markdowns at the group root
+  const rootMds = entries
+    .filter((e) => e.isFile() && e.name.toLowerCase().endsWith('.md'))
+    .sort((a, b) => a.name.localeCompare(b.name, 'en'))
+    .map((e) => {
+      const base = baseName(e.name)
+      return { slug: `${group}/${base}`, title: humanizeFull(base) }
+    })
+
+  // If there are subdirectories, collect their markdowns as well
+  const subdirMds = entries
+    .filter((e) => e.isDirectory())
+    .flatMap((d) => {
+      const sub = path.join(dir, d.name)
+      try {
+        return fs
+          .readdirSync(sub)
+          .filter((f) => f.toLowerCase().endsWith('.md'))
+          .sort((a, b) => a.localeCompare(b, 'en'))
+          .map((file) => {
+            const base = baseName(file)
+            return {
+              slug: `${group}/${d.name}/${base}`,
+              title: `${humanizeFull(d.name)} — ${humanizeFull(base)}`,
+            }
+          })
+      } catch {
+        return [] as { slug: string; title: string }[]
       }
     })
+
+  return [...rootMds, ...subdirMds]
 }
 
 export default async function LessonGroupPage({ params }: { params: Promise<{ group: string }> }) {

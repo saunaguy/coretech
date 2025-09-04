@@ -7,8 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
-import { UserMenu } from "@/components/user-menu"
-import Link from "next/link"
+// removed local header; rely on global header in layout
 
 export default function PracticePage() {
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -126,50 +125,6 @@ export default function PracticePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="bg-primary text-primary-foreground shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold hover:text-primary-foreground/80">
-                Linux & Server Lab
-              </Link>
-            </div>
-            <div className="flex items-center gap-6">
-              <nav className="hidden md:block">
-                <div className="flex items-baseline space-x-4">
-                  <Link
-                    href="/linux"
-                    className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    Linux 기초
-                  </Link>
-                  <Link
-                    href="/board"
-                    className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    게시판
-                  </Link>
-                  <Link
-                    href="/qna"
-                    className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    Q&A
-                  </Link>
-                  <Link
-                    href="/about"
-                    className="hover:bg-primary/80 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-                  >
-                    소개
-                  </Link>
-                </div>
-              </nav>
-              <UserMenu />
-            </div>
-          </div>
-        </div>
-      </header>
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
@@ -271,7 +226,7 @@ export default function PracticePage() {
                   )}
 
                   <div className="space-y-2">
-                    <h4 className="font-medium text-sm">실습 내용:</h4>
+                    <h4 className="font-medium text-sm">실습 과제:</h4>
                     <ul className="space-y-1">
                       {practice.tasks.map((task, index) => (
                         <li key={index} className="text-xs text-muted-foreground flex items-center gap-2">
@@ -288,9 +243,9 @@ export default function PracticePage() {
                     variant={practice.status === "completed" ? "outline" : "default"}
                   >
                     {practice.status === "completed"
-                      ? "다시 보기"
+                      ? "다시 풀기"
                       : practice.status === "in-progress"
-                        ? "계속하기"
+                        ? "이어하기"
                         : practice.status === "locked"
                           ? "잠김"
                           : "시작하기"}
