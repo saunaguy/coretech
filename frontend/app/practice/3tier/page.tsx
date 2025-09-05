@@ -195,7 +195,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "heading_2",
       "has_children": false,
       "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
-      "text": "1. 리눅스 기초 명령어"
+      "text": "1. 기본 지식"
     },
     {
       "id": "26424e56-f2bd-809c-af44-c02bd0b304a1",
@@ -203,7 +203,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": false,
       "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
-      "text": "파일 탐색: ls, pwd, cd"
+      "text": "Apache: 정적 파일(HTML, CSS, JavaScript, 이미지) 전달하는 웹 서버. 빠르고 가볍지만 동적 처리 없음"
     },
     {
       "id": "26424e56-f2bd-8022-ad00-cdf6e687dbad",
@@ -211,7 +211,15 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": false,
       "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
-      "text": "파일/폴더 관리: touch, mkdir, rm, cp, mv"
+      "text": "Tomcat: 동적 파일(JSP/Servlet) 처리하는 WAS. 정적도 가능하지만 주로 동적 로직 전담"
+    },
+    {
+      "id": "error-md-insert-mysql",
+      "object": "block",
+      "type": "bulleted_list_item",
+      "has_children": false,
+      "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
+      "text": "MySQL: SQL 쿼리를 처리하고 저장된 데이터로 응답하는 데이터베이스 서버"
     },
     {
       "id": "26424e56-f2bd-8072-ae6b-d8f3778a1e5e",
@@ -219,7 +227,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": true,
       "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
-      "text": "편집기 사용: vim"
+      "text": "mod_jk (Apache ↔ Tomcat)"
     },
     {
       "id": "26424e56-f2bd-8030-ba28-e63c5e2e3eea",
@@ -227,7 +235,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-8072-ae6b-d8f3778a1e5e" },
-      "text": "열기: vim filename"
+      "text": "Apache는 8009 포트에서 mod_jk를 통해 Tomcat과 통신"
     },
     {
       "id": "26424e56-f2bd-800a-af02-ff7b32281a78",
@@ -235,7 +243,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-8072-ae6b-d8f3778a1e5e" },
-      "text": "입력: i (insert 모드)"
+      "text": "Tomcat은 AJP 프로토콜로 응답하여 요청을 처리"
     },
     {
       "id": "26424e56-f2bd-805c-ba42-d3157755345f",
@@ -243,7 +251,23 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "bulleted_list_item",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-8072-ae6b-d8f3778a1e5e" },
-      "text": "저장: :w, 저장 후 종료: :wq, 강제 종료: :q!"
+      "text": "동적 처리(jsp/servlet) 요청을 Tomcat으로 넘겨 둘의 연결성 확립"
+    },
+    {
+      "id": "error-md-insert-jdbc",
+      "object": "block",
+      "type": "bulleted_list_item",
+      "has_children": false,
+      "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
+      "text": "JDBC (Java Database Connector): 자바 애플리케이션이 MySQL 같은 DB에 접근하도록 돕는 드라이버"
+    },
+    {
+      "id": "error-md-insert-jdk",
+      "object": "block",
+      "type": "bulleted_list_item",
+      "has_children": false,
+      "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
+      "text": "JDK (Java Development Kit): 컴파일러, 라이브러리, JVM 포함. JSP 실행과 JDBC 사용에 필수"
     },
     { "id": "26424e56-f2bd-80b5-854a-f7bfb8208ef4", "object": "block", "type": "divider", "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" }},
     {
