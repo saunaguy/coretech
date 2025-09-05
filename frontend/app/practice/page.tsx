@@ -84,7 +84,7 @@ export default function PracticePage() {
       duration: "45분",
       status: "in-progress",
       tasks: ["Apache", "Tomcat", "Mysql", "jdk"],
-      href: "/practice/linux-exam1",
+      href: "/practice/linux-3tier",
     },
   ]
 

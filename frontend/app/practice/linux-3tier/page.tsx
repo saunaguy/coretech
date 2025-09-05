@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { ArrowRight, Server, Database, Globe, Layers, Star } from "lucide-react"
 import Link from "next/link"
 
-export default function LinuxExam1Page() {
+export default function Linux3TierPage() {
   return (
     <main className="container mx-auto px-4 py-8 space-y-12">
       {/* Hero Section */}
@@ -96,60 +96,6 @@ export default function LinuxExam1Page() {
         </div>
       </section>
 
-      {/* Architecture Components */}
-      <section className="space-y-6">
-        <h3 className="text-2xl font-semibold text-center">구성 요소별 상세 설명</h3>
-        <div className="grid md:grid-cols-3 gap-6">
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="text-center">
-              <Globe className="h-12 w-12 text-primary mx-auto mb-2" />
-              <CardTitle>Web Server</CardTitle>
-              <CardDescription>프론트엔드 서버</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li>• HTML, CSS, JS 파일 서빙</li>
-                <li>• 사용자 요청 최초 접수</li>
-                <li>• SSL/TLS 암호화 처리</li>
-                <li>• 캐싱 및 압축</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="text-center">
-              <Server className="h-12 w-12 text-accent mx-auto mb-2" />
-              <CardTitle>WAS</CardTitle>
-              <CardDescription>애플리케이션 서버</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li>• 비즈니스 로직 실행</li>
-                <li>• 동적 콘텐츠 생성</li>
-                <li>• 세션 관리</li>
-                <li>• API 엔드포인트 제공</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card className="hover:shadow-lg transition-shadow">
-            <CardHeader className="text-center">
-              <Database className="h-12 w-12 text-chart-2 mx-auto mb-2" />
-              <CardTitle>Database</CardTitle>
-              <CardDescription>데이터베이스 서버</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2 text-sm">
-                <li>• 데이터 영구 저장</li>
-                <li>• CRUD 연산 처리</li>
-                <li>• 트랜잭션 관리</li>
-                <li>• 데이터 무결성 보장</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
       {/* Practice Section */}
       <section className="space-y-6">
         <div className="text-center space-y-4">
@@ -165,7 +111,7 @@ export default function LinuxExam1Page() {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <Link href="https://www.notion.so/26424e56f2bd80a29f07e8d25129be67?source=copy_link">
+            <Link href="/practice/3tier">
               <Button size="lg" className="gap-2">
                 실습 연결하기
                 <ArrowRight className="h-4 w-4" />
@@ -178,3 +124,4 @@ export default function LinuxExam1Page() {
     </main>
   )
 }
+
