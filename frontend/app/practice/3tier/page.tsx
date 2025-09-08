@@ -127,23 +127,37 @@ export default function ThreeTierTestPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {section.blocks.map((block) => {
-              if (block.type === 'bulleted_list_item') {
-                return (
-                  <ul key={block.id} className="space-y-2">
-                    <NotionBlock block={block} blocks={notionData.blocks} />
-                  </ul>
-                )
+            {(() => {
+              const content = [];
+              let i = 0;
+              while (i < section.blocks.length) {
+                const block = section.blocks[i];
+                
+                if (block.type === 'bulleted_list_item') {
+                  const listItems = [];
+                  let j = i;
+                  while (j < section.blocks.length && section.blocks[j].type === 'bulleted_list_item') {
+                    listItems.push(<NotionBlock key={section.blocks[j].id} block={section.blocks[j]} blocks={notionData.blocks} />);
+                    j++;
+                  }
+                  content.push(<ul key={`ul-${i}`} className="space-y-2 list-disc list-inside pl-4">{listItems}</ul>);
+                  i = j;
+                } else if (block.type === 'numbered_list_item') {
+                  const listItems = [];
+                  let j = i;
+                  while (j < section.blocks.length && section.blocks[j].type === 'numbered_list_item') {
+                    listItems.push(<NotionBlock key={section.blocks[j].id} block={section.blocks[j]} blocks={notionData.blocks} />);
+                    j++;
+                  }
+                  content.push(<ol key={`ol-${i}`} className="space-y-2 list-decimal list-inside pl-4">{listItems}</ol>);
+                  i = j;
+                } else {
+                  content.push(<NotionBlock key={block.id} block={block} blocks={notionData.blocks} />);
+                  i++;
+                }
               }
-              if (block.type === 'numbered_list_item') {
-                return (
-                  <ol key={block.id} className="space-y-2">
-                    <NotionBlock block={block} blocks={notionData.blocks} />
-                  </ol>
-                )
-              }
-              return <NotionBlock key={block.id} block={block} blocks={notionData.blocks} />
-            })}
+              return content;
+            })()}
           </CardContent>
         </Card>
       ))}
@@ -436,7 +450,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "code",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-8008-8773-cba542c269f2" },
-      "text": "yum install -y httpd-devel gcc make ibtool redhat-rpm-config\nwget https://archive.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.50-src.tar.gz\ntar -xvzf tomcat-connectors-1.2.50-src.tar.gz\ncd tomcat-connectors-1.2.50-src/native\n./configure --with-apxs=/usr/bin/apxs\nmake && make install",
+      "text": "yum install -y httpd-devel gcc make libtool redhat-rpm-config   # ┌ Apache 모듈을 빌드하기 위한 패키지 설치\n                                                                # │ httpd-devel → apxs 제공 (Apache 모듈 빌드용)\n                                                                # │ gcc/make/libtool → 소스 컴파일 필수 도구\n                                                                # └ redhat-rpm-config → 빌드 환경 기본 설정\n\nwget https://archive.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.50-src.tar.gz   # Tomcat Connector(mod_jk) 소스 다운로드\n\ntar -xvzf tomcat-connectors-1.2.50-src.tar.gz                   # 압축 해제\ncd tomcat-connectors-1.2.50-src/native                          # native 디렉토리로 이동 (빌드 대상)\n\n./configure --with-apxs=/usr/bin/apxs    # Apache의 apxs 경로를 지정하여 모듈 빌드 준비\nmake && make install                     # 소스 컴파일 후 Apache 모듈 디렉토리에 mod_jk.so 설치",
       "language": "bash"
     },
     {
@@ -461,8 +475,8 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "code",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-80e2-a5b0-d95df28137b4" },
-      "text": "LoadModule jk_module modules/mod_jk.so\n\n<IfModule jk_module>\n    JkWorkersFile    conf/workers.properties\n    JkLogFile        logs/mod_jk.log\n    JkLogLevel       info\n    JkMountFile      conf/uri.properties\n    JkMount          /* worker1\n    \n</IfModule>",
-      "language": "arduino"
+      "text": "LoadModule jk_module modules/mod_jk.so   # ┌ mod_jk.so 모듈을 Apache에 로드하여 Tomcat 연동 기능 활성화\n                                         # └ (Apache ↔ Tomcat 연결 다리 역할)\n\n<IfModule jk_module>\n    JkWorkersFile    conf/workers.properties   # ┌ Tomcat과 연동할 worker 정의 파일 (어떤 Tomcat, 포트 등)\n                                               # └ worker1, worker2 같은 개별 Tomcat 인스턴스 설정\n\n    JkLogFile        logs/mod_jk.log           # mod_jk 동작 로그 저장 경로\n    JkLogLevel       info                      # 로그 레벨 (debug/info/error 등)\n\n    JkMountFile      conf/uri.properties       # ┌ URL 패턴과 worker 매핑 파일\n                                               # └ 예: \"/app/*\" → worker1\n\n    JkMount          /* worker1                # 모든 요청(/*)을 worker1(Tomcat)으로 전달\n</IfModule>",
+      "language": "apache"
     },
     {
       "id": "26424e56-f2bd-8047-9a65-eecea5057330",
@@ -478,8 +492,8 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "code",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-8047-9a65-eecea5057330" },
-      "text": "worker.list=worker1\nworker.worker1.port=8009\nworker.worker1.host=localhost\nworker.worker1.type=ajp13",
-      "language": "arduino"
+      "text": "worker.list=worker1                 # ┌ 사용 가능한 worker 목록을 정의 (여기서는 worker1만 지정)\nworker.worker1.port=8009            # │ worker1이 사용할 포트 (Tomcat AJP 기본 포트)\nworker.worker1.host=localhost       # │ worker1이 동작하는 호스트 (여기선 로컬서버)\nworker.worker1.type=ajp13           # └ 연결 방식: AJP 1.3 프로토콜 사용 (Apache ↔ Tomcat 전용)",
+      "language": "apache"
     },
     {
       "id": "26424e56-f2bd-80ec-b0f0-ffe3acaea432",
@@ -495,8 +509,8 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "code",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-80ec-b0f0-ffe3acaea432" },
-      "text": "/*.jsp=worker1\n/*.do=worker1",
-      "language": "plain text"
+      "text": "/*.jsp=worker1   # ┌ 모든 .jsp 요청을 worker1(Tomcat)으로 전달\n/*.do=worker1    # └ 모든 .do 요청을 worker1(Tomcat)으로 전달",
+      "language": "apache"
     },
     {
       "id": "26424e56-f2bd-802f-8036-e024e8cb39a8",
@@ -512,7 +526,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "code",
       "has_children": false,
       "parent": { "type": "block_id", "block_id": "26424e56-f2bd-802f-8036-e024e8cb39a8" },
-      "text": "<Connector protocol=\"AJP/1.3\"\n           address=\"0.0.0.0\"\n           port=\"8009\"\n           redirectPort=\"8443\"\n           secretRequired=\"false\" />",
+      "text": "<Connector protocol=\"AJP/1.3\"            # ┌ Apache ↔ Tomcat 연결에 사용하는 AJP 프로토콜\n          address=\"0.0.0.0\"              # │ 모든 IP에서 접속 허용 (Apache 서버 포함)\n           port=\"8009\"                    # │ AJP 기본 포트 (workers.properties와 일치해야 함)\n           redirectPort=\"8443\"            # │ HTTPS(SSL)로 리다이렉트할 포트 지정\n           secretRequired=\"false\" />      # └ Tomcat 9 이후 기본값은 true → 여기선 보안을 끄고 연동 허용",
       "language": "xml"
     },
     { "id": "26424e56-f2bd-8062-a2c5-de6c31a3543e", "object": "block", "type": "divider", "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" }},
@@ -640,7 +654,7 @@ DB 버젼     mysql  Ver 8.0.41 for Linux on x86_64
       "type": "numbered_list_item",
       "has_children": true,
       "parent": { "type": "page_id", "page_id": "26424e56-f2bd-80a2-9f07-e8d25129be67" },
-      "text": "Tomcat context.xml 또는 server.xml에 DataSource 등록"
+      "text": "Tomcat context.xml 또는 server.xml에 DataSource 등록(등록한 DataSource를 통해 DB와 연동된다.)"
     },
     {
       "id": "26424e56-f2bd-8091-ad95-fe150478926a",
