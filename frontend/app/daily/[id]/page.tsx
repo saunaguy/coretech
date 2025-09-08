@@ -1,77 +1,29 @@
-"use client"
-
-import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
-import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { notFound } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import DailyTestInteractive from "@/components/daily/DailyTestInteractive"
+import { MOCK_DAILY_TESTS } from "@/lib/daily-data"
 
-type Question = { id: string; question: string; options: string[] }
+// 모든 복잡성을 제거하고 오직 목 데이터에서만 값을 찾도록 함수를 단순화합니다.
+async function getDailyTest(id: string) {
+  return MOCK_DAILY_TESTS[id] || null;
+}
 
-export default function DailyDetailPage() {
-  const params = useParams() as { id: string }
-  const [title, setTitle] = useState("")
-  const [questions, setQuestions] = useState<Question[]>([])
-  const [answers, setAnswers] = useState<Record<string, number>>({})
-  const [result, setResult] = useState<{ total: number; correct: number } | null>(null)
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
-
-  useEffect(() => {
-    const load = async () => {
-      const r = await fetch(`${base}/api/v1/daily/tests/${params.id}`)
-      if (r.ok) {
-        const data = await r.json()
-        setTitle(data.title)
-        setQuestions(data.questions)
-      }
-    }
-    load()
-  }, [params.id])
-
-  const submit = async () => {
-    const r = await fetch(`${base}/api/v1/daily/tests/${params.id}/submit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ answers }),
-    })
-    if (r.ok) {
-      setResult(await r.json())
-    }
+export default async function DailyTestPage({ params }: { params: { id: string } }) {
+  const item = await getDailyTest(params.id);
+  if (!item) {
+    notFound();
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>{title || "데일리 테스트"}</CardTitle>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {questions.map((q) => (
-            <div key={q.id} className="space-y-2">
-              <div className="font-medium">{q.question}</div>
-              <div className="space-y-1">
-                {q.options.map((opt, idx) => (
-                  <label key={idx} className="flex items-center gap-2 text-sm">
-                    <input
-                      type="radio"
-                      name={q.id}
-                      value={idx}
-                      onChange={() => setAnswers((s) => ({ ...s, [q.id]: idx }))}
-                    />
-                    <span>{opt}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          ))}
-          <Button onClick={submit}>제출</Button>
-          {result && (
-            <div className="text-sm text-muted-foreground">점수: {result.correct} / {result.total}</div>
-          )}
-        </CardContent>
-      </Card>
+    <main className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">데일리 테스트</h1>
+        <Button variant="outline" asChild>
+          <Link href="/daily">목록으로</Link>
+        </Button>
+      </div>
+      <DailyTestInteractive item={item} />
     </main>
-  )
+  );
 }
