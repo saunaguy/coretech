@@ -1,4 +1,5 @@
 const blocks = [
+  { type: 'heading', text: 'OS란 무엇인가' },
   { type: 'aside', text: '한 줄 정의: 컴퓨터의 자원 관리자이자 통역사' },
   { type: 'paragraph', text: '운영체제(Operating System, OS)는 사용자가 컴퓨터 하드웨어를 쉽고 효율적으로 사용할 수 있도록 돕는 시스템 소프트웨어입니다. 컴퓨터를 켜면 가장 먼저 우리를 맞이하며, 모든 프로그램은 이 운영체제 위에서 실행됩니다.' },
   { type: 'heading', text: 'OS가 하는 일(직관적으로)' },
@@ -51,6 +52,20 @@ const blocks = [
     '2) 트랩(Trap) 발생 → 사용자 모드에서 커널 모드로 전환',
     '3) 커널이 요청된 작업 수행',
     '4) 사용자 모드로 복귀하여 프로그램 실행 계속',
+  ]},
+  { type: 'divider' },
+  { type: 'heading', text: 'Hands-on: OS 관찰' },
+  { type: 'list', items: [
+    '프로세스 보기: ps -ef | head; top 혹은 htop(설치 필요)',
+    '메모리/스왑: free -h; vmstat 1 5(설치 여부에 따라)',
+    '파일시스템/권한: ls -al /etc | head; stat /bin/ls',
+    '시스템 콜 구경: strace -f -e openat,read,write echo hi (root 필요 없음)',
+  ]},
+  { type: 'heading', text: '체크리스트' },
+  { type: 'list', items: [
+    '커널과 셸의 역할을 한 문장씩 설명할 수 있는가',
+    '프로세스·메모리·파일 시스템 관리 기능을 예로 들 수 있는가',
+    '시스템 콜이 필요한 이유를 설명할 수 있는가',
   ]},
 ]
 
