@@ -19,6 +19,7 @@ export default [
     '디스플레이: 비디오 메모리 32MB+, 3D 가속(필요 시).',
     '네트워크: 어댑터 1 = NAT(기본). 필요시 어댑터 2 = Host-only 추가.',
     '공유 클립보드/드래그앤드롭: 편의 기능 활성화(게스트 확장 설치 후).',
+    '게스트 확장(Guest Additions): 화면 해상도/마우스 통합/공유폴더 개선.',
   ]},
 
   { type: 'heading', text: 'VMware Workstation/Player 기본 절차' },
@@ -28,7 +29,7 @@ export default [
     '디스크: NVMe/SCSI, 30GB+ (단일 파일 또는 분할).',
     '메모리/CPU: 워크로드에 맞게 조정(2 vCPU / 4GB+ 권장).',
     '펌웨어: UEFI(필요 시 Secure Boot 비활성화).',
-    '설치 후 VMware Tools 설치(디스플레이/마우스/네트워크 개선).',
+    '설치 후 VMware Tools 설치(디스플레이/마우스/네트워크/공유폴더 개선).',
   ]},
 
   { type: 'heading', text: '권장 리소스 가이드(개발/학습)' },

@@ -43,4 +43,15 @@ export default [
   ]},
 
   { type: 'aside', text: 'Windows 10 이상은 OpenSSH 클라이언트를 기본 제공(선택 기능). PowerShell에서 바로 `ssh user@host`를 사용할 수 있습니다.' },
+  { type: 'divider' },
+  { type: 'heading', text: 'SSH 하드닝 스니펫(/etc/ssh/sshd_config 일부)' },
+  { type: 'code', text: 'Port 22\nPubkeyAuthentication yes\nPasswordAuthentication no\nPermitRootLogin prohibit-password\nClientAliveInterval 60\nClientAliveCountMax 3' },
+  { type: 'paragraph', text: '설정 변경 후 `sudo systemctl reload sshd`(배포판에 따라 서비스명이 ssh/sshd 상이)로 적용하세요.' },
+  { type: 'heading', text: '첫 부팅 체크리스트' },
+  { type: 'list', items: [
+    '계정/비밀번호/호스트명 설정 확인',
+    '네트워크 연결 확인: ip addr, ping',
+    '업데이트 수행: apt update && apt upgrade / dnf update',
+    'SSH 서버 설치/활성화 및 방화벽 규칙 확인',
+  ]},
 ]

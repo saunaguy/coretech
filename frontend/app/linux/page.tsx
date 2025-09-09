@@ -56,6 +56,12 @@ const CommandDetailView = ({ command }) => {
             {block.text}
           </div>
         )
+      case 'code':
+        return (
+          <pre key={index} className="my-4 p-4 rounded-md bg-muted text-sm overflow-auto">
+            <code>{block.text}</code>
+          </pre>
+        )
       case 'divider':
         return <hr key={index} className="my-6 border-dashed" />
       default:

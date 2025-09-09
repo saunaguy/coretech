@@ -1,6 +1,13 @@
 export default [
   { type: 'heading', text: '2-2 설치 방법 (ISO, USB, 네트워크 설치)' },
   { type: 'paragraph', text: '리눅스 설치는 ISO 이미지를 내려받아 부팅 가능한 USB를 만들고, BIOS/UEFI에서 USB로 부팅하여 진행합니다. 기본 흐름과 디스크 파티셔닝/LVM 개념을 함께 정리합니다.' },
+  { type: 'heading', text: '설치 방식 비교(무엇을 쓸까?)' },
+  { type: 'list', items: [
+    '가상머신(VM): 가장 안전, 스냅샷/롤백 가능 → 학습 기본값',
+    '실컴(Bare-metal): 성능 최상, 듀얼부트/단독 설치 시 백업 필수',
+    'WSL(Windows): 개발/터미널 위주, 커널/네트워킹 제약 고려',
+    '클라우드(EC2 등): 원격 서버 학습에 유용, 과금/보안 주의',
+  ]},
 
   { type: 'heading', text: 'ISO 이미지란?' },
   { type: 'list', items: [
@@ -15,6 +22,11 @@ export default [
     '파티션 방식/대상 시스템: UEFI 시스템은 GPT, 레거시 BIOS는 MBR 권장.',
     '파일 시스템: FAT32(호환성 높음) 또는 NTFS(대용량 ISO 시).',
     '시작(START) 클릭 → 완료 후 USB로 부팅.',
+  ]},
+  { type: 'heading', text: '대안: balenaEtcher(Win/macOS/Linux)' },
+  { type: 'list', items: [
+    'Etcher 실행 → Flash from file(ISO) → Target(USB) → Flash',
+    '간단한 UI로 실수 방지, 멀티 플랫폼 지원',
   ]},
 
   { type: 'heading', text: 'BIOS/UEFI 설정 팁' },
@@ -56,4 +68,11 @@ export default [
   ]},
 
   { type: 'aside', text: '가상 머신에 설치한다면 스냅샷을 적절히 활용하세요. 설치 직후 스냅샷을 생성해두면 되돌리기가 쉬워집니다.' },
+  { type: 'heading', text: '첫 부팅 체크리스트(요약)' },
+  { type: 'list', items: [
+    '사용자/비밀번호/호스트명 확인',
+    '네트워크 연결 확인: ip addr, ping',
+    '업데이트: apt update && apt upgrade / dnf update',
+    'SSH 서버 설치/활성화: openssh-server, 방화벽 규칙 확인',
+  ]},
 ]

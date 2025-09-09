@@ -33,6 +33,14 @@ export default [
     '서버 공개 테스트: Bridged 단독 또는 NAT+포트포워딩.',
   ]},
 
+  { type: 'heading', text: 'NAT 포트 포워딩(예: 호스트 8080 → 게스트 80)' },
+  { type: 'list', items: [
+    'VirtualBox: VM 설정 → 네트워크 → 고급 → 포트 포워딩 → 규칙 추가',
+    '예) 이름: web, 프로토콜: TCP, 호스트포트: 8080, 게스트IP: 게스트IP, 게스트포트: 80',
+    'VMware(버전별 상이): NAT 어댑터 포트 포워딩 메뉴에서 규칙 추가',
+    '확인: 호스트 브라우저에서 http://localhost:8080 접속',
+  ]},
+
   { type: 'heading', text: '빠른 점검 명령' },
   { type: 'list', items: [
     '`ip addr` / `ip a`: 인터페이스/IP 확인.',

@@ -6,6 +6,7 @@ export default [
   { type: 'list', items: [
     'Type-1 (Bare-metal): 서버 하드웨어 위에 직접 설치 (예: VMware ESXi). 높은 성능/안정성.',
     'Type-2 (Hosted): 기존 OS 위에서 동작 (예: VirtualBox, VMware Workstation). 개발/테스트에 적합.',
+    'KVM: 리눅스 커널 내장 하이퍼바이저(모듈)로 고성능 가상화(많은 클라우드가 사용).',
   ]},
 
   { type: 'heading', text: '가상 머신(VM)의 특징' },
@@ -20,6 +21,7 @@ export default [
     '호스트 커널을 공유하는 OS 수준 가상화 → 매우 가볍고 빠름(MB, 수 초).',
     '애플리케이션과 의존성만 패키징 → 이식성/재현성 우수.',
     '단점: 커널 공유로 VM 대비 격리 수준이 낮고, 커널 기능 제약을 받음.',
+    '기술 요소: cgroups(자원 제한), namespaces(격리), 이미지/레이어, OCI 규격',
   ]},
 
   { type: 'heading', text: '언제 무엇을 쓸까?' },

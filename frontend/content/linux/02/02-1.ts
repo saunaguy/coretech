@@ -47,4 +47,16 @@ export default [
     'RHEL: https://access.redhat.com (개발자 구독 제공)',
     'Fedora: https://getfedora.org',
   ]},
+  { type: 'heading', text: '다운로드 무결성 확인' },
+  { type: 'list', items: [
+    '공식 사이트에서 제공하는 SHA256/SHA512 해시와 비교해 ISO 무결성 검증',
+    'Windows: PowerShell에서 `Get-FileHash <ISO> -Algorithm SHA256`',
+    'Linux/macOS: `sha256sum <ISO>`',
+  ]},
+  { type: 'heading', text: '체크리스트' },
+  { type: 'list', items: [
+    'LTS 우선, 커뮤니티/문서가 풍부한 배포판 선택',
+    '설치 목적(데스크톱/서버/개발)에 맞춘 계열 결정',
+    '다운로드 파일 해시 검증 완료',
+  ]},
 ]
