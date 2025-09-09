@@ -8,6 +8,13 @@ const blocks = [
     'CentOS / Rocky Linux: RHEL과 거의 동일한 무료 대안. 서버 관리자들이 선호.',
     'Fedora (페도라): 최신 기술을 가장 먼저 시험하는 테스트베드 역할.',
   ]},
+  { type: 'heading', text: '왜 리눅스인가?' },
+  { type: 'list', items: [
+    '무료/오픈소스: 비용 부담 없이 커스터마이징 가능',
+    '튼튼함/안정성: 서버·클라우드에서 널리 사용',
+    '자동화 친화: 스크립팅/도구 생태계가 풍부',
+    '컨테이너 친화: Docker/Kubernetes 기반 환경과 궁합 우수',
+  ]},
   { type: 'heading', text: '어떤 배포판을 선택해야 할까?' },
   { type: 'list', items: [
     '입문자라면: 가장 큰 사용자 커뮤니티와 풍부한 자료를 가진 Ubuntu 추천.',

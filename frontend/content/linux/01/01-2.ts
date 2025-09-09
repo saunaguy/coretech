@@ -1,5 +1,13 @@
 const blocks = [
+  { type: 'aside', text: '한 줄 정의: 컴퓨터의 자원 관리자이자 통역사' },
   { type: 'paragraph', text: '운영체제(Operating System, OS)는 사용자가 컴퓨터 하드웨어를 쉽고 효율적으로 사용할 수 있도록 돕는 시스템 소프트웨어입니다. 컴퓨터를 켜면 가장 먼저 우리를 맞이하며, 모든 프로그램은 이 운영체제 위에서 실행됩니다.' },
+  { type: 'heading', text: 'OS가 하는 일(직관적으로)' },
+  { type: 'list', items: [
+    '자원 나눔: CPU·메모리·디스크·네트워크를 공정하게 배분',
+    '쉬운 추상화: 파일/프로세스 등 친숙한 개념으로 하드웨어 감춤',
+    '보호/격리: 사용자·프로그램 간 경계를 두어 시스템 안정성 확보',
+    '창구 제공: 시스템 콜로 “읽기/쓰기/실행” 같은 부탁을 처리',
+  ]},
   { type: 'heading', text: '주요 운영체제의 종류' },
   { type: 'list', items: [
     'Windows: Microsoft사가 개발한 운영체제. PC 시장에서 높은 점유율과 편리한 GUI.',
@@ -21,15 +29,14 @@ const blocks = [
     '커널 (Kernel): 하드웨어 제어와 자원/프로세스 관리 등 핵심 기능을 담당하는 운영체제의 심장.',
     '인터페이스 (Interface): 사용자의 명령을 커널로 전달하고 결과를 보여줌. 셸(Shell)이 대표적.',
   ]},
-  { type: 'heading', text: '운영체제의 종류' },
+  { type: 'heading', text: '운영체제의 분류' },
   { type: 'list', items: [
     '데스크톱 OS: Microsoft Windows, macOS, Linux',
     '모바일 OS: Android, iOS',
     '서버 OS: Linux, UNIX, Windows Server',
   ]},
   { type: 'divider' },
-  { type: 'heading', text: '심화 학습: 운영체제 핵심 원리' },
-  { type: 'heading', text: '커널(Kernel)의 상세 기능' },
+  { type: 'heading', text: '심화: 커널(Kernel) 주요 기능' },
   { type: 'list', items: [
     '프로세스 관리: CPU 시간 배분과 스케줄링으로 동시성 제공',
     '메모리 관리: 메모리 할당/회수, 가상 메모리, 보호',

@@ -1,4 +1,5 @@
 const blocks = [
+  { type: 'aside', text: 'Linux는 Unix 철학을 계승한 오픈소스(Unix-like). GPL로 자유롭게 사용·수정·배포 가능.' },
   { type: 'paragraph', text: '리눅스는 유닉스(Unix)라는 운영체제에서 뿌리를 두고 있습니다. 둘의 관계를 이해하는 것은 리눅스의 철학을 이해하는 데 도움이 됩니다.' },
   { type: 'heading', text: '유닉스 (Unix) - 모든 것의 시작' },
   { type: 'list', items: [
