@@ -19,6 +19,9 @@ export default [
     '세션 저장: Session → Saved Sessions에 이름 입력 → Save(재사용).',
   ]},
 
+  { type: 'heading', text: '그림으로 보기: SSH 접속 흐름' },
+  { type: 'image', src: '/assets/ssh_flow.svg', alt: 'SSH 접속 흐름도', caption: '클라이언트 → 암호화 핸드셰이크 → 인증(키/비번) → 세션 확립' },
+
   { type: 'heading', text: '터미널과 프롬프트 이해' },
   { type: 'list', items: [
     '쉘: 명령을 해석/실행하는 프로그램(Bash 등).',
@@ -47,6 +50,20 @@ export default [
   { type: 'heading', text: 'SSH 하드닝 스니펫(/etc/ssh/sshd_config 일부)' },
   { type: 'code', text: 'Port 22\nPubkeyAuthentication yes\nPasswordAuthentication no\nPermitRootLogin prohibit-password\nClientAliveInterval 60\nClientAliveCountMax 3' },
   { type: 'paragraph', text: '설정 변경 후 `sudo systemctl reload sshd`(배포판에 따라 서비스명이 ssh/sshd 상이)로 적용하세요.' },
+  { type: 'heading', text: '고급: 포워딩/에이전트/파일전송' },
+  { type: 'list', items: [
+    '로컬 포워딩(L9090→R3306): `ssh -L 9090:127.0.0.1:3306 user@host` → 로컬 9090 통해 원격 3306 접근',
+    '리모트 포워딩(R8080→L3000): `ssh -R 8080:127.0.0.1:3000 user@host` → 원격 8080 통해 로컬 3000 노출',
+    '에이전트 포워딩: `ssh -A user@jump` → 점프 서버 경유 시 로컬 키 재사용(신뢰 환경에서만)',
+    'SCP: `scp file user@host:/path/` / `scp -r dir user@host:/path/`',
+    'Rsync(효율적 동기화): `rsync -avz -e ssh ./dir user@host:/path/`',
+  ]},
+  { type: 'heading', text: '문제 해결(자주 보는 에러)' },
+  { type: 'list', items: [
+    'Permission denied: 계정/키 권한(700 ~/.ssh, 600 id_rsa), 서버 로그(`/var/log/auth.log`/`journalctl -u sshd`) 확인',
+    'Host key 바뀜 경고: 서버 재설치/변경 시 `~/.ssh/known_hosts`에서 해당 호스트 제거 후 재접속',
+    '포워딩 불가: 서버 sshd_config의 `AllowTcpForwarding`/`GatewayPorts` 확인',
+  ]},
   { type: 'heading', text: '첫 부팅 체크리스트' },
   { type: 'list', items: [
     '계정/비밀번호/호스트명 설정 확인',

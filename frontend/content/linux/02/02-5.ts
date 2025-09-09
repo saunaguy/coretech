@@ -33,12 +33,23 @@ export default [
     '서버 공개 테스트: Bridged 단독 또는 NAT+포트포워딩.',
   ]},
 
+  { type: 'heading', text: '그림으로 보기: VM 네트워크 모드' },
+  { type: 'image', src: '/assets/vm_network_modes.svg', alt: 'VM 네트워크 모드 비교', caption: 'NAT / Bridged / Host-only 한눈에' },
+
   { type: 'heading', text: 'NAT 포트 포워딩(예: 호스트 8080 → 게스트 80)' },
   { type: 'list', items: [
     'VirtualBox: VM 설정 → 네트워크 → 고급 → 포트 포워딩 → 규칙 추가',
     '예) 이름: web, 프로토콜: TCP, 호스트포트: 8080, 게스트IP: 게스트IP, 게스트포트: 80',
     'VMware(버전별 상이): NAT 어댑터 포트 포워딩 메뉴에서 규칙 추가',
     '확인: 호스트 브라우저에서 http://localhost:8080 접속',
+  ]},
+
+  { type: 'heading', text: '문제 해결(트러블슈팅) 팁' },
+  { type: 'list', items: [
+    '브리지에서 IP가 안 나올 때: 공유기에서 무선 격리(AP isolation)·브리지 금지 설정 확인',
+    'Host-only 통신 실패: Host-only 어댑터의 DHCP/서브넷 설정 확인, 게스트에 IP가 있는지 확인',
+    'NAT 인터넷 불가: 게스트 라우팅(`ip route`)과 DNS(`/etc/resolv.conf`) 확인',
+    'Windows 호스트: Hyper-V/VPN/보안SW가 가상 어댑터를 가로막는지 점검(우선순위/네트워크 프로필)',
   ]},
 
   { type: 'heading', text: '빠른 점검 명령' },
