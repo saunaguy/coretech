@@ -8,6 +8,8 @@ const blocks = [
     'Arch 계열: Arch, Manjaro — 롤링 릴리즈, pacman/PKGBUILD, 최신 패키지·자유도 높음',
     'SUSE 계열: openSUSE, SLE — zypper/RPM, YaST 도구로 관리 편의',
   ]},
+  { type: 'heading', text: '한눈에 보자! 배포판 계열' },
+  { type: 'image', src: '/assets/linux_distro_families.svg', alt: '리눅스 배포판 계열 한눈에', caption: 'Debian · Red Hat · Arch · SUSE 계열 요약' },
   { type: 'heading', text: '왜 리눅스인가?' },
   { type: 'list', items: [
     '무료/오픈소스: 비용 절감과 커스터마이징 자유',

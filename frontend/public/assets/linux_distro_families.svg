@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="360" viewBox="0 0 920 360">
+  <style>
+    .title { font:600 18px 'Segoe UI', Arial; fill:#111827 }
+    .box { fill:#f9fafb; stroke:#111827; stroke-width:2; rx:10; ry:10 }
+    .head { font:600 14px 'Segoe UI', Arial; fill:#111827 }
+    .item { font:13px 'Segoe UI', Arial; fill:#374151 }
+    .note { font:12px 'Segoe UI', Arial; fill:#6b7280 }
+  </style>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="20" y="32" class="title">리눅스 배포판 계열 한눈에</text>
+
+  <!-- Debian family -->
+  <rect class="box" x="20" y="60" width="420" height="120"/>
+  <text x="40" y="85" class="head">Debian 계열</text>
+  <text x="40" y="110" class="item">Debian · Ubuntu · Linux Mint</text>
+  <text x="40" y="135" class="note">APT/DEB · 안정성 · LTS</text>
+
+  <!-- Red Hat family -->
+  <rect class="box" x="480" y="60" width="420" height="120"/>
+  <text x="500" y="85" class="head">Red Hat 계열</text>
+  <text x="500" y="110" class="item">RHEL · Rocky · AlmaLinux · Fedora</text>
+  <text x="500" y="135" class="note">DNF/YUM · RPM · 엔터프라이즈 지원</text>
+
+  <!-- Arch family -->
+  <rect class="box" x="20" y="200" width="420" height="120"/>
+  <text x="40" y="225" class="head">Arch 계열</text>
+  <text x="40" y="250" class="item">Arch · Manjaro</text>
+  <text x="40" y="275" class="note">pacman · 롤링 릴리즈 · 최신 패키지</text>
+
+  <!-- SUSE family -->
+  <rect class="box" x="480" y="200" width="420" height="120"/>
+  <text x="500" y="225" class="head">SUSE 계열</text>
+  <text x="500" y="250" class="item">openSUSE · SLE</text>
+  <text x="500" y="275" class="note">zypper/RPM · YaST</text>
+</svg>
+
