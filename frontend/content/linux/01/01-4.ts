@@ -1,4 +1,11 @@
 const blocks = [
+  { type: 'heading', text: '학습 목표' },
+  { type: 'list', items: [
+    '배포판(Distribution)의 개념을 정의한다',
+    '주요 계열(Debian/Red Hat/Arch/SUSE)의 특징을 비교한다',
+    '용도별로 적절한 배포판을 선택한다',
+    '기본 패키지 관리자 명령을 실행할 수 있다',
+  ]},
   { type: 'heading', text: '배포판(Distribution) 이해' },
   { type: 'aside', text: "리눅스는 '커널'이고, 배포판은 커널 + 사용자 공간(도구/설정/패키지/업데이트 체계)의 묶음입니다." },
   { type: 'heading', text: '주요 계열과 특징' },

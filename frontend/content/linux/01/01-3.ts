@@ -41,6 +41,8 @@ const blocks = [
     'Linux가 Unix와 다른 점을 2가지 말하라(라이선스/배포 생태 등)',
     'POSIX의 역할은 무엇인가',
   ]},
+  { type: 'heading', text: '요약' },
+  { type: 'paragraph', text: 'Unix는 현대 OS의 개념을 정립한 원류이고, Linux는 그 철학을 계승한 오픈소스 커널이다. 사용자 공간 도구(GNU)와 결합한 배포판 형태로 널리 쓰이며, POSIX를 공통 분모로 명령/개념 호환성을 유지한다.' },
 ]
 
 export default blocks as any
