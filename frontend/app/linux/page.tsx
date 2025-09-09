@@ -111,6 +111,9 @@ const CommandDetailView = ({ command }) => {
 export default function LinuxPage() {
   const [selectedCommand, setSelectedCommand] = useState<any>(null);
   const [loading, setLoading] = useState(false)
+  const handleSelect = (cmd: any) => {
+    setSelectedCommand((prev: any) => (prev?.id === cmd?.id ? prev : cmd))
+  }
 
   useEffect(() => {
     const loadBlocks = async () => {
@@ -151,7 +154,7 @@ export default function LinuxPage() {
                 <CardTitle>명령어 목록</CardTitle>
               </CardHeader>
               <CardContent>
-                <LinuxSidebar topics={linuxTopics} onCommandSelect={setSelectedCommand} />
+                <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
               </CardContent>
             </Card>
           </aside>
