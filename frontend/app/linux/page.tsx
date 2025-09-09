@@ -32,6 +32,16 @@ const CommandDetailView = ({ command }) => {
             {block.text}
           </p>
         )
+      case 'image':
+        return (
+          <figure key={index} className="my-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={block.src} alt={block.alt || ''} className="rounded-md border" />
+            {block.caption && (
+              <figcaption className="mt-2 text-sm text-muted-foreground">{block.caption}</figcaption>
+            )}
+          </figure>
+        )
       case 'list':
         return (
           <ul key={index} className="list-disc pl-6 space-y-1 text-muted-foreground">

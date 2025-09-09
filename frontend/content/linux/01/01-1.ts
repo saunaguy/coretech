@@ -68,6 +68,8 @@ const blocks = [
     'VFS/드라이버: 통일된 파일 인터페이스와 하드웨어 드라이버 계층',
     '인터럽트/컨텍스트 스위칭: 하드웨어 이벤트 처리와 실행 전환',
   ]},
+  { type: 'heading', text: '한눈에 알아보자! OS 계층 구조' },
+  { type: 'image', src: '/assets/os_layers.svg', alt: 'OS 계층 구조', caption: '애플리케이션 → 셸/CLI → 시스템 콜 → 커널 → 드라이버 → 하드웨어' },
   { type: 'heading', text: '사용자 공간과 커널 공간' },
   { type: 'paragraph', text: '일반 앱은 사용자 공간에서 동작하며, 특권이 필요한 작업은 시스템 콜로 커널에 위임합니다. 커널은 높은 권한으로 장치 제어·자원 관리·보호 기능을 수행합니다.' },
   { type: 'heading', text: '시스템 콜 흐름(간단 요약)' },
