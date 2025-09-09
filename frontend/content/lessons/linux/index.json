@@ -1,9 +1,0 @@
-{
-  "groups": [
-    { "slug": "absolute-beginner", "title": "왕초보", "path": "/content/lessons/absolute-beginner" },
-    { "slug": "beginner", "title": "초급", "path": "/content/lessons/beginner" },
-    { "slug": "intermediate", "title": "중급", "path": "/content/lessons/intermediate" },
-    { "slug": "advanced", "title": "고급", "path": "/content/lessons/advanced" }
-  ],
-  "notes": "/content/lessons/plan.md"
-}

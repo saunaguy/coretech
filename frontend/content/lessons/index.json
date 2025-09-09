@@ -1,8 +1,0 @@
-{
-  "groups": [
-    { "slug": "linux", "title": "Linux 기초" },
-    { "slug": "server", "title": "서버 관리" },
-    { "slug": "network", "title": "네트워크" }
-  ]
-}
-

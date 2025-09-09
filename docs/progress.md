@@ -18,3 +18,12 @@
 | 2025-09-03 | 헤더 복원 및 네비 정리 | 프론트 | 완료 | `components/site/Header.tsx`, `app/layout.tsx` |
 
 | 2025-09-04 16:20 | 실습 랜딩/상세 연결, 전역 헤더 정리, 노션 링크 적용 | 프론트 | 완료 | app/practice/page.tsx, app/practice/linux-exam1/page.tsx, components/ui/*, next.config.mjs |
+| 2025-09-08 | 리눅스 레슨: 사이드바/상세 구조 확인 및 가이드 문서화 | 프론트/문서 | 완료 | docs/error.md (가이드), frontend/app/linux/page.tsx, components/linux/LinuxSidebar.tsx |
+| 2025-09-08 | 리눅스 커리큘럼 페이지 초안 추가 후 제거 | 프론트 | 완료 | +frontend/app/linux/plan/page.tsx (추가) → 삭제 |
+| 2025-09-08 | 사이드바에 커리큘럼(대단원/장/소목차) 데이터 통합 | 프론트 | 완료 | frontend/lib/linux-data.ts |
+| 2025-09-08 | 사이드바 개선: 기본 전개/검색 연동, 글자 크기/들여쓰기 조정 | 프론트 | 완료 | components/linux/LinuxSidebar.tsx |
+| 2025-09-08 | 동적 MD→블록 유틸/API 추가 후 실효성 문제로 롤백 | 프론트/문서 | 완료 | +frontend/lib/md-blocks.ts, +app/api/linux/blocks → 삭제, +docs/docsutil.md → 삭제 |
+| 2025-09-08 | 01장 콘텐츠 확충(1-1~1-4) — 문서 톤 반영 | 프론트 | 완료 | frontend/lib/linux-data.ts |
+| 2025-09-08 | 모듈화 1차: 01장 콘텐츠 파일 분리 + 동적 import | 프론트 | 완료 | +frontend/content/linux/01/01-1.ts~01-4.ts, +frontend/content/linux/loader.ts, app/linux/page.tsx (동적 로딩), linux-data.ts (loaderKey 추가) |
+| 2025-09-08 | 대단원 토글(접기/펼치기) 지원 | 프론트 | 완료 | components/linux/LinuxSidebar.tsx |
+| 2025-09-08 | 리팩터링 계획서 작성(데이터/콘텐츠 분리, 청크 로딩) | 문서 | 완료 | docs/think.md |

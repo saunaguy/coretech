@@ -7,12 +7,23 @@ import { Input } from "@/components/ui/input"
 
 const LinuxSidebar = ({ topics, onCommandSelect }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [openCategories, setOpenCategories] = useState(
-    Object.keys(topics['왕초보'] || {}).reduce((acc, category) => {
-      acc[category] = true;
-      return acc;
-    }, {})
-  );
+  const [openCategories, setOpenCategories] = useState(() => {
+    const acc = {} as Record<string, boolean>;
+    Object.values(topics || {}).forEach((categories: any) => {
+      Object.keys(categories || {}).forEach((cat) => {
+        acc[cat] = true;
+      });
+    });
+    return acc;
+  });
+
+  const [openLevels, setOpenLevels] = useState(() => {
+    const acc = {} as Record<string, boolean>;
+    Object.keys(topics || {}).forEach((level) => {
+      acc[level] = true;
+    });
+    return acc;
+  });
 
   const filteredTopics = useMemo(() => {
     if (!searchTerm) {
@@ -50,6 +61,13 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     }));
   };
 
+  const toggleLevel = (level) => {
+    setOpenLevels(prev => ({
+      ...prev,
+      [level]: !prev[level]
+    }));
+  }
+
   return (
     <nav className="space-y-4 text-sm">
         <div className="px-2">
@@ -61,14 +79,20 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
         </div>
       {Object.entries(filteredTopics).map(([level, categories]) => (
         <div key={level} className="space-y-1">
-          <h3 className="font-semibold text-lg mb-2 px-2">{level}</h3>
-          {Object.entries(categories).map(([category, commands]) => (
+          <button
+            onClick={() => toggleLevel(level)}
+            className="w-full flex items-center justify-between py-2 px-2 rounded-md hover:bg-accent transition-colors"
+          >
+            <span className="font-semibold text-base">{level}</span>
+            {openLevels[level] || searchTerm ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          </button>
+          {(openLevels[level] || searchTerm) && Object.entries(categories).map(([category, commands]) => (
             <div key={category}>
               <button
                 onClick={() => toggleCategory(category)}
-                className="w-full flex items-center justify-between py-1 px-2 rounded-md hover:bg-accent transition-colors"
+                className="w-full flex items-center justify-between py-1 pl-4 pr-2 rounded-md hover:bg-accent transition-colors"
               >
-                <span className="font-medium text-base">{category}</span>
+                <span className="font-medium text-sm">{category}</span>
                 {openCategories[category] || searchTerm ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </button>
               {(openCategories[category] || searchTerm) && (
