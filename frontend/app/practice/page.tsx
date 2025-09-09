@@ -46,7 +46,7 @@ export default function PracticePage() {
       duration: "90분",
       status: "in-progress",
       tasks: ["Postfix", "Dovecot(IMAP/POP3)", "SPF/DKIM 기본", "테스트 계정"],
-      href: "/practice/linux-mail",
+      href: "/practice/server-mail",
     },
     {
       id: 4,

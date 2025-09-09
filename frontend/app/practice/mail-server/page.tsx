@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, Mail, Server, Code, Terminal, FileText, Settings, HardDrive, GitBranch } from "lucide-react";
+import { BookOpen, Mail, Server, Code, Terminal, FileText, Settings, HardDrive, GitBranch, Lock } from "lucide-react";
 
 const NotionBlock = ({ block, blocks }) => {
   if (!block) {
