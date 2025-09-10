@@ -33,6 +33,14 @@ export default [
     '서버 공개 테스트: Bridged 단독 또는 NAT+포트포워딩.',
   ]},
 
+  { type: 'heading', text: '요약 비교 및 활용 사례' },
+  { type: 'list', items: [
+    'NAT: 안전/간단. 패키지 설치/업데이트/일반 개발.',
+    'Bridged: 동일 네트워크 단말에서 접근 필요할 때(웹/DB 테스트).',
+    'Host-only: 외부 격리된 폐쇄망 실습/시뮬레이션.',
+    '혼합: NAT+Host-only로 인터넷과 내부망을 동시에 활용.',
+  ]},
+
   { type: 'heading', text: '그림으로 보기: VM 네트워크 모드' },
   { type: 'image', src: '/assets/vm_network_modes.svg', alt: 'VM 네트워크 모드 비교', caption: 'NAT / Bridged / Host-only 한눈에' },
 

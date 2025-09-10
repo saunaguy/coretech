@@ -38,5 +38,21 @@ export default [
     '네트워크: 기본 NAT, 필요 시 Bridged/Host-only 병행.',
   ]},
 
+  { type: 'heading', text: '스냅샷/클론/템플릿 이미지 관리' },
+  { type: 'list', items: [
+    '스냅샷: 특정 시점의 상태를 보존. 업데이트/설정 전 체크포인트로 활용.',
+    '클론: 현재 VM을 복제해 동일한 환경을 빠르게 증설.',
+    '템플릿: 공통 베이스 이미지를 만들어 다수 VM을 일관되게 배포.',
+    '권장 시점: 설치 직후, SSH/필수 패키지/업데이트 완료 후, 주요 설정 직전.',
+  ]},
+
+  { type: 'heading', text: '클라우드 이미지 형식과 변환(qcow2, vmdk, qemu-img)' },
+  { type: 'list', items: [
+    'qcow2: QEMU/KVM 기본 포맷(스냅샷/압축/씬 프로비저닝).',
+    'vmdk: VMware 디스크 포맷.',
+    'vdi/vhdx: VirtualBox/Hyper-V 포맷.',
+    '변환: `qemu-img convert -O qcow2 input.vmdk output.qcow2`',
+  ]},
+
   { type: 'aside', text: '스냅샷을 전략적으로 활용하세요. 설치 직후/핵심 설정 후 스냅샷을 남겨두면 실습 실패 시 빠른 복구가 가능합니다.' },
 ]

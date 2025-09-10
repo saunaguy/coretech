@@ -52,6 +52,14 @@ export default [
     '권장 예시(데스크톱): `/` 30G+, `/home` 여유분, `swap` 2~4G(또는 RAM에 비례).',
   ]},
 
+  { type: 'heading', text: '파일시스템 선택 가이드 (ext4 vs xfs, 스왑)' },
+  { type: 'list', items: [
+    'ext4: 범용·안정성 높음, 데스크톱/서버 모두 무난.',
+    'xfs: 대용량 파일/병렬처리 워크로드에서 강점(RHEL 기본).',
+    'btrfs: 스냅샷/서브볼륨/체크섬 등 현대적 기능(학습/실험에 적합).',
+    '스왑: 램 부족 시 안전장치. 램이 충분하면 swappiness를 낮추고, 노트북 절전/하이버네이션은 스왑 크기 재검토.',
+  ]},
+
   { type: 'heading', text: 'LVM(Logical Volume Manager) 개요' },
   { type: 'list', items: [
     'PV(물리 볼륨) → VG(볼륨 그룹) → LV(논리 볼륨) 구조.',
@@ -65,6 +73,14 @@ export default [
   { type: 'list', items: [
     'Netinstall/Minimal ISO로 네트워크를 통해 필요한 패키지 만 다운로드하여 설치.',
     '장점: 최신 패키지 기반 설치, 용량 절약. 단점: 설치 중 네트워크 품질에 영향.',
+  ]},
+
+  { type: 'heading', text: '설치 자동화 (Kickstart/Preseed, cloud-init 기초)' },
+  { type: 'list', items: [
+    'RHEL 계열: Kickstart로 파티셔닝/패키지/유저를 자동 설정(ks 파일).',
+    'Debian/Ubuntu: Preseed(구세대) 또는 Autoinstall(신규)로 무인 설치 구성.',
+    '클라우드: cloud-init로 첫 부팅 시 유저/키/패키지/스크립트 적용.',
+    '이점: 반복 설치 시간을 절약하고 설정 일관성을 보장.',
   ]},
 
   { type: 'aside', text: '가상 머신에 설치한다면 스냅샷을 적절히 활용하세요. 설치 직후 스냅샷을 생성해두면 되돌리기가 쉬워집니다.' },
