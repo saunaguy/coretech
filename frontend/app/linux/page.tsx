@@ -74,18 +74,17 @@ const CommandDetailView = ({ command }) => {
           </blockquote>
         )
       case 'aside':
-      case 'callout': {
-        const icon = block.icon || (typeof block.text === 'string' && /^[\p{Emoji}\p{So}]/u.test(block.text) ? block.text[0] : '💡')
-        const text = typeof block.text === 'string' && icon && block.text?.startsWith(icon)
-          ? block.text.slice(icon.length).trim()
-          : block.text
         return (
-          <div
-            key={index}
-            className="flex items-start gap-3 border rounded-lg bg-muted/60 p-4"
-          >
+          <div key={index} className="border rounded-lg bg-muted/60 p-4 text-muted-foreground leading-7">
+            {block.text}
+          </div>
+        )
+      case 'callout': {
+        const icon = block.icon || '💡'
+        return (
+          <div key={index} className="flex items-start gap-3 border rounded-lg bg-muted/60 p-4">
             <div className="text-xl leading-none select-none">{icon}</div>
-            <div className="text-muted-foreground leading-7">{text}</div>
+            <div className="text-muted-foreground leading-7">{block.text}</div>
           </div>
         )
       }
@@ -118,7 +117,19 @@ const CommandDetailView = ({ command }) => {
           <CardDescription className="text-lg">{command.description}</CardDescription>
         </CardHeader>
         {(command.content || command.blocks) && (
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-5 max-w-3xl">
+            {Array.isArray(command.blocks) && command.blocks.filter(b => b.type === 'heading')?.length > 2 && (
+              <div className="rounded-lg border bg-background p-4">
+                <div className="text-sm font-medium mb-2">목차</div>
+                <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
+                  {command.blocks.filter(b => b.type === 'heading').map((h, i) => (
+                    <li key={`toc-${i}`}>
+                      <a href={`#${slugify(h.text)}`} className="hover:underline">{h.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
             {command.blocks
               ? command.blocks.map((b, idx) => renderBlock(b, idx))
               : <p className="text-muted-foreground">{command.content}</p>}
