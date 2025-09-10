@@ -3,12 +3,16 @@ export const linuxContentLoaders: Record<string, () => Promise<{ default: any }>
   '01-2': () => import('./01/01-2'),
   '01-3': () => import('./01/01-3'),
   '01-4': () => import('./01/01-4'),
+  '01-5': () => import('./01/01-5'),
+  '01-6': () => import('./01/01-6'),
+  '01-7': () => import('./01/01-7'),
+  '01-8': () => import('./01/01-8'),
+  '01-9': () => import('./01/01-9'),
+  '01-10': () => import('./01/01-10'),
   '02-1': () => import('./02/02-1'),
   '02-2': () => import('./02/02-2'),
   '02-3': () => import('./02/02-3'),
   '02-4': () => import('./02/02-4'),
-  '02-5': () => import('./02/02-5'),
-  '02-6': () => import('./02/02-6'),
 }
 
 export async function loadLinuxContent(key: string): Promise<{ default: any }> {

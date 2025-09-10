@@ -1,15 +1,36 @@
 'use client'
 
 import { useEffect, useState } from "react"
-import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+//
 import LinuxSidebar from "@/components/linux/LinuxSidebar"
 import { linuxTopics } from "@/lib/linux-data"
 import { loadLinuxContent } from "@/content/linux/loader"
 
-const CommandDetailView = ({ command }) => {
+type ContentBlock = {
+  type: 'heading' | 'paragraph' | 'image' | 'list' | 'aside' | 'callout' | 'code' | 'divider' | 'quote'
+  text?: string
+  src?: string
+  alt?: string
+  caption?: string
+  items?: string[]
+  icon?: string
+}
+
+type Command = {
+  id?: string
+  name?: string
+  title: string
+  description?: string
+  content?: string
+  blocks?: ContentBlock[]
+  options?: { flag: string; description: string }[]
+  examples?: { command: string; description: string }[]
+  loaderKey?: string
+}
+
+const CommandDetailView = ({ command }: { command: Command | null }) => {
   if (!command) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -31,7 +52,7 @@ const CommandDetailView = ({ command }) => {
     } catch (_) {}
   };
 
-  const renderBlock = (block, index) => {
+  const renderBlock = (block: ContentBlock, index: number) => {
     switch (block.type) {
       case 'heading':
         return (
@@ -165,10 +186,10 @@ const CommandDetailView = ({ command }) => {
 }
 
 export default function LinuxPage() {
-  const [selectedCommand, setSelectedCommand] = useState<any>(null);
+  const [selectedCommand, setSelectedCommand] = useState<Command | null>(null)
   const [loading, setLoading] = useState(false)
-  const handleSelect = (cmd: any) => {
-    setSelectedCommand((prev: any) => (prev?.id === cmd?.id ? prev : cmd))
+  const handleSelect = (cmd: Command) => {
+    setSelectedCommand((prev) => (prev?.id === cmd?.id ? prev : cmd))
   }
 
   useEffect(() => {
@@ -187,7 +208,7 @@ export default function LinuxPage() {
     loadBlocks()
   }, [selectedCommand?.loaderKey, selectedCommand?.id])
 
-  const deriveKey = (cmd: any) => {
+  const deriveKey = (cmd: Command | null) => {
     // Try from title then name: expect patterns like "01-1 ..." or "3-1 ..."
     const pick = (s?: string) => {
       if (!s) return null
