@@ -4,38 +4,52 @@ import { osAndSetup } from "./topics/os-and-setup"
 export const linuxTopics = {
   "🖥️ 운영체제와 설치": osAndSetup,
 
-  // 2. 리눅스 명령어 (콘텐츠 02장은 설치/가상화이므로, 명령어 파트는 03장부터 시작)
+  // 2. 리눅스 핵심 명령어 (2-1 ~ 2-4)
   "⚙️ 리눅스 핵심 명령어": {
-    "03장 기본 명령어 실습": [
-      { id: "plan-03-1", name: "3-1 파일/디렉토리 명령어: ls, cp, mv, rm, touch, mkdir, rmdir", title: "커리큘럼: 3-1 파일/디렉토리", description: "docs/lessonplan.md 참조" },
-      { id: "plan-03-2", name: "3-2 탐색 명령어: pwd, cd, find, locate", title: "커리큘럼: 3-2 탐색", description: "docs/lessonplan.md 참조" },
-      { id: "plan-03-3", name: "3-3 텍스트 확인: cat, less, more, head, tail", title: "커리큘럼: 3-3 텍스트 확인", description: "docs/lessonplan.md 참조" },
-      { id: "plan-03-4", name: "3-4 도움말: man, help, --help", title: "커리큘럼: 3-4 도움말", description: "docs/lessonplan.md 참조" },
+    "2-1 기본 명령어": [
+      { id: "plan-2-1-1", name: "2-1 파일/디렉토리 관리 (ls, cp, mv, rm, mkdir 등)", title: "커리큘럼: 2-1 파일/디렉토리", description: "docs/think.md 기준" },
+      { id: "plan-2-1-2", name: "2-1 탐색 (pwd, cd, find, locate)", title: "커리큘럼: 2-1 탐색", description: "docs/think.md 기준" },
+      { id: "plan-2-1-3", name: "2-1 텍스트 확인 (cat, less, more, head, tail)", title: "커리큘럼: 2-1 텍스트 확인", description: "docs/think.md 기준" },
+      { id: "plan-2-1-4", name: "2-1 도움말 (man, help)", title: "커리큘럼: 2-1 도움말", description: "docs/think.md 기준" },
+      { id: "plan-2-1-5", name: "2-1 에디터 기초 (vim, nano)와 기본 단축키", title: "커리큘럼: 2-1 에디터 기초", description: "docs/think.md 기준" },
+      { id: "plan-2-1-6", name: "2-1 경로/글로빙, 와일드카드, 히스토리/alias", title: "커리큘럼: 2-1 경로·글로빙·히스토리", description: "docs/think.md 기준" },
+      { id: "plan-2-1-7", name: "2-1 리다이렉션/파이프/서브쉘과 명령 치환", title: "커리큘럼: 2-1 리다이렉션/파이프", description: "docs/think.md 기준" },
     ],
-    "04장 권한과 사용자 개념": [
-      { id: "plan-04-1", name: "4-1 사용자/그룹 관리: useradd, userdel, groupadd", title: "커리큘럼: 4-1 사용자/그룹 관리", description: "docs/lessonplan.md 참조" },
-      { id: "plan-04-2", name: "4-2 파일 권한: rwx, chmod, chown, chgrp", title: "커리큘럼: 4-2 파일 권한", description: "docs/lessonplan.md 참조" },
-      { id: "plan-04-3", name: "4-3 umask 기본값", title: "커리큘럼: 4-3 umask", description: "docs/lessonplan.md 참조" },
-      { id: "plan-04-4", name: "4-4 sudo 개념 및 visudo 설정", title: "커리큘럼: 4-4 sudo/visudo", description: "docs/lessonplan.md 참조" },
+    "2-2 사용자/권한 관련": [
+      { id: "plan-2-2-1", name: "2-2 사용자/그룹 관리 (useradd, groupadd, passwd)", title: "커리큘럼: 2-2 사용자/그룹", description: "docs/think.md 기준" },
+      { id: "plan-2-2-2", name: "2-2 파일 권한 (chmod, chown, umask)", title: "커리큘럼: 2-2 파일 권한", description: "docs/think.md 기준" },
+      { id: "plan-2-2-3", name: "2-2 sudo, visudo", title: "커리큘럼: 2-2 sudo/visudo", description: "docs/think.md 기준" },
+      { id: "plan-2-2-4", name: "2-2 특수 권한 (SUID/SGID/Sticky bit) 동작 원리", title: "커리큘럼: 2-2 특수 권한", description: "docs/think.md 기준" },
+      { id: "plan-2-2-5", name: "2-2 파일 속성/불변 플래그 (chattr, lsattr)", title: "커리큘럼: 2-2 파일 속성", description: "docs/think.md 기준" },
+      { id: "plan-2-2-6", name: "2-2 ACL 관리 (getfacl, setfacl)", title: "커리큘럼: 2-2 ACL", description: "docs/think.md 기준" },
+      { id: "plan-2-2-7", name: "2-2 로그인 셸과 환경 변수 (profile, bashrc, secure_path)", title: "커리큘럼: 2-2 로그인 셸/환경변수", description: "docs/think.md 기준" },
     ],
-    "05장 파일시스템 개념": [
-      { id: "plan-05-1", name: "5-1 파일시스템 구조: EXT4, XFS, Btrfs", title: "커리큘럼: 5-1 파일시스템 구조", description: "docs/lessonplan.md 참조" },
-      { id: "plan-05-2", name: "5-2 FHS (Filesystem Hierarchy Standard)", title: "커리큘럼: 5-2 FHS", description: "docs/lessonplan.md 참조" },
-      { id: "plan-05-3", name: "5-3 마운트/언마운트: mount, umount", title: "커리큘럼: 5-3 마운트/언마운트", description: "docs/lessonplan.md 참조" },
-      { id: "plan-05-4", name: "5-4 /etc/fstab 설정", title: "커리큘럼: 5-4 fstab", description: "docs/lessonplan.md 참조" },
-      { id: "plan-05-5", name: "5-5 inodes 개념", title: "커리큘럼: 5-5 inodes", description: "docs/lessonplan.md 참조" },
+    "2-3 시스템/프로세스 관리": [
+      { id: "plan-2-3-1", name: "2-3 프로세스 관리 (ps, top, htop, kill)", title: "커리큘럼: 2-3 프로세스 관리", description: "docs/think.md 기준" },
+      { id: "plan-2-3-2", name: "2-3 systemctl, 서비스 관리", title: "커리큘럼: 2-3 서비스 관리", description: "docs/think.md 기준" },
+      { id: "plan-2-3-3", name: "2-3 런레벨(target) 개념", title: "커리큘럼: 2-3 런레벨", description: "docs/think.md 기준" },
+      { id: "plan-2-3-4", name: "2-3 작업 스케줄링 (cron, at, systemd timer)", title: "커리큘럼: 2-3 작업 스케줄링", description: "docs/think.md 기준" },
+      { id: "plan-2-3-5", name: "2-3 로깅 (journalctl, rsyslog 기본)", title: "커리큘럼: 2-3 로깅", description: "docs/think.md 기준" },
+      { id: "plan-2-3-6", name: "2-3 시간 동기화 (chrony/ntpd)", title: "커리큘럼: 2-3 시간 동기화", description: "docs/think.md 기준" },
+      { id: "plan-2-3-7", name: "2-3 커널 로그/모듈 (dmesg, lsmod, modprobe)", title: "커리큘럼: 2-3 커널 로그/모듈", description: "docs/think.md 기준" },
+      { id: "plan-2-3-8", name: "2-3 자원 제한/격리 (ulimit, cgroups 개요, OOM Killer)", title: "커리큘럼: 2-3 자원 제한/격리", description: "docs/think.md 기준" },
     ],
-    "06장 프로세스 관리": [
-      { id: "plan-06-1", name: "6-1 프로세스 조회: ps, top, htop", title: "커리큘럼: 6-1 프로세스 조회", description: "docs/lessonplan.md 참조" },
-      { id: "plan-06-2", name: "6-2 프로세스 제어: kill, pkill, jobs, fg, bg", title: "커리큘럼: 6-2 프로세스 제어", description: "docs/lessonplan.md 참조" },
-      { id: "plan-06-3", name: "6-3 systemd 서비스 관리: systemctl start/stop/status", title: "커리큘럼: 6-3 systemd 서비스", description: "docs/lessonplan.md 참조" },
-      { id: "plan-06-4", name: "6-4 런레벨(target) 개념", title: "커리큘럼: 6-4 런레벨", description: "docs/lessonplan.md 참조" },
-    ],
-    "07장 네트워크 기초": [
-      { id: "plan-07-1", name: "7-1 네트워크 인터페이스 관리: ip addr, ifconfig, nmcli", title: "커리큘럼: 7-1 인터페이스 관리", description: "docs/lessonplan.md 참조" },
-      { id: "plan-07-2", name: "7-2 기본 네트워킹: ping, traceroute, netstat, ss", title: "커리큘럼: 7-2 기본 네트워킹", description: "docs/lessonplan.md 참조" },
-      { id: "plan-07-3", name: "7-3 DNS 확인: nslookup, dig", title: "커리큘럼: 7-3 DNS", description: "docs/lessonplan.md 참조" },
-      { id: "plan-07-4", name: "7-4 라우팅 테이블: ip route", title: "커리큘럼: 7-4 라우팅", description: "docs/lessonplan.md 참조" },
+    "2-4 고급/관리 명령어": [
+      { id: "plan-2-4-1", name: "2-4 텍스트 처리 (grep, awk, sed, cut, sort)", title: "커리큘럼: 2-4 텍스트 처리", description: "docs/think.md 기준" },
+      { id: "plan-2-4-2", name: "2-4 아카이빙/압축 (tar, gzip, bzip2, xz)", title: "커리큘럼: 2-4 아카이빙/압축", description: "docs/think.md 기준" },
+      { id: "plan-2-4-3", name: "2-4 스트림 편집 (tee, xargs, tr)", title: "커리큘럼: 2-4 스트림 편집", description: "docs/think.md 기준" },
+      { id: "plan-2-4-4", name: "2-4 파일 비교/검증 (diff, cmp, md5sum)", title: "커리큘럼: 2-4 파일 비교/검증", description: "docs/think.md 기준" },
+      { id: "plan-2-4-5", name: "2-4 패키지 관리 (yum/dnf, apt, rpm/dpkg)", title: "커리큘럼: 2-4 패키지 관리", description: "docs/think.md 기준" },
+      { id: "plan-2-4-6", name: "2-4 스토리지 관리 (fdisk, LVM, RAID, multipath)", title: "커리큘럼: 2-4 스토리지 관리", description: "docs/think.md 기준" },
+      { id: "plan-2-4-7", name: "2-4 네트워크 기초 도구 (ping, traceroute, netstat, ss)", title: "커리큘럼: 2-4 네트워크 도구", description: "docs/think.md 기준" },
+      { id: "plan-2-4-8", name: "2-4 보안/네트워크 심화 (iptables, firewalld, tcpdump, wireshark, ssh, scp, rsync)", title: "커리큘럼: 2-4 보안/네트워크", description: "docs/think.md 기준" },
+      { id: "plan-2-4-9", name: "2-4 패키지 저장소/리포지토리 설정 (EPEL, PPA, repo 파일)", title: "커리큘럼: 2-4 리포지토리", description: "docs/think.md 기준" },
+      { id: "plan-2-4-10", name: "2-4 부팅/서비스 트러블슈팅 (systemd unit 작성과 디버깅)", title: "커리큘럼: 2-4 부팅/서비스 트러블슈팅", description: "docs/think.md 기준" },
+      { id: "plan-2-4-11", name: "2-4 파일 시스템 점검/마운트 (fsck, mount, fstab, automount)", title: "커리큘럼: 2-4 파일 시스템", description: "docs/think.md 기준" },
+      { id: "plan-2-4-12", name: "2-4 디스크 용량 분석 (df, du, ncdu)", title: "커리큘럼: 2-4 디스크 용량", description: "docs/think.md 기준" },
+      { id: "plan-2-4-13", name: "2-4 빠른 파일 검색 (mlocate/updatedb, ripgrep)", title: "커리큘럼: 2-4 파일 검색", description: "docs/think.md 기준" },
+      { id: "plan-2-4-14", name: "2-4 네트워크 진단 보강 (nmap, dig, nslookup, curl, nc)", title: "커리큘럼: 2-4 네트워크 진단", description: "docs/think.md 기준" },
+      { id: "plan-2-4-15", name: "2-4 무결성/해시 (sha256sum, shasum) 및 감사(auditd) 기초", title: "커리큘럼: 2-4 무결성/감사", description: "docs/think.md 기준" },
     ],
   },
 
