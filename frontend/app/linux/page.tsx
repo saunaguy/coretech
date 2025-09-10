@@ -18,17 +18,34 @@ const CommandDetailView = ({ command }) => {
     )
   }
 
+  const slugify = (s: string) =>
+    (s || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9가-힣\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-');
+
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text || '');
+    } catch (_) {}
+  };
+
   const renderBlock = (block, index) => {
     switch (block.type) {
       case 'heading':
         return (
-          <h3 key={index} className="text-xl font-semibold mt-4 mb-2">
+          <h3
+            key={index}
+            id={slugify(block.text)}
+            className="scroll-mt-24 text-[1.25rem] font-semibold mt-6 mb-2 tracking-tight"
+          >
             {block.text}
           </h3>
         )
       case 'paragraph':
         return (
-          <p key={index} className="text-muted-foreground leading-7">
+          <p key={index} className="text-muted-foreground leading-7 whitespace-pre-wrap">
             {block.text}
           </p>
         )
@@ -44,23 +61,47 @@ const CommandDetailView = ({ command }) => {
         )
       case 'list':
         return (
-          <ul key={index} className="list-disc pl-6 space-y-1 text-muted-foreground">
+          <ul key={index} className="list-disc pl-6 space-y-1 text-muted-foreground leading-7">
             {block.items?.map((it, i) => (
               <li key={i}>{it}</li>
             ))}
           </ul>
         )
-      case 'aside':
+      case 'quote':
         return (
-          <div key={index} className="border rounded-lg bg-muted/60 p-4 text-muted-foreground">
+          <blockquote key={index} className="border-l-4 pl-4 italic text-muted-foreground">
             {block.text}
+          </blockquote>
+        )
+      case 'aside':
+      case 'callout': {
+        const icon = block.icon || (typeof block.text === 'string' && /^[\p{Emoji}\p{So}]/u.test(block.text) ? block.text[0] : '💡')
+        const text = typeof block.text === 'string' && icon && block.text?.startsWith(icon)
+          ? block.text.slice(icon.length).trim()
+          : block.text
+        return (
+          <div
+            key={index}
+            className="flex items-start gap-3 border rounded-lg bg-muted/60 p-4"
+          >
+            <div className="text-xl leading-none select-none">{icon}</div>
+            <div className="text-muted-foreground leading-7">{text}</div>
           </div>
         )
+      }
       case 'code':
         return (
-          <pre key={index} className="my-4 p-4 rounded-md bg-muted text-sm overflow-auto">
-            <code>{block.text}</code>
-          </pre>
+          <div key={index} className="my-4 relative">
+            <button
+              onClick={() => copyToClipboard(block.text)}
+              className="absolute right-2 top-2 z-10 rounded-md border bg-background/70 px-2 py-1 text-xs text-muted-foreground hover:bg-accent"
+            >
+              Copy
+            </button>
+            <pre className="p-4 rounded-md bg-muted text-sm overflow-auto">
+              <code>{block.text}</code>
+            </pre>
+          </div>
         )
       case 'divider':
         return <hr key={index} className="my-6 border-dashed" />
