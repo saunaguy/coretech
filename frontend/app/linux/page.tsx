@@ -117,19 +117,7 @@ const CommandDetailView = ({ command }) => {
           <CardDescription className="text-lg">{command.description}</CardDescription>
         </CardHeader>
         {(command.content || command.blocks) && (
-          <CardContent className="space-y-5 max-w-3xl">
-            {Array.isArray(command.blocks) && command.blocks.filter(b => b.type === 'heading')?.length > 2 && (
-              <div className="rounded-lg border bg-background p-4">
-                <div className="text-sm font-medium mb-2">목차</div>
-                <ul className="text-sm text-muted-foreground space-y-1 list-disc pl-5">
-                  {command.blocks.filter(b => b.type === 'heading').map((h, i) => (
-                    <li key={`toc-${i}`}>
-                      <a href={`#${slugify(h.text)}`} className="hover:underline">{h.text}</a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+          <CardContent className="space-y-4 max-w-3xl">
             {command.blocks
               ? command.blocks.map((b, idx) => renderBlock(b, idx))
               : <p className="text-muted-foreground">{command.content}</p>}

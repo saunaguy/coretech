@@ -2,7 +2,7 @@ import { osAndSetup } from "./topics/os-and-setup"
 
 // 1장은 유지 (osAndSetup). 2~5장은 think.md 구조에 맞춰 재편성.
 export const linuxTopics = {
-  "🖥️ 운영체제와 설치": osAndSetup,
+  "🖥️ 1장 운영체제와 설치": osAndSetup,
 
   // 2. 리눅스 핵심 명령어 (단일 카테고리: 5장 스타일)
   "⚙️ 리눅스 핵심 명령어": {
