@@ -4,9 +4,9 @@ import { osAndSetup } from "./topics/os-and-setup"
 export const linuxTopics = {
   "🖥️ 1장 운영체제와 설치": osAndSetup,
 
-  // 2. 리눅스 핵심 명령어 (단일 카테고리: 5장 스타일)
+  // 2. 리눅스 핵심 명령어 (토글 그룹)
   "⚙️ 리눅스 핵심 명령어": {
-    "2장 리눅스 핵심 명령어": [
+    "2-1 기본 명령어": [
       { id: "plan-2-1-1", name: "2-1 파일/디렉토리 관리 (ls, cp, mv, rm, mkdir 등)", title: "커리큘럼: 2-1 파일/디렉토리", description: "docs/think.md 기준" },
       { id: "plan-2-1-2", name: "2-1 탐색 (pwd, cd, find, locate)", title: "커리큘럼: 2-1 탐색", description: "docs/think.md 기준" },
       { id: "plan-2-1-3", name: "2-1 텍스트 확인 (cat, less, more, head, tail)", title: "커리큘럼: 2-1 텍스트 확인", description: "docs/think.md 기준" },
@@ -14,6 +14,8 @@ export const linuxTopics = {
       { id: "plan-2-1-5", name: "2-1 에디터 기초 (vim, nano)와 기본 단축키", title: "커리큘럼: 2-1 에디터 기초", description: "docs/think.md 기준" },
       { id: "plan-2-1-6", name: "2-1 경로/글로빙, 와일드카드, 히스토리/alias", title: "커리큘럼: 2-1 경로·글로빙·히스토리", description: "docs/think.md 기준" },
       { id: "plan-2-1-7", name: "2-1 리다이렉션/파이프/서브쉘과 명령 치환", title: "커리큘럼: 2-1 리다이렉션/파이프", description: "docs/think.md 기준" },
+    ],
+    "2-2 사용자/권한 관련": [
       { id: "plan-2-2-1", name: "2-2 사용자/그룹 관리 (useradd, groupadd, passwd)", title: "커리큘럼: 2-2 사용자/그룹", description: "docs/think.md 기준" },
       { id: "plan-2-2-2", name: "2-2 파일 권한 (chmod, chown, umask)", title: "커리큘럼: 2-2 파일 권한", description: "docs/think.md 기준" },
       { id: "plan-2-2-3", name: "2-2 sudo, visudo", title: "커리큘럼: 2-2 sudo/visudo", description: "docs/think.md 기준" },
@@ -21,6 +23,8 @@ export const linuxTopics = {
       { id: "plan-2-2-5", name: "2-2 파일 속성/불변 플래그 (chattr, lsattr)", title: "커리큘럼: 2-2 파일 속성", description: "docs/think.md 기준" },
       { id: "plan-2-2-6", name: "2-2 ACL 관리 (getfacl, setfacl)", title: "커리큘럼: 2-2 ACL", description: "docs/think.md 기준" },
       { id: "plan-2-2-7", name: "2-2 로그인 셸과 환경 변수 (profile, bashrc, secure_path)", title: "커리큘럼: 2-2 로그인 셸/환경변수", description: "docs/think.md 기준" },
+    ],
+    "2-3 시스템/프로세스 관리": [
       { id: "plan-2-3-1", name: "2-3 프로세스 관리 (ps, top, htop, kill)", title: "커리큘럼: 2-3 프로세스 관리", description: "docs/think.md 기준" },
       { id: "plan-2-3-2", name: "2-3 systemctl, 서비스 관리", title: "커리큘럼: 2-3 서비스 관리", description: "docs/think.md 기준" },
       { id: "plan-2-3-3", name: "2-3 런레벨(target) 개념", title: "커리큘럼: 2-3 런레벨", description: "docs/think.md 기준" },
@@ -29,6 +33,8 @@ export const linuxTopics = {
       { id: "plan-2-3-6", name: "2-3 시간 동기화 (chrony/ntpd)", title: "커리큘럼: 2-3 시간 동기화", description: "docs/think.md 기준" },
       { id: "plan-2-3-7", name: "2-3 커널 로그/모듈 (dmesg, lsmod, modprobe)", title: "커리큘럼: 2-3 커널 로그/모듈", description: "docs/think.md 기준" },
       { id: "plan-2-3-8", name: "2-3 자원 제한/격리 (ulimit, cgroups 개요, OOM Killer)", title: "커리큘럼: 2-3 자원 제한/격리", description: "docs/think.md 기준" },
+    ],
+    "2-4 고급/관리 명령어": [
       { id: "plan-2-4-1", name: "2-4 텍스트 처리 (grep, awk, sed, cut, sort)", title: "커리큘럼: 2-4 텍스트 처리", description: "docs/think.md 기준" },
       { id: "plan-2-4-2", name: "2-4 아카이빙/압축 (tar, gzip, bzip2, xz)", title: "커리큘럼: 2-4 아카이빙/압축", description: "docs/think.md 기준" },
       { id: "plan-2-4-3", name: "2-4 스트림 편집 (tee, xargs, tr)", title: "커리큘럼: 2-4 스트림 편집", description: "docs/think.md 기준" },
@@ -110,8 +116,11 @@ export const linuxTopics = {
 
   // 5. 실습 코너 (토글 그룹)
   "🧪 실습 코너": {
-    "5-1 리눅스 실습": [
-      { id: "plan-5-1", name: "5-1 리눅스 실습 (준비중)", title: "5-1 리눅스 실습", description: "구성 준비중" },
+    "🐧 리눅스 실습": [
+      { id: "lab-5-1", name: "1. 환경 준비", title: "리눅스 실습 1: 환경 준비", description: "VM/네트워크/계정/로그 사전 준비", loaderKey: '05-1' },
+      { id: "lab-5-2", name: "2. 기본 점검", title: "리눅스 실습 2: 기본 점검", description: "서비스/로그/스토리지 확인", loaderKey: '05-4' },
+      { id: "lab-5-3", name: "3. 메일 실습", title: "리눅스 실습 3: 메일 실습", description: "DNS→SMTP 경로 점검 및 트러블슈팅", loaderKey: '05-3' },
+      { id: "lab-5-4", name: "4. 마무리", title: "리눅스 실습 4: 마무리", description: "회고/정리", loaderKey: '05-5' },
     ],
     "5-2 네트워크 실습": [
       { id: "plan-5-2", name: "5-2 네트워크 실습 (준비중)", title: "5-2 네트워크 실습", description: "구성 준비중" },

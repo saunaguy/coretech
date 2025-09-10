@@ -1,58 +1,23 @@
 export default [
-  { type: 'heading', text: '2-4 VirtualBox/VMware 설치 및 기본 설정' },
-  { type: 'paragraph', text: '개발/학습 환경에서는 Type-2 하이퍼바이저(호스트 OS 위에서 동작)인 VirtualBox/VMware Workstation(Player)을 주로 사용합니다.' },
-
-  { type: 'heading', text: '사전 확인' },
+  { type: 'heading', text: '2-4 고급/관리 명령어' },
+  { type: 'paragraph', text: '텍스트 처리/아카이빙/스트림 편집/비교/패키지/스토리지/네트워크/보안/부팅/파일시스템/용량/검색/진단/무결성 등 관리 명령을 모아 개괄합니다.' },
   { type: 'list', items: [
-    'BIOS/UEFI에서 가상화(VT-x/AMD-V) 활성화.',
-    'Windows의 경우 Hyper-V가 활성화되어 있으면 다른 하이퍼바이저와 충돌할 수 있음.',
+    '텍스트 처리: grep, awk, sed, cut, sort',
+    '아카이빙/압축: tar, gzip, bzip2, xz',
+    '스트림 편집: tee, xargs, tr',
+    '파일 비교/검증: diff, cmp, md5sum',
+    '패키지 관리: yum/dnf, apt, rpm/dpkg',
+    '스토리지: fdisk, LVM, RAID, multipath',
+    '네트워크 도구: ping, traceroute, netstat, ss',
+    '보안/네트워크 심화: iptables, firewalld, tcpdump, wireshark, ssh/scp/rsync',
+    '리포지토리: EPEL, PPA, repo 파일',
+    '부팅/서비스 트러블슈팅: systemd unit/디버깅',
+    '파일 시스템: fsck, mount, fstab, automount',
+    '용량 분석: df, du, ncdu',
+    '검색: mlocate/updatedb, ripgrep',
+    '진단 보강: nmap, dig, nslookup, curl, nc',
+    '무결성/감사: sha256sum/shasum, auditd',
   ]},
-
-  { type: 'heading', text: 'VirtualBox 기본 절차' },
-  { type: 'list', items: [
-    '새로 만들기 → 이름/종류/버전 설정(Ubuntu/64-bit 등).',
-    '메모리 크기: 2~4GB 이상 권장(호스트 여유 고려).',
-    '프로세서: 2 vCPU 이상(호스트 코어 대비 과도 할당 주의).',
-    '가상 하드디스크: VDI, 동적 할당, 30GB+ 권장.',
-    '저장소: 컨트롤러에 ISO 마운트(설치 미디어).',
-    '시스템: EFI 사용 여부, 부트 순서(Optical → HDD) 확인.',
-    '디스플레이: 비디오 메모리 32MB+, 3D 가속(필요 시).',
-    '네트워크: 어댑터 1 = NAT(기본). 필요시 어댑터 2 = Host-only 추가.',
-    '공유 클립보드/드래그앤드롭: 편의 기능 활성화(게스트 확장 설치 후).',
-    '게스트 확장(Guest Additions): 화면 해상도/마우스 통합/공유폴더 개선.',
-  ]},
-
-  { type: 'heading', text: 'VMware Workstation/Player 기본 절차' },
-  { type: 'list', items: [
-    'Create a New Virtual Machine → ISO 선택(또는 나중에 설치).',
-    '게스트 OS 유형/버전 선택 → 이름/저장 경로 지정.',
-    '디스크: NVMe/SCSI, 30GB+ (단일 파일 또는 분할).',
-    '메모리/CPU: 워크로드에 맞게 조정(2 vCPU / 4GB+ 권장).',
-    '펌웨어: UEFI(필요 시 Secure Boot 비활성화).',
-    '설치 후 VMware Tools 설치(디스플레이/마우스/네트워크/공유폴더 개선).',
-  ]},
-
-  { type: 'heading', text: '권장 리소스 가이드(개발/학습)' },
-  { type: 'list', items: [
-    'vCPU: 2~4, RAM: 4~8GB, 디스크: 30~60GB.',
-    '네트워크: 기본 NAT, 필요 시 Bridged/Host-only 병행.',
-  ]},
-
-  { type: 'heading', text: '스냅샷/클론/템플릿 이미지 관리' },
-  { type: 'list', items: [
-    '스냅샷: 특정 시점의 상태를 보존. 업데이트/설정 전 체크포인트로 활용.',
-    '클론: 현재 VM을 복제해 동일한 환경을 빠르게 증설.',
-    '템플릿: 공통 베이스 이미지를 만들어 다수 VM을 일관되게 배포.',
-    '권장 시점: 설치 직후, SSH/필수 패키지/업데이트 완료 후, 주요 설정 직전.',
-  ]},
-
-  { type: 'heading', text: '클라우드 이미지 형식과 변환(qcow2, vmdk, qemu-img)' },
-  { type: 'list', items: [
-    'qcow2: QEMU/KVM 기본 포맷(스냅샷/압축/씬 프로비저닝).',
-    'vmdk: VMware 디스크 포맷.',
-    'vdi/vhdx: VirtualBox/Hyper-V 포맷.',
-    '변환: `qemu-img convert -O qcow2 input.vmdk output.qcow2`',
-  ]},
-
-  { type: 'aside', text: '스냅샷을 전략적으로 활용하세요. 설치 직후/핵심 설정 후 스냅샷을 남겨두면 실습 실패 시 빠른 복구가 가능합니다.' },
+  { type: 'aside', text: '🛠️ 팁: 반복 작업은 스크립트화하고, 파괴적 명령은 항상 -n/--dry-run을 먼저.' },
 ]
+
