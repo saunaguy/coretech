@@ -47,9 +47,9 @@ export const linuxTopics = {
     ],
   },
 
-  // 3. 리눅스 서버 운영 & 트러블슈팅 (단일 카테고리)
+  // 3. 리눅스 서버 운영 & 트러블슈팅 (토글 그룹)
   "🧰 리눅스 서버 운영 & 트러블슈팅": {
-    "3장 리눅스 서버 운영 & 트러블슈팅": [
+    "3-1 서버 운영": [
       { id: "plan-3-1-1", name: "3-1 서비스 운영 표준: systemd 유닛/의존성(After/Wants/Requires)", title: "커리큘럼: 3-1 systemd 유닛/의존성", description: "docs/think.md 기준" },
       { id: "plan-3-1-2", name: "3-1 구성 관리: env/시크릿, Drop-in vs 유닛 복제, Restart=", title: "커리큘럼: 3-1 구성 관리 포인트", description: "docs/think.md 기준" },
       { id: "plan-3-1-3", name: "3-1 로깅 운영: journal 보존/로테이션, rsyslog, 구조화 로그", title: "커리큘럼: 3-1 로깅 운영", description: "docs/think.md 기준" },
@@ -57,6 +57,8 @@ export const linuxTopics = {
       { id: "plan-3-1-5", name: "3-1 스토리지 운영: fstab(noatime/discard), LVM 스냅샷, fsck", title: "커리큘럼: 3-1 스토리지 운영", description: "docs/think.md 기준" },
       { id: "plan-3-1-6", name: "3-1 접근 제어: sudo 분리(/etc/sudoers.d), 계정 잠금, MFA/SSH 하드닝", title: "커리큘럼: 3-1 접근 제어", description: "docs/think.md 기준" },
       { id: "plan-3-1-7", name: "3-1 백업/복구: rsync/tar, 보관주기/오프사이트, RPO/RTO", title: "커리큘럼: 3-1 백업/복구", description: "docs/think.md 기준" },
+    ],
+    "3-2 트러블슈팅": [
       { id: "plan-3-2-1", name: "3-2 부팅 실패: GRUB 수동 부팅, initramfs 검증(lsinitrd), 커널 파라미터", title: "커리큘럼: 3-2 부팅 실패 대응", description: "docs/think.md 기준" },
       { id: "plan-3-2-2", name: "3-2 서비스 장애: systemctl/journalctl, StartLimit/Restart loop", title: "커리큘럼: 3-2 서비스 장애 분석", description: "docs/think.md 기준" },
       { id: "plan-3-2-3", name: "3-2 네트워크 이슈: 라우팅/방화벽/네임해결 점검(ip/ss/nft/dig)", title: "커리큘럼: 3-2 네트워크 이슈", description: "docs/think.md 기준" },
@@ -67,28 +69,38 @@ export const linuxTopics = {
     ],
   },
 
-  // 4. 네트워크 (단일 카테고리)
+  // 4. 네트워크 (토글 그룹)
   "🌐 네트워크": {
-    "4장 네트워크": [
+    "4-1 인터페이스/라우팅 기초": [
       { id: "plan-4-1-1", name: "4-1 OSI/TCP-IP 계층, MTU/MSS/PMTUD", title: "커리큘럼: 4-1 OSI/TCP-IP/MTU", description: "docs/think.md 기준" },
       { id: "plan-4-1-2", name: "4-1 인터페이스 관리: ip/nmcli, 주소/링크/라우트", title: "커리큘럼: 4-1 인터페이스 관리", description: "docs/think.md 기준" },
       { id: "plan-4-1-3", name: "4-1 라우팅 테이블/메트릭, 기본 게이트웨이", title: "커리큘럼: 4-1 라우팅/메트릭", description: "docs/think.md 기준" },
       { id: "plan-4-1-4", name: "4-1 IPv4/IPv6 기초, CIDR/프리픽스", title: "커리큘럼: 4-1 IPv4/IPv6/CIDR", description: "docs/think.md 기준" },
+    ],
+    "4-2 이름 해석/주소할당 (DNS/DHCP)": [
       { id: "plan-4-2-1", name: "4-2 DNS 동작(재귀/권한/캐시), DNSSEC/split-horizon", title: "커리큘럼: 4-2 DNS 동작", description: "docs/think.md 기준" },
       { id: "plan-4-2-2", name: "4-2 도구: dig/nslookup/drill, 레코드 유형", title: "커리큘럼: 4-2 DNS 도구/레코드", description: "docs/think.md 기준" },
       { id: "plan-4-2-3", name: "4-2 DHCP 기본(DORA), 예약/옵션, PXE", title: "커리큘럼: 4-2 DHCP 기본", description: "docs/think.md 기준" },
+    ],
+    "4-3 방화벽/보안 접속": [
       { id: "plan-4-3-1", name: "4-3 iptables/nftables 개념 및 테이블/체인", title: "커리큘럼: 4-3 iptables/nftables", description: "docs/think.md 기준" },
       { id: "plan-4-3-2", name: "4-3 firewalld 존/서비스, 리치 규칙", title: "커리큘럼: 4-3 firewalld", description: "docs/think.md 기준" },
       { id: "plan-4-3-3", name: "4-3 SSH 하드닝, 포트포워딩/프록시점프, fail2ban", title: "커리큘럼: 4-3 SSH/보안 접속", description: "docs/think.md 기준" },
       { id: "plan-4-3-4", name: "4-3 TLS/인증서 기초, OCSP/ALPN/HSTS", title: "커리큘럼: 4-3 TLS/인증서", description: "docs/think.md 기준" },
+    ],
+    "4-4 로드밸런서/프록시": [
       { id: "plan-4-4-1", name: "4-4 L4/L7 기본: 헬스체크/세션유지/프로브", title: "커리큘럼: 4-4 L4/L7 기본", description: "docs/think.md 기준" },
       { id: "plan-4-4-2", name: "4-4 HAProxy/Nginx 역/정방향 프록시 구성", title: "커리큘럼: 4-4 HAProxy/Nginx", description: "docs/think.md 기준" },
       { id: "plan-4-4-3", name: "4-4 캐싱/압축, WAF 개요/배치 패턴", title: "커리큘럼: 4-4 캐싱/WAF", description: "docs/think.md 기준" },
+    ],
+    "4-5 고가용성/고급 토폴로지": [
       { id: "plan-4-5-1", name: "4-5 VLAN/trunk, bonding(team) 설계", title: "커리큘럼: 4-5 VLAN/본딩", description: "docs/think.md 기준" },
       { id: "plan-4-5-2", name: "4-5 게이트웨이 이중화: VRRP/GLBP/HSRP, keepalived", title: "커리큘럼: 4-5 게이트웨이 이중화", description: "docs/think.md 기준" },
       { id: "plan-4-5-3", name: "4-5 정책 기반 라우팅(PBR), 다중 회선/게이트웨이", title: "커리큘럼: 4-5 PBR/다중 회선", description: "docs/think.md 기준" },
       { id: "plan-4-5-4", name: "4-5 VPN(OpenVPN/IPSec), 터널/라우팅 상호작용", title: "커리큘럼: 4-5 VPN/터널", description: "docs/think.md 기준" },
       { id: "plan-4-5-5", name: "4-5 컨테이너 네트워킹/네임스페이스, veth/브리지", title: "커리큘럼: 4-5 컨테이너 네트워킹", description: "docs/think.md 기준" },
+    ],
+    "4-6 진단/성능 분석": [
       { id: "plan-4-6-1", name: "4-6 성능 측정: iperf3/mtr/ping 방법론", title: "커리큘럼: 4-6 성능 측정", description: "docs/think.md 기준" },
       { id: "plan-4-6-2", name: "4-6 패킷 캡처/분석: tcpdump/Wireshark/pcap", title: "커리큘럼: 4-6 패킷 분석", description: "docs/think.md 기준" },
       { id: "plan-4-6-3", name: "4-6 서비스 레벨 점검: ss/curl/nmap", title: "커리큘럼: 4-6 서비스 점검", description: "docs/think.md 기준" },
@@ -96,11 +108,15 @@ export const linuxTopics = {
     ],
   },
 
-  // 5. 실습 코너 (준비중)
+  // 5. 실습 코너 (토글 그룹)
   "🧪 실습 코너": {
-    "5장 실습": [
+    "5-1 리눅스 실습": [
       { id: "plan-5-1", name: "5-1 리눅스 실습 (준비중)", title: "5-1 리눅스 실습", description: "구성 준비중" },
+    ],
+    "5-2 네트워크 실습": [
       { id: "plan-5-2", name: "5-2 네트워크 실습 (준비중)", title: "5-2 네트워크 실습", description: "구성 준비중" },
+    ],
+    "5-3 복합 실습": [
       { id: "plan-5-3", name: "5-3 복합 실습 (준비중)", title: "5-3 복합 실습", description: "구성 준비중" },
     ],
   },
