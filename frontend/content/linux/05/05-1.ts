@@ -1,5 +1,5 @@
 export default [
-  { type: 'heading', text: '05-1 콘텐츠 준비 중입니다.' },
-  { type: 'paragraph', text: '파일시스템 구조 콘텐츠가 곧 추가됩니다.' },
-  { type: 'aside', text: '📚 자세한 커리큘럼은 basics/intro.md를 참조하세요.' },
+  { type: 'heading', text: '5-1 리눅스 실습 (준비중)' },
+  { type: 'paragraph', text: '기초 명령/파일시스템/프로세스/서비스를 종합하는 실습 시나리오를 준비합니다.' },
 ]
+

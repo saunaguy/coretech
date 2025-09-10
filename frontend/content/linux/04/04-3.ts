@@ -1,5 +1,11 @@
 export default [
-  { type: 'heading', text: '04-3 콘텐츠 준비 중입니다.' },
-  { type: 'paragraph', text: 'umask 콘텐츠가 곧 추가됩니다.' },
-  { type: 'aside', text: '📚 자세한 커리큘럼은 basics/intro.md를 참조하세요.' },
+  { type: 'heading', text: '4-3 방화벽/보안 접속' },
+  { type: 'paragraph', text: 'iptables/nftables의 테이블/체인 모델과 firewalld를 이해하고, SSH 하드닝과 TLS 기본을 정리합니다.' },
+  { type: 'list', items: [
+    'iptables/nftables: 테이블/체인 구조, 정책/규칙',
+    'firewalld: 존/서비스, 리치 규칙',
+    'SSH 하드닝: 키 인증/포트포워딩/프록시점프, fail2ban',
+    'TLS/인증서: 키/CSR/CA, OCSP/ALPN/HSTS',
+  ]},
 ]
+

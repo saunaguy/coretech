@@ -1,5 +1,5 @@
 export default [
-  { type: 'heading', text: '05-2 콘텐츠 준비 중입니다.' },
-  { type: 'paragraph', text: 'FHS 콘텐츠가 곧 추가됩니다.' },
-  { type: 'aside', text: '📚 자세한 커리큘럼은 basics/intro.md를 참조하세요.' },
+  { type: 'heading', text: '5-2 네트워크 실습 (준비중)' },
+  { type: 'paragraph', text: '인터페이스/라우팅/DNS/DHCP/방화벽을 아우르는 네트워크 실습 시나리오를 구성합니다.' },
 ]
+

@@ -1,5 +1,5 @@
 export default [
-  { type: 'heading', text: '05-3 콘텐츠 준비 중입니다.' },
-  { type: 'paragraph', text: '마운트/언마운트 콘텐츠가 곧 추가됩니다.' },
-  { type: 'aside', text: '📚 자세한 커리큘럼은 basics/intro.md를 참조하세요.' },
+  { type: 'heading', text: '5-3 복합 실습 (준비중)' },
+  { type: 'paragraph', text: '서버 운영과 네트워크 요소를 결합한 시나리오(서비스 배포/장애주입/복구)를 설계합니다.' },
 ]
+
