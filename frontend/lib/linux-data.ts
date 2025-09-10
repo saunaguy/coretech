@@ -4,9 +4,9 @@ import { osAndSetup } from "./topics/os-and-setup"
 export const linuxTopics = {
   "🖥️ 운영체제와 설치": osAndSetup,
 
-  // 2. 리눅스 핵심 명령어 (2-1 ~ 2-4)
+  // 2. 리눅스 핵심 명령어 (단일 카테고리: 5장 스타일)
   "⚙️ 리눅스 핵심 명령어": {
-    "2-1 기본 명령어": [
+    "2장 리눅스 핵심 명령어": [
       { id: "plan-2-1-1", name: "2-1 파일/디렉토리 관리 (ls, cp, mv, rm, mkdir 등)", title: "커리큘럼: 2-1 파일/디렉토리", description: "docs/think.md 기준" },
       { id: "plan-2-1-2", name: "2-1 탐색 (pwd, cd, find, locate)", title: "커리큘럼: 2-1 탐색", description: "docs/think.md 기준" },
       { id: "plan-2-1-3", name: "2-1 텍스트 확인 (cat, less, more, head, tail)", title: "커리큘럼: 2-1 텍스트 확인", description: "docs/think.md 기준" },
@@ -14,8 +14,6 @@ export const linuxTopics = {
       { id: "plan-2-1-5", name: "2-1 에디터 기초 (vim, nano)와 기본 단축키", title: "커리큘럼: 2-1 에디터 기초", description: "docs/think.md 기준" },
       { id: "plan-2-1-6", name: "2-1 경로/글로빙, 와일드카드, 히스토리/alias", title: "커리큘럼: 2-1 경로·글로빙·히스토리", description: "docs/think.md 기준" },
       { id: "plan-2-1-7", name: "2-1 리다이렉션/파이프/서브쉘과 명령 치환", title: "커리큘럼: 2-1 리다이렉션/파이프", description: "docs/think.md 기준" },
-    ],
-    "2-2 사용자/권한 관련": [
       { id: "plan-2-2-1", name: "2-2 사용자/그룹 관리 (useradd, groupadd, passwd)", title: "커리큘럼: 2-2 사용자/그룹", description: "docs/think.md 기준" },
       { id: "plan-2-2-2", name: "2-2 파일 권한 (chmod, chown, umask)", title: "커리큘럼: 2-2 파일 권한", description: "docs/think.md 기준" },
       { id: "plan-2-2-3", name: "2-2 sudo, visudo", title: "커리큘럼: 2-2 sudo/visudo", description: "docs/think.md 기준" },
@@ -23,8 +21,6 @@ export const linuxTopics = {
       { id: "plan-2-2-5", name: "2-2 파일 속성/불변 플래그 (chattr, lsattr)", title: "커리큘럼: 2-2 파일 속성", description: "docs/think.md 기준" },
       { id: "plan-2-2-6", name: "2-2 ACL 관리 (getfacl, setfacl)", title: "커리큘럼: 2-2 ACL", description: "docs/think.md 기준" },
       { id: "plan-2-2-7", name: "2-2 로그인 셸과 환경 변수 (profile, bashrc, secure_path)", title: "커리큘럼: 2-2 로그인 셸/환경변수", description: "docs/think.md 기준" },
-    ],
-    "2-3 시스템/프로세스 관리": [
       { id: "plan-2-3-1", name: "2-3 프로세스 관리 (ps, top, htop, kill)", title: "커리큘럼: 2-3 프로세스 관리", description: "docs/think.md 기준" },
       { id: "plan-2-3-2", name: "2-3 systemctl, 서비스 관리", title: "커리큘럼: 2-3 서비스 관리", description: "docs/think.md 기준" },
       { id: "plan-2-3-3", name: "2-3 런레벨(target) 개념", title: "커리큘럼: 2-3 런레벨", description: "docs/think.md 기준" },
@@ -33,8 +29,6 @@ export const linuxTopics = {
       { id: "plan-2-3-6", name: "2-3 시간 동기화 (chrony/ntpd)", title: "커리큘럼: 2-3 시간 동기화", description: "docs/think.md 기준" },
       { id: "plan-2-3-7", name: "2-3 커널 로그/모듈 (dmesg, lsmod, modprobe)", title: "커리큘럼: 2-3 커널 로그/모듈", description: "docs/think.md 기준" },
       { id: "plan-2-3-8", name: "2-3 자원 제한/격리 (ulimit, cgroups 개요, OOM Killer)", title: "커리큘럼: 2-3 자원 제한/격리", description: "docs/think.md 기준" },
-    ],
-    "2-4 고급/관리 명령어": [
       { id: "plan-2-4-1", name: "2-4 텍스트 처리 (grep, awk, sed, cut, sort)", title: "커리큘럼: 2-4 텍스트 처리", description: "docs/think.md 기준" },
       { id: "plan-2-4-2", name: "2-4 아카이빙/압축 (tar, gzip, bzip2, xz)", title: "커리큘럼: 2-4 아카이빙/압축", description: "docs/think.md 기준" },
       { id: "plan-2-4-3", name: "2-4 스트림 편집 (tee, xargs, tr)", title: "커리큘럼: 2-4 스트림 편집", description: "docs/think.md 기준" },
@@ -53,9 +47,9 @@ export const linuxTopics = {
     ],
   },
 
-  // 3. 리눅스 서버 운영 & 트러블슈팅
+  // 3. 리눅스 서버 운영 & 트러블슈팅 (단일 카테고리)
   "🧰 리눅스 서버 운영 & 트러블슈팅": {
-    "3-1 서버 운영": [
+    "3장 리눅스 서버 운영 & 트러블슈팅": [
       { id: "plan-3-1-1", name: "3-1 서비스 운영 표준: systemd 유닛/의존성(After/Wants/Requires)", title: "커리큘럼: 3-1 systemd 유닛/의존성", description: "docs/think.md 기준" },
       { id: "plan-3-1-2", name: "3-1 구성 관리: env/시크릿, Drop-in vs 유닛 복제, Restart=", title: "커리큘럼: 3-1 구성 관리 포인트", description: "docs/think.md 기준" },
       { id: "plan-3-1-3", name: "3-1 로깅 운영: journal 보존/로테이션, rsyslog, 구조화 로그", title: "커리큘럼: 3-1 로깅 운영", description: "docs/think.md 기준" },
@@ -63,8 +57,6 @@ export const linuxTopics = {
       { id: "plan-3-1-5", name: "3-1 스토리지 운영: fstab(noatime/discard), LVM 스냅샷, fsck", title: "커리큘럼: 3-1 스토리지 운영", description: "docs/think.md 기준" },
       { id: "plan-3-1-6", name: "3-1 접근 제어: sudo 분리(/etc/sudoers.d), 계정 잠금, MFA/SSH 하드닝", title: "커리큘럼: 3-1 접근 제어", description: "docs/think.md 기준" },
       { id: "plan-3-1-7", name: "3-1 백업/복구: rsync/tar, 보관주기/오프사이트, RPO/RTO", title: "커리큘럼: 3-1 백업/복구", description: "docs/think.md 기준" },
-    ],
-    "3-2 트러블슈팅": [
       { id: "plan-3-2-1", name: "3-2 부팅 실패: GRUB 수동 부팅, initramfs 검증(lsinitrd), 커널 파라미터", title: "커리큘럼: 3-2 부팅 실패 대응", description: "docs/think.md 기준" },
       { id: "plan-3-2-2", name: "3-2 서비스 장애: systemctl/journalctl, StartLimit/Restart loop", title: "커리큘럼: 3-2 서비스 장애 분석", description: "docs/think.md 기준" },
       { id: "plan-3-2-3", name: "3-2 네트워크 이슈: 라우팅/방화벽/네임해결 점검(ip/ss/nft/dig)", title: "커리큘럼: 3-2 네트워크 이슈", description: "docs/think.md 기준" },
@@ -75,38 +67,28 @@ export const linuxTopics = {
     ],
   },
 
-  // 4. 네트워크 (섹션 그룹 재편: 4-1 ~ 4-6)
+  // 4. 네트워크 (단일 카테고리)
   "🌐 네트워크": {
-    "4-1 인터페이스/라우팅 기초": [
+    "4장 네트워크": [
       { id: "plan-4-1-1", name: "4-1 OSI/TCP-IP 계층, MTU/MSS/PMTUD", title: "커리큘럼: 4-1 OSI/TCP-IP/MTU", description: "docs/think.md 기준" },
       { id: "plan-4-1-2", name: "4-1 인터페이스 관리: ip/nmcli, 주소/링크/라우트", title: "커리큘럼: 4-1 인터페이스 관리", description: "docs/think.md 기준" },
       { id: "plan-4-1-3", name: "4-1 라우팅 테이블/메트릭, 기본 게이트웨이", title: "커리큘럼: 4-1 라우팅/메트릭", description: "docs/think.md 기준" },
       { id: "plan-4-1-4", name: "4-1 IPv4/IPv6 기초, CIDR/프리픽스", title: "커리큘럼: 4-1 IPv4/IPv6/CIDR", description: "docs/think.md 기준" },
-    ],
-    "4-2 이름 해석/주소할당 (DNS/DHCP)": [
       { id: "plan-4-2-1", name: "4-2 DNS 동작(재귀/권한/캐시), DNSSEC/split-horizon", title: "커리큘럼: 4-2 DNS 동작", description: "docs/think.md 기준" },
       { id: "plan-4-2-2", name: "4-2 도구: dig/nslookup/drill, 레코드 유형", title: "커리큘럼: 4-2 DNS 도구/레코드", description: "docs/think.md 기준" },
       { id: "plan-4-2-3", name: "4-2 DHCP 기본(DORA), 예약/옵션, PXE", title: "커리큘럼: 4-2 DHCP 기본", description: "docs/think.md 기준" },
-    ],
-    "4-3 방화벽/보안 접속": [
       { id: "plan-4-3-1", name: "4-3 iptables/nftables 개념 및 테이블/체인", title: "커리큘럼: 4-3 iptables/nftables", description: "docs/think.md 기준" },
       { id: "plan-4-3-2", name: "4-3 firewalld 존/서비스, 리치 규칙", title: "커리큘럼: 4-3 firewalld", description: "docs/think.md 기준" },
       { id: "plan-4-3-3", name: "4-3 SSH 하드닝, 포트포워딩/프록시점프, fail2ban", title: "커리큘럼: 4-3 SSH/보안 접속", description: "docs/think.md 기준" },
       { id: "plan-4-3-4", name: "4-3 TLS/인증서 기초, OCSP/ALPN/HSTS", title: "커리큘럼: 4-3 TLS/인증서", description: "docs/think.md 기준" },
-    ],
-    "4-4 로드밸런서/프록시": [
       { id: "plan-4-4-1", name: "4-4 L4/L7 기본: 헬스체크/세션유지/프로브", title: "커리큘럼: 4-4 L4/L7 기본", description: "docs/think.md 기준" },
       { id: "plan-4-4-2", name: "4-4 HAProxy/Nginx 역/정방향 프록시 구성", title: "커리큘럼: 4-4 HAProxy/Nginx", description: "docs/think.md 기준" },
       { id: "plan-4-4-3", name: "4-4 캐싱/압축, WAF 개요/배치 패턴", title: "커리큘럼: 4-4 캐싱/WAF", description: "docs/think.md 기준" },
-    ],
-    "4-5 고가용성/고급 토폴로지": [
       { id: "plan-4-5-1", name: "4-5 VLAN/trunk, bonding(team) 설계", title: "커리큘럼: 4-5 VLAN/본딩", description: "docs/think.md 기준" },
       { id: "plan-4-5-2", name: "4-5 게이트웨이 이중화: VRRP/GLBP/HSRP, keepalived", title: "커리큘럼: 4-5 게이트웨이 이중화", description: "docs/think.md 기준" },
       { id: "plan-4-5-3", name: "4-5 정책 기반 라우팅(PBR), 다중 회선/게이트웨이", title: "커리큘럼: 4-5 PBR/다중 회선", description: "docs/think.md 기준" },
       { id: "plan-4-5-4", name: "4-5 VPN(OpenVPN/IPSec), 터널/라우팅 상호작용", title: "커리큘럼: 4-5 VPN/터널", description: "docs/think.md 기준" },
       { id: "plan-4-5-5", name: "4-5 컨테이너 네트워킹/네임스페이스, veth/브리지", title: "커리큘럼: 4-5 컨테이너 네트워킹", description: "docs/think.md 기준" },
-    ],
-    "4-6 진단/성능 분석": [
       { id: "plan-4-6-1", name: "4-6 성능 측정: iperf3/mtr/ping 방법론", title: "커리큘럼: 4-6 성능 측정", description: "docs/think.md 기준" },
       { id: "plan-4-6-2", name: "4-6 패킷 캡처/분석: tcpdump/Wireshark/pcap", title: "커리큘럼: 4-6 패킷 분석", description: "docs/think.md 기준" },
       { id: "plan-4-6-3", name: "4-6 서비스 레벨 점검: ss/curl/nmap", title: "커리큘럼: 4-6 서비스 점검", description: "docs/think.md 기준" },

@@ -1,5 +1,5 @@
 export const osAndSetup = {
-  "1-1 운영체제 기초": [
+  "1장 운영체제와 설치": [
     {
       id: "plan-01-1",
       name: "1-1 컴퓨터 구조와 OS의 역할",
@@ -28,8 +28,6 @@ export const osAndSetup = {
       description: "배포판 계열과 선택 가이드",
       loaderKey: '01-4',
     },
-  ],
-  "1-2 설치 및 가상화": [
     {
       id: "plan-02-1",
       name: "1-2-1 리눅스 배포판 종류 (RHEL, Ubuntu, Rocky 등)",
