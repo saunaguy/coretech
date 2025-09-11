@@ -14,6 +14,7 @@ from .db import (
     DailyTest as DBDailyTest,
     Notice as DBNotice,
     ProgressUser as DBProgressUser,
+    engine as DBEngine,
 )
 
 
@@ -79,6 +80,18 @@ def _startup_main():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/health/db")
+def health_db():
+    """Lightweight DB connectivity check."""
+    try:
+        with DBEngine.connect() as conn:
+            conn.exec_driver_sql("SELECT 1")
+        return {"status": "ok", "dialect": DBEngine.dialect.name}
+    except Exception as e:
+        # Return minimal error info to help diagnose connection issues
+        raise HTTPException(status_code=503, detail=f"db_unavailable: {type(e).__name__}: {e}")
 
 
 # ---------------------------
