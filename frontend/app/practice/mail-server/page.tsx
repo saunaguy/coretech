@@ -1,8 +1,37 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { BookOpen, Mail, Server, Code, Terminal, FileText, Settings, HardDrive, GitBranch, Lock } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Code, Terminal, FileText, Settings, Server, Mail, Network } from "lucide-react";
+
+const versionTableData = {
+  headers: ["서버", "도메인", "호스트네임", "IP", "역할"],
+  rows: [
+    ["test1", "test1.com", "mail.test1.com", "192.168.0.61", "수신+발신 (sendmail+dovecot)"],
+    ["test2", "test2.com", "mail.test2.com", "192.168.0.62", "수신+발신 (sendmail+dovecot)"],
+  ],
+};
+
+const descriptionTableData = {
+    headers: ["설정 항목", "설명"],
+    rows: [
+        ["`local-host-names`", "수신할 도메인/호스트를 정의, 없으면 외부에서 메일 못 받음"],
+        ["`access`", "IP, 도메인별 relay 권한 설정 (RELAY/REJECT/DISCARD/OK)"],
+        ["`sendmail.mc → sendmail.cf`", "mc에서 설정 후 m4로 cf 생성. cf 직접 수정하지 않음"],
+        ["`DAEMON_OPTIONS`", "SMTP 수신 포트/주소 설정. 127.0.0.1만 되면 외부 접속 불가, Addr 생략 시 전체 허용"],
+        ["`MAILER(smtp)`", "SMTP를 통한 메일 발신/수신 활성화"],
+        ["`MAILER(procmail)`", "로컬 배달 활성화 (메일박스에 저장)"],
+        ["`dovecot mail_location`", "수신 메일이 저장되는 위치 지정"],
+        ["`disable_plaintext_auth`", "평문 인증 허용 여부 (실습용 yes/no)"],
+    ]
+}
 
 const NotionBlock = ({ block, blocks }) => {
   if (!block) {
@@ -15,24 +44,26 @@ const NotionBlock = ({ block, blocks }) => {
 
   switch (block.type) {
     case 'heading_1':
-      return <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-8 flex items-center gap-3"><Mail className="h-8 w-8 text-primary" />{block.text}</h1>;
+      return <h1 className="text-2xl font-semibold mb-4 flex items-center gap-2"><Mail className="h-6 w-6 text-primary" />{block.text}</h1>;
     case 'heading_2': {
       const iconMap = {
-        "Postfix": <Server className="h-6 w-6 text-accent" />,
-        "Dovecot": <Server className="h-6 w-6 text-accent" />,
-        "DNS": <Settings className="h-6 w-6 text-accent" />,
-        "테스트": <Terminal className="h-6 w-6 text-accent" />,
-        "SSL/TLS": <Lock className="h-6 w-6 text-accent" />,
-        "사용자": <FileText className="h-6 w-6 text-accent" />,
+        "DNS": <Network className="h-6 w-6 text-accent" />,
+        "서버": <Server className="h-6 w-6 text-accent" />,
+        "Sendmail": <Mail className="h-6 w-6 text-accent" />,
+        "Dovecot": <Mail className="h-6 w-6 text-accent" />,
+        "설명": <FileText className="h-6 w-6 text-accent" />,
+        "구조": <Settings className="h-6 w-6 text-accent" />,
       };
       const headingIcon = Object.keys(iconMap).find((key) => block.text.includes(key));
       return (
         <h2 className="text-2xl font-semibold mb-4 flex items-center gap-2">
-          {headingIcon ? iconMap[headingIcon] : <FileText className="h-6 w-6 text-accent" />}
+          {headingIcon ? iconMap[headingIcon] : <Terminal className="h-6 w-6 text-accent" />}
           {block.text}
         </h2>
       );
     }
+    case 'heading_3':
+        return <h3 className="text-xl font-semibold mt-6 mb-3">{block.text}</h3>
     case 'divider':
       return <hr className="my-6 border-dashed" />;
     case 'bulleted_list_item': {
@@ -50,21 +81,6 @@ const NotionBlock = ({ block, blocks }) => {
         </li>
       );
     }
-    case 'numbered_list_item': {
-      const numberedChildren = getChildren(block.id);
-      return (
-        <li className="mb-2 ml-4 list-decimal">
-          {block.text}
-          {numberedChildren.length > 0 && (
-            <div className="pl-5 mt-2">
-              {numberedChildren.map((child) => (
-                <NotionBlock key={child.id} block={child} blocks={blocks} />
-              ))}
-            </div>
-          )}
-        </li>
-      );
-    }
     case 'code':
       return (
         <div className="bg-gray-900 rounded-md p-4 my-4 text-white font-mono text-sm overflow-x-auto">
@@ -75,6 +91,12 @@ const NotionBlock = ({ block, blocks }) => {
             <pre><code>{block.text}</code></pre>
         </div>
       );
+    case 'quote':
+        return (
+            <blockquote className="mt-6 border-l-2 pl-6 italic text-muted-foreground">
+                {block.text}
+            </blockquote>
+        )
     case 'paragraph':
         if(!block.text) return null;
       return <p className="text-muted-foreground leading-relaxed mb-4">{block.text}</p>;
@@ -92,20 +114,14 @@ export default function MailServerPage() {
   let currentSection = null;
 
   topLevelBlocks.forEach(block => {
-    if (block.type === 'paragraph' && !block.text) return;
-
-    if (block.type === 'heading_1') {
+    if (block.type === 'heading_1' || block.type === 'heading_2') {
         if (currentSection) sections.push(currentSection);
-        currentSection = { title: block.text, icon: <BookOpen className="h-8 w-8 text-primary" />, blocks: [] };
-        return;
-    }
-    if (block.type === 'heading_2') {
-      if (currentSection) sections.push(currentSection);
-      currentSection = { title: block.text, blocks: [] };
+        currentSection = { title: block.text, blocks: [block] };
     } else {
-      if (currentSection) {
-        currentSection.blocks.push(block);
+      if (!currentSection) {
+        currentSection = { title: "메일 서버 설정", blocks: [] };
       }
+      currentSection.blocks.push(block);
     }
   });
   if (currentSection) sections.push(currentSection);
@@ -114,52 +130,53 @@ export default function MailServerPage() {
   return (
     <main className="container mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-primary">메일 서버 구축 실습</h1>
-            <p className="text-lg text-muted-foreground">Postfix와 Dovecot을 이용한 메일 서버 구축 가이드입니다.</p>
+            <h1 className="text-4xl font-bold text-primary">Mail 서버 구축 실습</h1>
+            <p className="text-lg text-muted-foreground">Notion의 실습 가이드를 기반으로 생성된 페이지입니다.</p>
         </div>
 
-      {sections.map((section, index) => (
-        <Card key={`${index}-${section.title}`} className="hover:shadow-xl transition-shadow duration-300">
-          <CardHeader>
-            <CardTitle className="text-2xl font-bold flex items-center gap-3">
-                <NotionBlock block={{type: 'heading_2', text: section.title}} blocks={[]} />
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {(() => {
-              const content = [];
-              let i = 0;
-              while (i < section.blocks.length) {
-                const block = section.blocks[i];
-                
-                if (block.type === 'bulleted_list_item') {
-                  const listItems = [];
-                  let j = i;
-                  while (j < section.blocks.length && section.blocks[j].type === 'bulleted_list_item') {
-                    listItems.push(<NotionBlock key={section.blocks[j].id} block={section.blocks[j]} blocks={notionData.blocks} />);
-                    j++;
-                  }
-                  content.push(<ul key={`ul-${i}`} className="space-y-2 list-disc list-inside pl-4">{listItems}</ul>);
-                  i = j;
-                } else if (block.type === 'numbered_list_item') {
-                  const listItems = [];
-                  let j = i;
-                  while (j < section.blocks.length && section.blocks[j].type === 'numbered_list_item') {
-                    listItems.push(<NotionBlock key={section.blocks[j].id} block={section.blocks[j]} blocks={notionData.blocks} />);
-                    j++;
-                  }
-                  content.push(<ol key={`ol-${i}`} className="space-y-2 list-decimal list-inside pl-4">{listItems}</ol>);
-                  i = j;
-                } else {
-                  content.push(<NotionBlock key={block.id} block={block} blocks={notionData.blocks} />);
-                  i++;
-                }
-              }
-              return content;
-            })()}
-          </CardContent>
-        </Card>
-      ))}
+      
+
+        {sections.map((section, index) => {
+            const isVersionTable = section.title === "📘 2개의 메일 서버 (수발신 모두 가능)";
+            const isDescriptionTable = section.title === "5️⃣ 설명 (교육용)";
+
+            const CardContentComponent = isVersionTable ? (
+                <Table>
+                    <TableHeader>
+                        <TableRow>{versionTableData.headers.map(h => <TableHead key={h}>{h}</TableHead>)}</TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {versionTableData.rows.map((r, i) => <TableRow key={i}>{r.map((c, j) => <TableCell key={j}>{c}</TableCell>)}</TableRow>)}
+                    </TableBody>
+                </Table>
+            ) : isDescriptionTable ? (
+                <Table>
+                    <TableHeader>
+                        <TableRow>{descriptionTableData.headers.map(h => <TableHead key={h}>{h}</TableHead>)}</TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {descriptionTableData.rows.map((r, i) => <TableRow key={i}>{r.map((c, j) => <TableCell key={j}>{c}</TableCell>)}</TableRow>)}
+                    </TableBody>
+                </Table>
+            ) : (
+                section.blocks
+                    .filter(block => block.type !== 'heading_1' && block.type !== 'heading_2')
+                    .map(block => <NotionBlock key={block.id} block={block} blocks={notionData.blocks} />)
+            );
+
+            return (
+                <Card key={index} className="hover:shadow-xl transition-shadow duration-300">
+                    <CardHeader>
+                        <CardTitle className="text-2xl font-bold flex items-center gap-3">
+                            <NotionBlock block={{type: isVersionTable ? 'heading_1' : 'heading_2', text: section.title}} blocks={[]} />
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {CardContentComponent}
+                    </CardContent>
+                </Card>
+            );
+        })}
     </main>
   );
 }
@@ -167,329 +184,287 @@ export default function MailServerPage() {
 const notionContent = {
     "blocks": [
     {
-      "id": "mail-intro-heading",
+      "id": "26a24e56-f2bd-801a-a213-e2d8b423859a",
       "object": "block",
       "type": "heading_1",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "📧 메일 서버 구축 개요"
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "📘 2개의 메일 서버 (수발신 모두 가능)"
     },
     {
-      "id": "mail-intro-para1",
+      "id": "26a24e56-f2bd-8090-9208-c3648b0bca9c",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "1️⃣ DNS 서버 설정"
+    },
+    {
+      "id": "26a24e56-f2bd-8063-825f-ce64e6ea3976",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/var/named/test1.com.zone"
+    },
+    {
+      "id": "26a24e56-f2bd-800c-937f-ee14c586bdde",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "$TTL 1D\n@       IN      SOA     ns.test1.com. root.test1.com. (\n                                                       2025091001 ; serial\n                                                       1H ; refresh\n                                                       10M ; retry\n                                                       1D ; expire\n                                                       3H ) ; minimum\n \n        IN      NS      ns.test1.com.\n        IN      MX 10   mail.test1.com.   ; 메일 서버 우선순위 (숫자가 낮을수록 우선)\n\nns      IN      A       192.168.0.40   ; DNS 서버 IP\nmail    IN      A       192.168.0.61   ; test1 메일 서버 IP\n",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-80d3-a567-eafeddf3ffdb",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/var/named/test2.com.zone"
+    },
+    {
+      "id": "26a24e56-f2bd-802f-ac76-c3de4c5a4e21",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "$TTL 1D\n@       IN      SOA     ns.test2.com. root.test2.com. (\n                                                       2025091001 ; serial\n                                                       1H ; refresh\n                                                       10M ; retry\n                                                       1D ; expire\n                                                       3H ) ; minimum\n \n        IN      NS      ns.test2.com.\n        IN      MX 10   mail.test2.com.   ; 메일 서버 우선순위\n\nns      IN      A       192.168.0.40   ; DNS 서버 IP\nmail    IN      A       192.168.0.62   ; test2 메일 서버 IP\n",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-80c2-bc48-e05e34c0d15f",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "2️⃣ 서버 기본 설정"
+    },
+    {
+      "id": "26a24e56-f2bd-80ca-9481-ce7e7399a1f1",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/hostname"
+    },
+    {
+      "id": "26a24e56-f2bd-80d3-9224-ec750b27ae00",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "mail.test1.com   # test1 서버\nmail.test2.com   # test2 서버",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-800b-a592-ffe90ab7e52e",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/hosts"
+    },
+    {
+      "id": "26a24e56-f2bd-8016-baf2-f08f6fc32c18",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "127.0.0.1   localhost localhost.localdomain\n192.168.0.61 mail.test1.com   # test1 서버 IP\n192.168.0.62 mail.test2.com   # test2 서버 IP",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-8017-825f-e1165aacdb69",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/resolv.conf"
+    },
+    {
+      "id": "26a24e56-f2bd-8020-b493-d4faf8ad0495",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "search test1.com             # 기본 도메인\nnameserver 192.168.0.40      # 내부 DNS 서버",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-8022-8e62-d8a36e35c604",
+      "object": "block",
+      "type": "quote",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "⚠️ 참고: 재부팅 시 resolv.conf 초기화 방지를 위해 NetworkManager 설정 필요"
+    },
+    {
+      "id": "26a24e56-f2bd-80c4-9dc5-f6f10d7dff87",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "3️⃣ Sendmail 설정"
+    },
+    {
+      "id": "26a24e56-f2bd-8080-a3c0-c2fbf4605c83",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/mail/access"
+    },
+    {
+      "id": "26a24e56-f2bd-80b2-a9f8-f6993cf53328",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "Connect:localhost.localdomain   RELAY    # 로컬 접속 허용\nConnect:localhost               RELAY\nConnect:127.0.0.1               RELAY\nConnect:192.168.0               RELAY    # 내부 네트워크 허용\nConnect:test1.com               RELAY    # 도메인 허용\nConnect:test2.com               RELAY",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-8077-8fca-ec92d199fee4",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "makemap hash /etc/mail/access < /etc/mail/access   # access.db 생성",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-80c7-b640-ef63a984c9cc",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/mail/local-host-names"
+    },
+    {
+      "id": "26a24e56-f2bd-80c2-89b9-fa0e0808b35c",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "mail.test1.com   # 수신 도메인 매칭 (test1 서버)\n\nmail.test2.com   # 수신 도메인 매칭 (test2 서버)",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-806b-b6c0-d0cdb0280c67",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/mail/sendmail.mc"
+    },
+    {
+      "id": "26a24e56-f2bd-801e-94bc-da5dc61f266e",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "dnl DAEMON_OPTIONS('Port=smtp, Addr=127.0.0.1, Name=MTA')dnl\nDAEMON_OPTIONS('Port=smtp, Name=MTA')dnl    # 모든 IP에서 SMTP 수신 허용",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-807c-b856-e7c55f21b0b2",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "m4 /etc/mail/sendmail.mc > /etc/mail/sendmail.cf  # cf 파일 생성\nsystemctl restart sendmail                         # Sendmail 적용",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-80fc-9457-c980364ed4ec",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "4️⃣ Dovecot 설정 (메일 수신/읽기)"
+    },
+    {
+      "id": "26a24e56-f2bd-80a7-8018-e411ab07ac91",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/dovecot/dovecot.conf"
+    },
+    {
+      "id": "26a24e56-f2bd-80ce-a0b3-e4e4d4f73e81",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "protocols = imap pop3 lmtp submission       # 메일 수신 프로토콜\nlisten = *, ::                              # 모든 인터페이스 수신",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-80b6-8131-fadabddb1d55",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/dovecot/conf.d/10-ssl.conf"
+    },
+    {
+      "id": "26a24e56-f2bd-80c8-9c67-da6c01c80655",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "ssl = no   # 실습용 SSL 미사용",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-8000-a258-ea152800ffc8",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/dovecot/conf.d/10-mail.conf"
+    },
+    {
+      "id": "26a24e56-f2bd-80d6-9f4d-e9a773d3734d",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "mail_location = mbox:~/mail:INBOX=/var/mail/%u   # 메일 저장 위치 (메일박스)\nmail_access_groups = mail                        # mail 그룹 사용자 접근 허용",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-8089-a281-f8b45eb0b75b",
+      "object": "block",
+      "type": "heading_3",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "/etc/dovecot/conf.d/10-auth.conf"
+    },
+    {
+      "id": "26a24e56-f2bd-8082-a792-c38aededdf00",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "disable_plaintext_auth = no   # 평문 인증 허용\nauth_mechanisms = plain login # 인증 방식",
+      "language": "plain text"
+    },
+    {
+      "id": "26a24e56-f2bd-8025-9323-f0f44dfb22ef",
+      "object": "block",
+      "type": "code",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "systemctl restart dovecot   # Dovecot 적용",
+      "language": "bash"
+    },
+    {
+      "id": "26a24e56-f2bd-8077-96f5-e09eb5151d5d",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "5️⃣ 설명 (교육용)"
+    },
+    {
+      "id": "26a24e56-f2bd-805e-a2f9-dba05f9ab9cf",
+      "object": "block",
+      "type": "heading_2",
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "6️⃣ 최종 구조"
+    },
+    {
+      "id": "26a24e56-f2bd-80f5-a70a-c6b92609fa50",
+      "object": "block",
+      "type": "bulleted_list_item",
+      "has_children": true,
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "test1.com (mail.test1.com, 192.168.0.61)"
+    },
+    {
+      "id": "26a24e56-f2bd-80e5-81d5-ef78d85c6e9d",
+      "object": "block",
+      "type": "bulleted_list_item",
+      "has_children": true,
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "test2.com (mail.test2.com, 192.168.0.62)"
+    },
+    {
+      "id": "26a24e56-f2bd-8019-8b46-c76c35f260bd",
       "object": "block",
       "type": "paragraph",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "메일 서버는 이메일을 주고받는 데 필요한 핵심 인프라입니다. 이 실습에서는 Postfix와 Dovecot을 사용하여 기본적인 메일 서버를 구축하는 방법을 학습합니다."
-    },
-    {
-      "id": "mail-intro-para2",
-      "object": "block",
-      "type": "paragraph",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "주요 구성 요소:"
-    },
-    {
-      "id": "mail-intro-bullet1",
-      "object": "block",
-      "type": "bulleted_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "**MTA (Mail Transfer Agent)**: 메일을 보내고 받는 역할 (예: Postfix)"
-    },
-    {
-      "id": "mail-intro-bullet2",
-      "object": "block",
-      "type": "bulleted_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "**MDA (Mail Delivery Agent)**: 수신된 메일을 사용자 사서함에 저장 (예: Dovecot)"
-    },
-    {
-      "id": "mail-intro-bullet3",
-      "object": "block",
-      "type": "bulleted_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "**MUA (Mail User Agent)**: 사용자가 메일을 읽고 쓰는 클라이언트 (예: Thunderbird, Outlook)"
-    },
-    {
-      "id": "mail-divider-1",
-      "object": "block",
-      "type": "divider",
-      "parent": { "type": "page_id", "page_id": "mail-server-page" }
-    },
-    {
-      "id": "postfix-heading",
-      "object": "block",
-      "type": "heading_2",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "1. Postfix 설치 및 설정"
-    },
-    {
-      "id": "postfix-step1",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "Postfix 설치 (Ubuntu/Debian 기준)"
-    },
-    {
-      "id": "postfix-code1",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "postfix-step1" },
-      "text": "sudo apt update\nsudo apt install postfix",
-      "language": "bash"
-    },
-    {
-      "id": "postfix-step2",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "Postfix 기본 설정 (인터넷 사이트, 시스템 메일 이름 등)"
-    },
-    {
-      "id": "postfix-code2",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "postfix-step2" },
-      "text": "sudo dpkg-reconfigure postfix",
-      "language": "bash"
-    },
-    {
-      "id": "postfix-step3",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "`main.cf` 설정 수정 (예: `myhostname`, `mydomain`, `mynetworks`)"
-    },
-    {
-      "id": "postfix-code3",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "postfix-step3" },
-      "text": "sudo nano /etc/postfix/main.cf",
-      "language": "bash"
-    },
-    {
-      "id": "postfix-step4",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "Postfix 재시작"
-    },
-    {
-      "id": "postfix-code4",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "postfix-step4" },
-      "text": "sudo systemctl restart postfix",
-      "language": "bash"
-    },
-    {
-      "id": "mail-divider-2",
-      "object": "block",
-      "type": "divider",
-      "parent": { "type": "page_id", "page_id": "mail-server-page" }
-    },
-    {
-      "id": "dovecot-heading",
-      "object": "block",
-      "type": "heading_2",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "2. Dovecot 설치 및 설정"
-    },
-    {
-      "id": "dovecot-step1",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "Dovecot 설치"
-    },
-    {
-      "id": "dovecot-code1",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dovecot-step1" },
-      "text": "sudo apt install dovecot-imapd dovecot-pop3d",
-      "language": "bash"
-    },
-    {
-      "id": "dovecot-step2",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "`10-mail.conf` 설정 수정 (메일 저장 방식 등)"
-    },
-    {
-      "id": "dovecot-code2",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dovecot-step2" },
-      "text": "sudo nano /etc/dovecot/conf.d/10-mail.conf",
-      "language": "bash"
-    },
-    {
-      "id": "dovecot-step3",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "`10-auth.conf` 설정 수정 (인증 방식 등)"
-    },
-    {
-      "id": "dovecot-code3",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dovecot-step3" },
-      "text": "sudo nano /etc/dovecot/conf.d/10-auth.conf",
-      "language": "bash"
-    },
-    {
-      "id": "dovecot-step4",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "Dovecot 재시작"
-    },
-    {
-      "id": "dovecot-code4",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dovecot-step4" },
-      "text": "sudo systemctl restart dovecot",
-      "language": "bash"
-    },
-    {
-      "id": "mail-divider-3",
-      "object": "block",
-      "type": "divider",
-      "parent": { "type": "page_id", "page_id": "mail-server-page" }
-    },
-    {
-      "id": "user-heading",
-      "object": "block",
-      "type": "heading_2",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "3. 메일 사용자 생성 및 테스트"
-    },
-    {
-      "id": "user-step1",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "메일 사용자 계정 생성"
-    },
-    {
-      "id": "user-code1",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "user-step1" },
-      "text": "sudo adduser mailuser",
-      "language": "bash"
-    },
-    {
-      "id": "user-step2",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "메일 송신 테스트 (telnet 이용)"
-    },
-    {
-      "id": "user-code2",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "user-step2" },
-      "text": "telnet localhost 25\nHELO yourdomain.com\nMAIL FROM: <mailuser@yourdomain.com>\nRCPT TO: <mailuser@yourdomain.com>\nDATA\nSubject: Test Mail\n\nThis is a test mail.\n.\nQUIT",
-      "language": "bash"
-    },
-    {
-      "id": "user-step3",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "메일 수신 테스트 (telnet 이용)"
-    },
-    {
-      "id": "user-code3",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "user-step3" },
-      "text": "telnet localhost 110\nUSER mailuser\nPASS mailuser_password\nLIST\nRETR 1\nQUIT",
-      "language": "bash"
-    },
-    {
-      "id": "mail-divider-4",
-      "object": "block",
-      "type": "divider",
-      "parent": { "type": "page_id", "page_id": "mail-server-page" }
-    },
-    {
-      "id": "dns-heading",
-      "object": "block",
-      "type": "heading_2",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "4. DNS 설정 (MX 레코드)"
-    },
-    {
-      "id": "dns-step1",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "도메인에 대한 MX 레코드 추가"
-    },
-    {
-      "id": "dns-code1",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dns-step1" },
-      "text": "yourdomain.com. IN MX 10 mail.yourdomain.com.\nmail.yourdomain.com. IN A <Your_Server_IP>",
-      "language": "dns"
-    },
-    {
-      "id": "dns-step2",
-      "object": "block",
-      "type": "numbered_list_item",
-      "has_children": false,
-      "parent": { "type": "page_id", "page_id": "mail-server-page" },
-      "text": "SPF 레코드 추가 (선택 사항이지만 권장)"
-    },
-    {
-      "id": "dns-code2",
-      "object": "block",
-      "type": "code",
-      "has_children": false,
-      "parent": { "type": "block_id", "block_id": "dns-step2" },
-      "text": "yourdomain.com. IN TXT \"v=spf1 mx -all\"",
-      "language": "dns"
+      "parent": { "type": "page_id", "page_id": "26a24e56-f2bd-80fb-98b2-f7c7fedbc278" },
+      "text": "📩 이제 test1 사용자 ↔ test2 사용자 간 메일 송수신 가능"
     }
   ]
 };

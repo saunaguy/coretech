@@ -101,7 +101,7 @@ export default function DnsPage() {
     <main className="container mx-auto px-4 py-8 space-y-12">
         <div className="text-center space-y-4">
             <h1 className="text-4xl font-bold text-primary">DNS 서버 구축 실습</h1>
-            <p className="text-lg text-muted-foreground">Notion의 실습 가이드를 기반으로 생성된 페이지입니다.</p>
+                        <p className="text-lg text-muted-foreground">Notion의 실습 가이드를 기반으로 생성된 페이지입니다.</p>
         </div>
 
       {sections.map((section, index) => (
@@ -333,7 +333,7 @@ const notionContent = {
             "type": "code",
             "has_children": false,
             "parent": { "type": "page_id", "page_id": "dns-page" },
-            "text": "$TTL 1D\n@   IN SOA example1.com. root.example1.com. (\n        2025090501 ; serial       # 존 파일 버전, 변경 시 증가\n        1D         ; refresh      # 슬레이브 서버가 갱신하는 주기\n        1H         ; retry        # 갱신 실패 시 재시도 주기\n        1W         ; expire       # 슬레이브 서버가 존 정보를 사용할 수 있는 기간\n        3H )       ; minimum      # 존재하지 않는 레코드 캐시 기간\n\n    IN NS   example1.com.       # 네임서버 지정\n\n@   IN A    192.168.0.69      # example1.com 도메인 → IP\nns  IN A    192.168.0.69      # ns.example1.com → IP\nwww IN A    192.168.0.69      # www.example1.com → IP",
+            "text": "$TTL 1D\n@   IN SOA example1.com. root.example1.com. (\n        2025090501 ; serial       # 존 파일 버전. 이 값이 변경되면 슬레이브 DNS 서버가 존 파일이 업데이트되었음을 인지하고 데이터를 갱신합니다.\n        1D         ; refresh      # 슬레이브 서버가 갱신하는 주기\n        1H         ; retry        # 갱신 실패 시 재시도 주기\n        1W         ; expire       # 슬레이브 서버가 존 정보를 사용할 수 있는 기간\n        3H )       ; minimum      # 존재하지 않는 레코드 캐시 기간\n\n    IN NS   example1.com.       # 네임서버 지정\n\n@   IN A    192.168.0.69      # example1.com 도메인 → IP\nns  IN A    192.168.0.69      # ns.example1.com → IP\nwww IN A    192.168.0.69      # www.example1.com → IP",
             "language": "bash"
         },
         {
