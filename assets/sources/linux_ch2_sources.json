@@ -1,0 +1,36 @@
+{
+  "distros_and_installation": [
+    "https://ubuntu.com/tutorials/install-ubuntu-desktop",
+    "https://docs.rockylinux.org/guides/installation/",
+    "https://www.debian.org/releases/stable/installmanual"
+  ],
+  "bootable_usb": [
+    "https://rufus.ie/en/",
+    "https://www.balena.io/etcher/",
+    "https://wiki.archlinux.org/title/USB_flash_installation_medium"
+  ],
+  "virtualization_virtualbox": [
+    "https://www.virtualbox.org/manual/UserManual.html#intro-install",
+    "https://www.virtualbox.org/manual/ch01.html",
+    "https://www.virtualbox.org/manual/ch06.html"
+  ],
+  "virtualization_vmware": [
+    "https://docs.vmware.com/en/VMware-Workstation-Player/index.html",
+    "https://docs.vmware.com/en/VMware-Workstation-Pro/index.html"
+  ],
+  "vm_networking": [
+    "https://www.virtualbox.org/manual/ch06.html#networkingmodes",
+    "https://docs.vmware.com/en/VMware-Workstation-Player/17.0/com.vmware.player.win.using.doc/GUID-2A6C1D13-8BCA-4C6B-86B8-1D2E0BAE9F63.html"
+  ],
+  "remote_access_ssh_putty": [
+    "https://www.openssh.com/manual.html",
+    "https://www.chiark.greenend.org.uk/~sgtatham/putty/",
+    "https://man7.org/linux/man-pages/man1/ssh.1.html"
+  ],
+  "initial_cli_basics": [
+    "https://www.gnu.org/software/bash/manual/bash.html",
+    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://man7.org/linux/man-pages/man1/cd.1.html"
+  ]
+}
+

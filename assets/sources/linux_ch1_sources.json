@@ -1,0 +1,42 @@
+{
+  "01_os_overview": [
+    "https://en.wikipedia.org/wiki/Operating_system",
+    "https://en.wikipedia.org/wiki/Linux",
+    "https://en.wikipedia.org/wiki/Linux_kernel"
+  ],
+  "02_components_kernel_shell": [
+    "https://en.wikipedia.org/wiki/Kernel_(operating_system)",
+    "https://en.wikipedia.org/wiki/Shell_(computing)",
+    "https://man7.org/linux/man-pages/man2/syscalls.2.html"
+  ],
+  "03_computer_basics": [
+    "https://en.wikipedia.org/wiki/Computer_architecture",
+    "https://en.wikipedia.org/wiki/Central_processing_unit",
+    "https://en.wikipedia.org/wiki/Random-access_memory",
+    "https://en.wikipedia.org/wiki/Input/output"
+  ],
+  "04_process_and_memory": [
+    "https://en.wikipedia.org/wiki/Process_(computing)",
+    "https://en.wikipedia.org/wiki/Virtual_memory",
+    "https://en.wikipedia.org/wiki/Memory_management"
+  ],
+  "05_filesystem_basics": [
+    "https://en.wikipedia.org/wiki/File_system",
+    "https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard"
+  ],
+  "06_boot_and_firmware": [
+    "https://en.wikipedia.org/wiki/BIOS",
+    "https://en.wikipedia.org/wiki/UEFI",
+    "https://wiki.archlinux.org/title/Arch_boot_process"
+  ],
+  "07_distributions_and_gnu": [
+    "https://en.wikipedia.org/wiki/Linux_distribution",
+    "https://www.gnu.org/gnu/linux-and-gnu.en.html"
+  ],
+  "08_cli_and_tools_intro": [
+    "https://www.gnu.org/software/bash/manual/bash.html",
+    "https://man7.org/linux/man-pages/man1/ls.1.html",
+    "https://man7.org/linux/man-pages/man1/cat.1.html"
+  ]
+}
+

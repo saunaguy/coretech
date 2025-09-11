@@ -6,5 +6,47 @@ export default [
     'Fedora: 최신 기술, 빠른 릴리스',
   ]},
   { type: 'aside', text: '🧩 목적에 맞춰 배포판을 선택하세요: 학습=Ubuntu LTS/Rocky, 운영=RHEL/Ubuntu LTS' },
+  { type: 'divider' },
+  // 아래는 01-4.ts의 상세 내용에서 통합
+  { type: 'heading', text: '배포판(Distribution) 이해' },
+  { type: 'aside', text: "리눅스는 '커널'이고, 배포판은 커널 + 사용자 공간(도구/설정/패키지/업데이트 체계)의 묶음입니다." },
+  { type: 'heading', text: '주요 계열과 특징' },
+  { type: 'list', items: [
+    'Debian 계열: Debian, Ubuntu, Linux Mint — 패키지 관리자 APT/DEB, 안정성과 방대한 리포지토리, Ubuntu LTS 제공',
+    'Red Hat 계열: RHEL, Rocky Linux, AlmaLinux, Fedora — DNF/YUM/RPM, 기업 지원과 안정성, Fedora는 최신 기술 시도',
+    'Arch 계열: Arch, Manjaro — 롤링 릴리즈, pacman/PKGBUILD, 최신 패키지·자유도 높음',
+    'SUSE 계열: openSUSE, SLE — zypper/RPM, YaST 도구로 관리 편의',
+  ]},
+  { type: 'heading', text: '한눈에 보자! 배포판 계열' },
+  { type: 'image', src: '/assets/linux_distro_families.svg', alt: '리눅스 배포판 계열 한눈에', caption: 'Debian · Red Hat · Arch · SUSE 계열 요약' },
+  { type: 'heading', text: '왜 리눅스인가?' },
+  { type: 'list', items: [
+    '무료/오픈소스: 비용 절감과 커스터마이징 자유',
+    '안정성·보안: 서버/클라우드/컨테이너에서 검증',
+    '자동화·DevOps 친화: 패키징/CI/CD/인프라 as 코드와 궁합',
+    '학습/커뮤니티: 문서/포럼/예시가 풍부',
+  ]},
+  { type: 'heading', text: '선택 가이드(용도별)' },
+  { type: 'list', items: [
+    '입문·데스크톱: Ubuntu LTS, Linux Mint',
+    '서버·엔터프라이즈: RHEL/ Rocky/ AlmaLinux 또는 Ubuntu Server LTS',
+    '최신 기술·개발자: Fedora(신기술), Arch/Manjaro(최신 패키지)',
+    '관리 도구 선호: openSUSE(YaST)',
+  ]},
+  { type: 'heading', text: '패키지 관리자 맛보기' },
+  { type: 'list', items: [
+    'APT(Debian/Ubuntu): sudo apt update && sudo apt install htop',
+    'DNF(RHEL/Fedora/Rocky): sudo dnf install htop',
+    'pacman(Arch): sudo pacman -Syu htop',
+    'zypper(openSUSE): sudo zypper in htop',
+  ]},
+  { type: 'divider' },
+  { type: 'heading', text: '체크리스트·주의' },
+  { type: 'list', items: [
+    '문서/가이드의 대상 배포판과 버전을 항상 확인(EOL/명령 차이)',
+    '서버는 LTS/엔터프라이즈 안정 채널을 선호',
+    '개발·실험 환경은 롤링/최신 채널 고려',
+  ]},
+  { type: 'heading', text: '요약' },
+  { type: 'paragraph', text: '배포판은 목적과 운영 모델에 따라 선택이 갈립니다. 패키지 관리자와 릴리즈 정책을 이해하면 운영과 학습 모두 수월해집니다.' },
 ]
-

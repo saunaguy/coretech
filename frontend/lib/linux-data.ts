@@ -116,11 +116,14 @@ export const linuxTopics = {
 
   // 5. 실습 코너 (토글 그룹)
   "🧪 실습 코너": {
+    "🔧 환경 준비": [
+      { id: "env-5-0", name: "환경 준비", title: "리눅스 실습 · 환경 준비", description: "VM/네트워크/계정/로그 사전 준비", loaderKey: '05-0' },
+    ],
     "🐧 리눅스 실습": [
-      { id: "lab-5-1", name: "1. 환경 준비", title: "리눅스 실습 1: 환경 준비", description: "VM/네트워크/계정/로그 사전 준비", loaderKey: '05-1' },
-      { id: "lab-5-2", name: "2. 기본 점검", title: "리눅스 실습 2: 기본 점검", description: "서비스/로그/스토리지 확인", loaderKey: '05-4' },
-      { id: "lab-5-3", name: "3. 메일 실습", title: "리눅스 실습 3: 메일 실습", description: "DNS→SMTP 경로 점검 및 트러블슈팅", loaderKey: '05-3' },
-      { id: "lab-5-4", name: "4. 마무리", title: "리눅스 실습 4: 마무리", description: "회고/정리", loaderKey: '05-5' },
+      { id: "lab-5-1", name: "1. 3-Tier 실습", title: "리눅스 실습 1: 3-Tier 서비스", description: "Nginx + App + DB", loaderKey: '05-1-1' },
+      { id: "lab-5-2", name: "2. DNS 실습", title: "리눅스 실습 2: DNS", description: "MX/A/AAAA/PTR/SPF", loaderKey: '05-1-2' },
+      { id: "lab-5-3", name: "3. 메일 실습", title: "리눅스 실습 3: 메일", description: "DNS→SMTP 경로 점검 및 트러블슈팅", loaderKey: '05-1-3' },
+      { id: "lab-5-4", name: "4. 회고/정리", title: "리눅스 실습 4: 회고/정리", description: "정리 및 보완 과제", loaderKey: '05-1-4' },
     ],
     "5-2 네트워크 실습": [
       { id: "plan-5-2", name: "5-2 네트워크 실습 (준비중)", title: "5-2 네트워크 실습", description: "구성 준비중" },

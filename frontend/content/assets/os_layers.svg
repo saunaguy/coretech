@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="520" viewBox="0 0 860 520">
+  <style>
+    .box { fill:#f9fafb; stroke:#111827; stroke-width:2; rx:10; ry:10; }
+    .title { font: 600 18px 'Segoe UI', Arial; fill:#111827; }
+    .label { font: 14px 'Segoe UI', Arial; fill:#111827; }
+    .note { font: 12px 'Segoe UI', Arial; fill:#374151; }
+    .divider { stroke:#9ca3af; stroke-width:1; stroke-dasharray:4 4; }
+  </style>
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <text x="20" y="36" class="title">OS 계층 한눈에 보기 (응용 → 커널 → 하드웨어)</text>
+
+  <!-- Application Layer -->
+  <rect class="box" x="40" y="60" width="780" height="70"/>
+  <text x="60" y="100" class="label">애플리케이션 (Editors, Servers, Tools)</text>
+
+  <!-- Shell/CLI -->
+  <rect class="box" x="40" y="140" width="780" height="60"/>
+  <text x="60" y="176" class="label">셸·CLI (Bash/Zsh, coreutils)</text>
+
+  <!-- Syscall API -->
+  <rect class="box" x="40" y="210" width="780" height="60"/>
+  <text x="60" y="246" class="label">시스템 콜 API (open, read, write, fork, exec, socket)</text>
+
+  <!-- Kernel Core -->
+  <rect class="box" x="40" y="280" width="780" height="120"/>
+  <text x="60" y="310" class="label">리눅스 커널</text>
+  <line class="divider" x1="60" y1="320" x2="800" y2="320"/>
+  <text x="70" y="344" class="note">프로세스 스케줄러 · 메모리 관리 · 파일시스템 · 네트워크 스택 · 보안</text>
+
+  <!-- Drivers -->
+  <rect class="box" x="40" y="410" width="780" height="50"/>
+  <text x="60" y="442" class="label">드라이버 계층</text>
+
+  <!-- Hardware -->
+  <text x="40" y="490" class="label">하드웨어: CPU · RAM · 디스크 · NIC · I/O</text>
+
+  <!-- Arrows -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="10" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#111827" />
+    </marker>
+  </defs>
+  <line x1="430" y1="130" x2="430" y2="140" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="200" x2="430" y2="210" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="270" x2="430" y2="280" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="430" y1="400" x2="430" y2="410" stroke="#111827" stroke-width="2" marker-end="url(#arrow)"/>
+</svg>
+

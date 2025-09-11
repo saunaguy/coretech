@@ -11,7 +11,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     const acc = {} as Record<string, boolean>;
     Object.values(topics || {}).forEach((categories: any) => {
       Object.keys(categories || {}).forEach((cat) => {
-        acc[cat] = true;
+        acc[cat] = false; // 기본은 닫힘
       });
     });
     return acc;
@@ -20,7 +20,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
   const [openLevels, setOpenLevels] = useState(() => {
     const acc = {} as Record<string, boolean>;
     Object.keys(topics || {}).forEach((level) => {
-      acc[level] = true;
+      acc[level] = false; // 기본은 닫힘
     });
     return acc;
   });

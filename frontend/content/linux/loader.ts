@@ -1,8 +1,9 @@
 export const linuxContentLoaders: Record<string, () => Promise<{ default: any }>> = {
-  '01-1': () => import('./01/01-1'),
-  '01-2': () => import('./01/01-2'),
-  '01-3': () => import('./01/01-3'),
-  '01-4': () => import('./01/01-4'),
+  '01-1': () => import('./01/1-1/1'),
+  // 호환성: 01-1~01-4는 세부 스텝 폴더로 매핑
+  '01-2': () => import('./01/1-1/2'),
+  '01-3': () => import('./01/1-1/3'),
+  '01-4': () => import('./01/1-1/4'),
   '01-5': () => import('./01/01-5'),
   '01-6': () => import('./01/01-6'),
   '01-7': () => import('./01/01-7'),
@@ -13,6 +14,23 @@ export const linuxContentLoaders: Record<string, () => Promise<{ default: any }>
   '02-2': () => import('./02/02-2'),
   '02-3': () => import('./02/02-3'),
   '02-4': () => import('./02/02-4'),
+  // 05 Labs (nested)
+  '05-0': () => import('./05/05-0'),
+  '05-1-1': () => import('./05/05-1/1'),
+  '05-1-2': () => import('./05/05-1/2'),
+  '05-1-3': () => import('./05/05-1/3'),
+  '05-1-4': () => import('./05/05-1/4'),
+  // 01 nested steps
+  '01-1-1': () => import('./01/1-1/1'),
+  '01-1-2': () => import('./01/1-1/2'),
+  '01-1-3': () => import('./01/1-1/3'),
+  '01-1-4': () => import('./01/1-1/4'),
+  '01-1-2-5': () => import('./01/1-2/5'),
+  '01-1-2-6': () => import('./01/1-2/6'),
+  '01-1-2-7': () => import('./01/1-2/7'),
+  '01-1-2-8': () => import('./01/1-2/8'),
+  '01-1-2-9': () => import('./01/1-2/9'),
+  '01-1-2-10': () => import('./01/1-2/10'),
 }
 
 export async function loadLinuxContent(key: string): Promise<{ default: any }> {
@@ -20,11 +38,14 @@ export async function loadLinuxContent(key: string): Promise<{ default: any }> {
   const loader = linuxContentLoaders[key]
   if (loader) return loader()
 
-  // Fallback: compute path like ./NN/NN-M
+  // Fallback: compute path like ./NN/NN-M or ./NN/NN-M/K
   try {
-    const [ch, sec] = key.split('-')
+    const parts = key.split('-')
+    const [ch, sec, step] = parts
     const chapter = ch.padStart(2, '0')
-    const modulePath = `./${chapter}/${chapter}-${sec}.ts`
+    const modulePath = step
+      ? `./${chapter}/${chapter}-${sec}/${step}.ts`
+      : `./${chapter}/${chapter}-${sec}.ts`
     const mod = await import(
       /* webpackInclude: /\.ts$/ */
       modulePath as any
