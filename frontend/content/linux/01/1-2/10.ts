@@ -1,7 +1,10 @@
 const blocks = [
-  { type: 'heading', text: '1-2 · 10. 핸즈온/체크/요약' },
-  { type: 'paragraph', text: '핸즈온 수행, 체크리스트, 요약 정리를 제공합니다.' },
+  { type: 'heading', text: '1-10 기본 CLI 사용법' },
+  { type: 'list', items: [
+    'SSH 접속: ssh user@host, 키 인증',
+    '터미널/쉘: 프롬프트, pwd/cd/ls',
+    '도움말: man, --help',
+  ]},
 ]
 
 export default blocks as any
-

@@ -1,7 +1,10 @@
 const blocks = [
-  { type: 'heading', text: '1-2 · 7. 구성요소/분류' },
-  { type: 'paragraph', text: '커널/셸 등 구성요소와 분류 체계를 설명합니다.' },
+  { type: 'heading', text: '1-7 가상화 개념' },
+  { type: 'list', items: [
+    '하이퍼바이저: Type-1 vs Type-2, KVM',
+    'VM vs 컨테이너: 격리/성능/운영 차이',
+  ]},
+  { type: 'aside', text: '🧪 학습은 VM, 배포는 컨테이너를 기본으로 생각해 보세요.' },
 ]
 
 export default blocks as any
-

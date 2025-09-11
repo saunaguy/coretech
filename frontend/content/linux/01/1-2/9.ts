@@ -1,7 +1,11 @@
 const blocks = [
-  { type: 'heading', text: '1-2 · 9. 사용자/커널/시스콜' },
-  { type: 'paragraph', text: '사용자/커널 모드와 시스템 콜 개념을 정리합니다.' },
+  { type: 'heading', text: '1-9 VM 네트워크 모드' },
+  { type: 'list', items: [
+    'NAT: 기본/안전, 포트포워딩으로 외부 진입',
+    'Bridged: 동일 네트워크에서 직접 접근',
+    'Host-only: 호스트↔게스트 전용 내부망',
+  ]},
+  { type: 'aside', text: '🔀 흔한 조합: NAT + Host-only' },
 ]
 
 export default blocks as any
-
