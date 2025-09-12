@@ -4,6 +4,7 @@ import { GeistMono } from "geist/font/mono"
 import "./globals.css"
 import Header from "@/components/site/Header"
 import { ThemeProvider } from "@/components/site/ThemeProvider"
+import { AuthProvider } from "@/components/auth/AuthProvider"
 
 export const metadata: Metadata = {
   title: "CoreTech",
@@ -21,7 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <Header />
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

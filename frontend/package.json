@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "content:sync": "node scripts/sync_lessons.mjs",
-    "format": "prettier -w \"**/*.{md,mdx,json,yml,yaml}\""
+    "format": "prettier -w \"**/*.{md,mdx,json,yml,yaml}\"",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -49,6 +50,7 @@
     "embla-carousel-react": "^8.5.1",
     "geist": "^1.3.1",
     "input-otp": "^1.4.1",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.454.0",
     "marked": "^12.0.2",
     "next": "15.2.4",

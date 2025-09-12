@@ -21,7 +21,7 @@ from .db import (
 app = FastAPI(title="CoreTech API", version="0.1.0")
 
 # CORS for Next.js dev
-cors_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",") if o.strip()]
+cors_origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -32,14 +32,9 @@ app.add_middleware(
 )
 
 # Routers
-try:
-    # optional auth router; available when deps installed
-    from .auth import router as auth_router
+from .auth import router as auth_router
 
-    app.include_router(auth_router)
-except Exception:
-    # auth is optional for initial bring-up
-    pass
+app.include_router(auth_router, prefix="/api/v1")
 
 
 @app.on_event("startup")
