@@ -5,11 +5,16 @@ import "./globals.css"
 import Header from "@/components/site/Header"
 import { ThemeProvider } from "@/components/site/ThemeProvider"
 import { AuthProvider } from "@/components/auth/AuthProvider"
+import ToasterClient from "@/components/site/ToasterClient"
 
 export const metadata: Metadata = {
   title: "CoreTech",
   description: "Linux · Server · Network 학습 허브",
 }
+
+// Force dynamic rendering globally to avoid prerender/export errors on routes
+// that depend on runtime auth, middleware redirects, or dynamic imports.
+export const dynamic = "force-dynamic"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,10 +26,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
           <AuthProvider>
+            <Header />
             {children}
           </AuthProvider>
+          <ToasterClient />
         </ThemeProvider>
       </body>
     </html>

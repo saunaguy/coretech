@@ -4,9 +4,28 @@ import Link from "next/link"
 import { useTheme } from "next-themes"
 import { Sun, Moon } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/components/auth/AuthProvider"
+import { useRouter } from "next/navigation"
+import { useEffect, useRef } from "react"
+import { useSearchParams } from "next/navigation"
+import { toast } from "sonner"
 
 export default function Header() {
   const { theme, setTheme } = useTheme()
+  const { isAuthenticated, user, logout } = useAuth()
+  const router = useRouter()
+  const params = useSearchParams()
+  const alerted = useRef(false)
+
+  useEffect(() => {
+    // Show one-time notice if redirected due to lack of permission
+    if (!alerted.current && params.get('denied') === '1') {
+      alerted.current = true
+      toast.error('접근 권한이 없습니다.', { duration: 3000 })
+      // Clean the query param from URL
+      router.replace('/')
+    }
+  }, [params, router])
 
   const headerClassName = theme === 'dark' 
     ? 'bg-[#000080] text-white' 
@@ -25,7 +44,27 @@ export default function Header() {
               <Link href="/board" className="hover:text-primary transition-colors">게시판</Link>
               <Link href="/qna" className="hover:text-primary transition-colors">Q&A</Link>
               <Link href="/about" className="hover:text-primary transition-colors">소개</Link>
-              <Link href="/login" className="hover:text-primary transition-colors">로그인</Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/login" className="hover:text-primary transition-colors">로그인</Link>
+                  <Link href="/register" className="hover:text-primary transition-colors">회원가입</Link>
+                </>
+              ) : (
+                <>
+                  <span className="text-sm opacity-80">{user?.username || user?.email}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="hover:bg-white/10 dark:hover:bg-white/10"
+                    onClick={() => {
+                      logout()
+                      router.push("/")
+                    }}
+                  >
+                    로그아웃
+                  </Button>
+                </>
+              )}
             </nav>
             <Button
               aria-label="테마 전환"
