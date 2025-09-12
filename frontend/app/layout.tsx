@@ -12,6 +12,10 @@ export const metadata: Metadata = {
   description: "Linux · Server · Network 학습 허브",
 }
 
+// Force dynamic rendering globally to avoid prerender/export errors on routes
+// that depend on runtime auth, middleware redirects, or dynamic imports.
+export const dynamic = "force-dynamic"
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" suppressHydrationWarning>
@@ -28,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {children}
             </MobileSidebarProvider>
           </AuthProvider>
+          <ToasterClient />
         </ThemeProvider>
       </body>
     </html>

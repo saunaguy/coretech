@@ -16,6 +16,7 @@ from .db import (
     ProgressUser as DBProgressUser,
     engine as DBEngine,
 )
+from .auth import get_current_user
 
 
 app = FastAPI(title="CoreTech API", version="0.1.0")
@@ -41,6 +42,30 @@ app.include_router(auth_router)
 def _startup_main():
     try:
         init_db()
+        # Seed a test user for local testing (email: test@test.com / password: 1212)
+        try:
+            from .db import SessionLocal, User
+            from .auth import get_password_hash
+            db = SessionLocal()
+            try:
+                u = db.query(User).filter(User.email == "test@test.com").first()
+                if not u:
+                    u = User(
+                        username="test",
+                        email="test@test.com",
+                        password_hash=get_password_hash("1212"),
+                    )
+                    db.add(u)
+                    db.commit()
+                else:
+                    # Ensure password matches the requested testing value
+                    u.password_hash = get_password_hash("1212")
+                    db.commit()
+            finally:
+                db.close()
+        except Exception:
+            # seeding test user is best-effort only
+            pass
         # seed daily tests from JSON files; dedupe by title so it can run repeatedly
         db = SessionLocal()
         try:
@@ -279,12 +304,12 @@ class PostCreate(BaseModel):
 
 
 @app.post("/api/v1/board/posts", status_code=status.HTTP_201_CREATED)
-def create_post(payload: PostCreate, db: Session = Depends(get_db)):
-    p = DBPost(title=payload.title, body=payload.body, author_id=0)
+def create_post(payload: PostCreate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
+    p = DBPost(title=payload.title, body=payload.body, author_id=int(current_user.id))
     db.add(p)
     db.commit()
     db.refresh(p)
-    return {"id": p.id, "title": p.title}
+    return {"id": p.id, "title": p.title, "author": getattr(current_user, "username", None)}
 
 
 @app.get("/api/v1/board/posts")
@@ -295,6 +320,18 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
     else:
         q = q.order_by(DBPost.created_at.desc())
     rows = q.limit(50).all()
+    # Resolve author names (simple per-row lookup to keep it straightforward)
+    try:
+        from .db import User
+    except Exception:
+        User = None  # type: ignore
+
+    def author_name(author_id: int | None) -> str | None:
+        if not User or author_id is None:
+            return None
+        u = db.query(User).get(author_id)
+        return u.username if u else None
+
     return [
         {
             "id": r.id,
@@ -302,6 +339,7 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
             "views": r.views,
             "likes": r.likes,
             "createdAt": r.created_at.isoformat(),
+            "author": author_name(getattr(r, "author_id", None)),
         }
         for r in rows
     ]
@@ -312,6 +350,14 @@ def get_post(pid: int, db: Session = Depends(get_db)):
     p = db.query(DBPost).get(pid)
     if not p:
         raise HTTPException(status_code=404, detail="Post not found")
+    # Resolve author username if available
+    author_name = None
+    try:
+        from .db import User
+        u = db.query(User).get(p.author_id) if p.author_id is not None else None
+        author_name = u.username if u else None
+    except Exception:
+        author_name = None
     return {
         "id": p.id,
         "title": p.title,
@@ -319,14 +365,17 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         "views": p.views,
         "likes": p.likes,
         "createdAt": p.created_at.isoformat(),
+        "author": author_name,
     }
 
 
 @app.delete("/api/v1/board/posts/{pid}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(pid: int, db: Session = Depends(get_db)):
+def delete_post(pid: int, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
     p = db.query(DBPost).get(pid)
     if not p:
         raise HTTPException(status_code=404, detail="Post not found")
+    if p.author_id is not None and int(p.author_id) != int(getattr(current_user, "id", -1)):
+        raise HTTPException(status_code=403, detail="Not allowed to delete this post")
     db.delete(p)
     db.commit()
     return

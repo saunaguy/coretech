@@ -1,4 +1,5 @@
 "use client"
+export const dynamic = "force-dynamic"
 
 import { useEffect, useMemo, useState } from "react"
 import Link from "next/link"
@@ -6,6 +7,7 @@ import { format, isValid, parseISO } from "date-fns"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { CalendarDays, Eye, ThumbsUp, Search, ChevronRight, User } from "lucide-react"
+import { useAuth } from "@/components/auth/AuthProvider"
 
 type Post = {
   id: number
@@ -18,7 +20,8 @@ type Post = {
 }
 
 export default function BoardPage() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  const { isAuthenticated } = useAuth()
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState("")
@@ -78,9 +81,15 @@ export default function BoardPage() {
           <h1 className="text-2xl font-bold tracking-tight">게시판</h1>
           <p className="text-sm text-muted-foreground">질문/공유/후기를 자유롭게 남겨보세요.</p>
         </div>
-        <Button asChild>
-          <Link href="/board/new">새 글 작성</Link>
-        </Button>
+        {isAuthenticated ? (
+          <Button asChild>
+            <Link href="/board/new">새 글 작성</Link>
+          </Button>
+        ) : (
+          <Button asChild variant="outline">
+            <Link href="/login">로그인 후 글 작성</Link>
+          </Button>
+        )}
       </div>
 
       <Card>

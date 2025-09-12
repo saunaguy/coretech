@@ -27,7 +27,27 @@ export default function Header() {
               <Link href="/board" className="hover:text-primary transition-colors">게시판</Link>
               <Link href="/qna" className="hover:text-primary transition-colors">Q&A</Link>
               <Link href="/about" className="hover:text-primary transition-colors">소개</Link>
-              <Link href="/login" className="hover:text-primary transition-colors">로그인</Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/login" className="hover:text-primary transition-colors">로그인</Link>
+                  <Link href="/register" className="hover:text-primary transition-colors">회원가입</Link>
+                </>
+              ) : (
+                <>
+                  <span className="text-sm opacity-80">{user?.username || user?.email}</span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="hover:bg-white/10 dark:hover:bg-white/10"
+                    onClick={() => {
+                      logout()
+                      router.push("/")
+                    }}
+                  >
+                    로그아웃
+                  </Button>
+                </>
+              )}
             </nav>
             {/* Mobile menu button */}
             <Button

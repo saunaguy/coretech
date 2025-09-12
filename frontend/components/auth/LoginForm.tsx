@@ -30,7 +30,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <p className="text-red-500">{error}</p>}
       <div className="space-y-2">
-        <Label htmlFor="email">ID</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="text"
