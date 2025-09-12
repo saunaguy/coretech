@@ -26,7 +26,7 @@ services:
       SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
       JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
       DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://coretech:coretech@db:5432/coretech}
-      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000,http://192.168.0.14:3000}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
     ports:
       - "8000:8000"
     depends_on:
@@ -37,10 +37,14 @@ services:
     build:
       context: .
       dockerfile: frontend/Dockerfile.frontend
+      args:
+        # Pass API_BASE_URL into the image build so Next.js can embed it
+        API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
     container_name: coretech-frontend
     environment:
       NODE_ENV: production
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+      # Public base URL the browser will call
+      NEXT_PUBLIC_API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
       INTERNAL_API_BASE_URL: http://backend:8000
     ports:
       - "3000:3000"
