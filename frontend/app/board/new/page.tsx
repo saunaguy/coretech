@@ -1,28 +1,37 @@
 "use client"
+export const dynamic = "force-dynamic"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { authenticatedFetch } from "@/lib/auth"
+import { useAuth } from "@/components/auth/AuthProvider"
 
 export default function BoardNewPage() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
   const router = useRouter()
+  const { isAuthenticated } = useAuth()
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.replace("/login")
+    }
+  }, [isAuthenticated, router])
 
   const submit = async () => {
     if (!title.trim() || !body.trim()) return
     setLoading(true)
     try {
-      const r = await fetch(`${base}/api/v1/board/posts`, {
+      const r = await authenticatedFetch(`${base}/api/v1/board/posts`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, body }),
       })
-      if (r.ok) {
-        const data = await r.json()
+      if (r && (r as any).id) {
+        const data = r as any
         router.push(`/board/${data.id ?? ""}` || "/board")
       }
     } finally {

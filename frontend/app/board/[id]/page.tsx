@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 
 async function getPost(id: string) {
   try {
-    const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+    const base = (process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
     const res = await fetch(`${base}/api/v1/board/posts/${id}`, { cache: "no-store" })
     if (!res.ok) return null
     return res.json()
