@@ -78,7 +78,7 @@ class TokenResponse(BaseModel):
     token_type: str = "bearer"
 
 
-router = APIRouter(prefix="/auth", tags=["auth"])
+router = APIRouter(tags=["auth"])
 
 
 @router.on_event("startup")

@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Menu, X } from "lucide-react" // Added Menu, X
+import { Button } from "@/components/ui/button" // Added Button
+import { useMobileSidebar } from "@/lib/MobileSidebarContext" // New import
 //
 import LinuxSidebar from "@/components/linux/LinuxSidebar"
 import { linuxTopics } from "@/lib/linux-data"
@@ -188,8 +191,11 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
 export default function LinuxPage() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null)
   const [loading, setLoading] = useState(false)
+  const { isMobileSidebarOpen, closeMobileSidebar } = useMobileSidebar() // Use context
+
   const handleSelect = (cmd: Command) => {
     setSelectedCommand((prev) => (prev?.id === cmd?.id ? prev : cmd))
+    closeMobileSidebar() // Close sidebar on command select
   }
 
   useEffect(() => {
@@ -225,6 +231,7 @@ export default function LinuxPage() {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-row gap-8">
+          {/* Desktop Sidebar */}
           <aside className="w-1/4 hidden lg:block">
             <Card className="sticky top-24">
               <CardHeader>
@@ -235,6 +242,29 @@ export default function LinuxPage() {
               </CardContent>
             </Card>
           </aside>
+
+          {/* Mobile Sidebar Overlay */}
+          {isMobileSidebarOpen && (
+            <div className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm lg:hidden">
+              <div className="absolute inset-0 left-0 bg-black/50" onClick={closeMobileSidebar} /> {/* Moved background overlay first */}
+              <div className="absolute inset-y-0 left-0 w-full bg-card shadow-lg p-4 overflow-y-auto"> {/* Changed w-64 to w-full */}
+                <div className="flex justify-end">
+                  <Button variant="ghost" size="icon" onClick={closeMobileSidebar}>
+                    <X className="h-6 w-6" />
+                    <span className="sr-only">메뉴 닫기</span>
+                  </Button>
+                </div>
+                <Card className="mt-4">
+                  <CardHeader>
+                    <CardTitle>명령어 목록</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
 
           <main className="w-full lg:w-3/4">
             {loading ? (

@@ -5,6 +5,7 @@ import "./globals.css"
 import Header from "@/components/site/Header"
 import { ThemeProvider } from "@/components/site/ThemeProvider"
 import { AuthProvider } from "@/components/auth/AuthProvider"
+import { MobileSidebarProvider } from "@/lib/MobileSidebarContext" // New import
 
 export const metadata: Metadata = {
   title: "CoreTech",
@@ -21,9 +22,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
           <AuthProvider>
-            {children}
+            <MobileSidebarProvider> {/* New wrapper */}
+              <Header /> {/* Moved Header inside */}
+              {children}
+            </MobileSidebarProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
