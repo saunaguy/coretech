@@ -27,12 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           disableTransitionOnChange
         >
           <AuthProvider>
-            <MobileSidebarProvider> {/* New wrapper */}
-              <Header /> {/* Moved Header inside */}
+            <MobileSidebarProvider>
+              <Header />
               {children}
             </MobileSidebarProvider>
           </AuthProvider>
-          <ToasterClient />
         </ThemeProvider>
       </body>
     </html>

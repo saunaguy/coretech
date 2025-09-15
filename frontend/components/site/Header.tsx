@@ -1,14 +1,18 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Sun, Moon, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useMobileSidebar } from "@/lib/MobileSidebarContext" // New import
+import { useMobileSidebar } from "@/lib/MobileSidebarContext"
+import { useAuth } from "@/components/auth/AuthProvider"
 
 export default function Header() {
+  const router = useRouter()
   const { theme, setTheme } = useTheme()
-  const { toggleMobileSidebar } = useMobileSidebar() // Use context
+  const { toggleMobileSidebar } = useMobileSidebar()
+  const { isAuthenticated, user, logout } = useAuth()
 
   const headerClassName = theme === 'dark' 
     ? 'bg-[#000080] text-white' 
