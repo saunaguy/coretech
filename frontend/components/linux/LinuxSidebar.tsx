@@ -29,6 +29,31 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
 
   // helper: normalize search (lowercase + no spaces)
   const normalize = (s: string) => String(s || '').toLowerCase().replace(/\s+/g, '')
+  // helper: clean display labels (strip numeric codes and prefixes)
+  const cleanLabel = (s: string) => {
+    let t = String(s || '').replace(/\u00A0/g, ' ').trim() // normalize NBSP
+    // remove known prefixes first
+    t = t.replace(/^커리큘럼:\s*/i, '').trim()
+    // remove leading codes like "2-1 ", or single leading number like "2 "
+    t = t.replace(/^\d+\s*-\s*\d+\s*/, '').trim()
+    t = t.replace(/^\d+\s*/, '').trim()
+    // remove a leading bullet / separator
+    t = t.replace(/^[·•\-:\|]\s*/, '').trim()
+    // remove leading enumerator like "1. "
+    t = t.replace(/^\d+\.\s*/, '').trim()
+    return t
+  }
+
+  // helper: clean top-level level title (remove only the "1장 " prefix, keep emoji)
+  const cleanLevelTitle = (s: string) => String(s || '').replace('1장 ', '').trim()
+
+  // helper: add emoji for specific categories
+  const addEmoji = (label: string) => {
+    const t = String(label || '')
+    if (/복합\s*실습/.test(t)) return `💻 ${t}`
+    if (/네트워크/.test(t) && /실습/.test(t)) return `🌐 ${t}`
+    return t
+  }
 
   // build optional content index once when enabled
   const [includeContent, setIncludeContent] = useState(false)
@@ -132,17 +157,19 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
   }, [rawTerm])
   return (
     <nav className="space-y-6">
-      <div className="relative group">
-        <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center">
-          <Search className="w-4 h-4 -mt-px text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
-        </span>
-        <Input
-          placeholder="명령어 검색..."
-          aria-label="명령어 검색"
-          value={rawTerm}
-          onChange={(e) => setRawTerm(e.target.value)}
-          className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
-        />
+      <div className="group">
+        <div className="relative">
+          <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center">
+            <Search className="w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
+          </span>
+          <Input
+            placeholder="명령어 검색..."
+            aria-label="명령어 검색"
+            value={rawTerm}
+            onChange={(e) => setRawTerm(e.target.value)}
+            className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
+          />
+        </div>
         <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
           <label className="inline-flex items-center gap-2 cursor-pointer select-none">
             <input
@@ -168,7 +195,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                   <Folder className="w-4 h-4 text-sidebar-primary" />
                 </div>
                 <span className="font-semibold text-base text-sidebar-foreground group-hover:text-sidebar-primary transition-colors truncate">
-                  {level}
+                  {cleanLevelTitle(level)}
                 </span>
               </div>
               <div className="text-sidebar-primary">
@@ -191,7 +218,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                       <div className="flex items-center gap-2 min-w-0">
                         <FileText className="w-4 h-4 text-sidebar-primary/70 shrink-0" />
                         <span className="font-medium text-sm text-sidebar-foreground group-hover:text-sidebar-primary transition-colors truncate">
-                          {category}
+                          {addEmoji(cleanLabel(category))}
                         </span>
                         <Badge
                           variant="secondary"
@@ -222,15 +249,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                               className="text-sm font-mono group-hover:font-medium transition-all truncate"
                               title={command.title || command.name}
                             >
-                              {`${index + 1}. ${(command.title || command.name || '')
-                                // Remove leading codes like "1-1 "
-                                .replace(/^\s*\d+(?:-\d+)?\s*/, '')
-                                // Remove bullet separators like "· " or "- " or ": " immediately after
-                                .replace(/^[·•\-:\|]\s*/, '')
-                                // Remove an extra leading enumerator like "1. "
-                                .replace(/^\d+\.\s*/, '')
-                                .trim()
-                              }`}
+                              {`${index + 1}. ${cleanLabel(command.title || command.name)}`}
                             </span>
                           </button>
                         ))}

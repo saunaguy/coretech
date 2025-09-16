@@ -55,6 +55,16 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
     } catch (_) {}
   };
 
+  const cleanTitle = (s: string) => {
+    let t = String(s || '').replace(/\u00A0/g, ' ').trim()
+    t = t.replace(/^커리큘럼:\s*/i, '').trim()
+    t = t.replace(/^\d+\s*-\s*\d+\s*/, '').trim()
+    t = t.replace(/^\d+\s*/, '').trim()
+    t = t.replace(/^[·•\-:\|]\s*/, '').trim()
+    t = t.replace(/^\d+\.\s*/, '').trim()
+    return t
+  }
+
   const renderBlock = (block: ContentBlock, index: number) => {
     switch (block.type) {
       case 'heading':
@@ -137,7 +147,7 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">{command.title}</CardTitle>
+          <CardTitle className="text-3xl font-bold">{cleanTitle(command.title || command.name || '')}</CardTitle>
           <CardDescription className="text-lg">{command.description}</CardDescription>
         </CardHeader>
         {(command.content || command.blocks) && (
