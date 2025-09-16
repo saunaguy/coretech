@@ -27,6 +27,9 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     return acc
   })
 
+  // helper: normalize search (lowercase + no spaces)
+  const normalize = (s: string) => String(s || '').toLowerCase().replace(/\s+/g, '')
+
   // build optional content index once when enabled
   const [includeContent, setIncludeContent] = useState(false)
   const [buildingIndex, setBuildingIndex] = useState(false)
@@ -127,9 +130,6 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     const id = setTimeout(() => setSearchTerm(rawTerm), 250)
     return () => clearTimeout(id)
   }, [rawTerm])
-
-  // Normalize helper: lowercase + remove spaces
-  const normalize = (s: string) => String(s || '').toLowerCase().replace(/\s+/g, '')
   return (
     <nav className="space-y-6">
       <div className="relative group">
