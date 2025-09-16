@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { loadLinuxContent } from "@/content/linux/loader"
 
-const LinuxSidebar = ({ topics, onCommandSelect }) => {
+const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [rawTerm, setRawTerm] = useState("")
   const [openCategories, setOpenCategories] = useState(() => {
@@ -162,13 +162,14 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
           <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center">
             <Search className="w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
           </span>
-          <Input
-            placeholder="명령어 검색..."
-            aria-label="명령어 검색"
-            value={rawTerm}
-            onChange={(e) => setRawTerm(e.target.value)}
-            className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
-          />
+        <Input
+          placeholder="명령어 검색..."
+          aria-label="명령어 검색"
+          value={rawTerm}
+          onChange={(e) => setRawTerm(e.target.value)}
+          autoFocus={autoFocus as any}
+          className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
+        />
         </div>
         <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
           <label className="inline-flex items-center gap-2 cursor-pointer select-none">

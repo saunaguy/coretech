@@ -26,7 +26,7 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-baseline space-x-4">
-              <Link href="/linux" className="hover:text-primary transition-colors">Linux 기초</Link>
+              <Link href="/linux?open=1" className="hover:text-primary transition-colors">Linux 기초</Link>
               <Link href="/board" className="hover:text-primary transition-colors">게시판</Link>
               <Link href="/qna" className="hover:text-primary transition-colors">Q&A</Link>
               <Link href="/about" className="hover:text-primary transition-colors">소개</Link>
