@@ -33,6 +33,9 @@
   --sidebar-accent-foreground: oklch(0.27 0 0);
   --sidebar-border: oklch(0.9 0 0);
   --sidebar-ring: oklch(0.55 0.25 240);
+  /* Header (light) defaults to card surface */
+  --header: var(--card);
+  --header-foreground: var(--card-foreground);
 }
 
 .dark {
@@ -65,6 +68,9 @@
   --sidebar-accent-foreground: oklch(0.1 0 0);
   --sidebar-border: oklch(0.34 0 0);
   --sidebar-ring: oklch(0.55 0.25 240);
+  /* Subtle navy for header in dark mode */
+  --header: oklch(0.22 0.06 250);
+  --header-foreground: oklch(0.98 0 0);
 }
 
 @theme inline {
@@ -101,6 +107,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
 }
 
 @layer base {

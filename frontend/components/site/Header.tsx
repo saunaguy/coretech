@@ -14,8 +14,8 @@ export default function Header() {
   const { toggleMobileSidebar } = useMobileSidebar()
   const { isAuthenticated, user, logout } = useAuth()
 
-  const headerClassName = theme === 'dark' 
-    ? 'bg-[#000080] text-white' 
+  const headerClassName = theme === 'dark'
+    ? 'bg-header text-header-foreground'
     : 'bg-primary text-primary-foreground';
 
   return (
