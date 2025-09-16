@@ -59,7 +59,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
               if (b.type === 'code') return b.text || ''
               return ''
             }).join(' ')
-            return [cmd.id, String(text).toLowerCase()] as const
+            return [cmd.id, normalize(String(text))] as const
           } catch {
             return [cmd.id, ''] as const
           }
@@ -75,10 +75,10 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
   }, [includeContent, topics])
 
   const filteredTopics = useMemo(() => {
-    if (!searchTerm) {
+    const needle = normalize(searchTerm)
+    if (!needle) {
       return topics
     }
-    const lowercasedFilter = searchTerm.toLowerCase()
     const filtered = {}
 
     for (const level in topics) {
@@ -88,12 +88,12 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
         const commands = categories[category]
         const filteredCommands = commands.filter((command) => {
           const baseMatch =
-            (command.name || '').toLowerCase().includes(lowercasedFilter) ||
-            (command.title || '').toLowerCase().includes(lowercasedFilter) ||
-            (command.description || '').toLowerCase().includes(lowercasedFilter)
+            normalize(command.name).includes(needle) ||
+            normalize(command.title).includes(needle) ||
+            normalize(command.description).includes(needle)
           if (baseMatch) return true
           if (includeContent && contentIndex && contentIndex[command.id]) {
-            return contentIndex[command.id].includes(lowercasedFilter)
+            return contentIndex[command.id].includes(needle)
           }
           return false
         })
@@ -106,7 +106,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
       }
     }
     return filtered
-  }, [searchTerm, topics])
+  }, [searchTerm, topics, includeContent, contentIndex])
 
   const toggleCategory = (category) => {
     setOpenCategories((prev) => ({
@@ -128,11 +128,13 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     return () => clearTimeout(id)
   }, [rawTerm])
 
+  // Normalize helper: lowercase + remove spaces
+  const normalize = (s: string) => String(s || ).toLowerCase().replace(/\s+/g, )
   return (
     <nav className="space-y-6">
       <div className="relative group">
         <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center">
-          <Search className="w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
+          <Search className="w-4 h-4 -mt-px text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
         </span>
         <Input
           placeholder="명령어 검색..."
