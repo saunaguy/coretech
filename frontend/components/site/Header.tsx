@@ -14,8 +14,8 @@ export default function Header() {
   const { toggleMobileSidebar } = useMobileSidebar()
   const { isAuthenticated, user, logout } = useAuth()
 
-  // Use Tailwind dark: variants to avoid initial theme mismatch
-  const headerClassName = 'bg-primary text-primary-foreground dark:bg-header dark:text-header-foreground'
+  // Use CSS variables via tokens to keep colors consistent across themes
+  const headerClassName = 'bg-header text-header-foreground'
 
   return (
     <header className={`sticky top-0 z-50 w-full border-b border-border/40 shadow-sm backdrop-blur ${headerClassName}`}>
