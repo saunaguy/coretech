@@ -69,7 +69,7 @@
   --sidebar-border: oklch(0.34 0 0);
   --sidebar-ring: oklch(0.55 0.25 240);
   /* Subtle navy for header in dark mode */
-  --header: oklch(0.22 0.06 250);
+  --header: oklch(0.30 0.05 250);
   --header-foreground: oklch(0.98 0 0);
 }
 
