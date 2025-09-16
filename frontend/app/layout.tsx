@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           attribute="class"
           defaultTheme="light"
           enableSystem={false}
+          storageKey="coretech-theme-v2"
           disableTransitionOnChange
         >
           <AuthProvider>
