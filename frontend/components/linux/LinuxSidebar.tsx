@@ -1,9 +1,10 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { ChevronDown, ChevronRight, Search, Terminal, Folder, FileText } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
+import { loadLinuxContent } from "@/content/linux/loader"
 
 const LinuxSidebar = ({ topics, onCommandSelect }) => {
   const [searchTerm, setSearchTerm] = useState("")
@@ -25,6 +26,53 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     return acc
   })
 
+  // build optional content index once when enabled
+  const [includeContent, setIncludeContent] = useState(false)
+  const [buildingIndex, setBuildingIndex] = useState(false)
+  const [contentIndex, setContentIndex] = useState<Record<string, string>>({})
+
+  useEffect(() => {
+    const build = async () => {
+      if (!includeContent || buildingIndex) return
+      setBuildingIndex(true)
+      try {
+        const flatten: any[] = []
+        for (const level in topics) {
+          const cats = topics[level] || {}
+          for (const category in cats) {
+            const cmds = cats[category] || []
+            for (const cmd of cmds) flatten.push(cmd)
+          }
+        }
+        const entries = await Promise.all(flatten.map(async (cmd) => {
+          try {
+            const key = cmd.loaderKey
+            if (!key) return [cmd.id, ''] as const
+            const mod = await loadLinuxContent(String(key))
+            const blocks = (mod as any).default || []
+            const text = blocks.map((b: any) => {
+              if (!b) return ''
+              if (typeof b === 'string') return b
+              if (b.type === 'heading' || b.type === 'paragraph' || b.type === 'quote' || b.type === 'aside' || b.type === 'callout') return b.text || ''
+              if (b.type === 'list') return (b.items || []).join(' ')
+              if (b.type === 'code') return b.text || ''
+              return ''
+            }).join(' ')
+            return [cmd.id, String(text).toLowerCase()] as const
+          } catch {
+            return [cmd.id, ''] as const
+          }
+        }))
+        const idx: Record<string, string> = {}
+        for (const [id, text] of entries) idx[String(id)] = text
+        setContentIndex(idx)
+      } finally {
+        setBuildingIndex(false)
+      }
+    }
+    build()
+  }, [includeContent, topics])
+
   const filteredTopics = useMemo(() => {
     if (!searchTerm) {
       return topics
@@ -37,12 +85,17 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
       const filteredCategories = {}
       for (const category in categories) {
         const commands = categories[category]
-        const filteredCommands = commands.filter(
-          (command) =>
-            command.name.toLowerCase().includes(lowercasedFilter) ||
-            command.title.toLowerCase().includes(lowercasedFilter) ||
-            command.description.toLowerCase().includes(lowercasedFilter),
-        )
+        const filteredCommands = commands.filter((command) => {
+          const baseMatch =
+            (command.name || '').toLowerCase().includes(lowercasedFilter) ||
+            (command.title || '').toLowerCase().includes(lowercasedFilter) ||
+            (command.description || '').toLowerCase().includes(lowercasedFilter)
+          if (baseMatch) return true
+          if (includeContent && contentIndex && contentIndex[command.id]) {
+            return contentIndex[command.id].includes(lowercasedFilter)
+          }
+          return false
+        })
         if (filteredCommands.length > 0) {
           filteredCategories[category] = filteredCommands
         }
@@ -78,6 +131,17 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="pl-10 bg-background border-sidebar-border focus:ring-sidebar-ring"
         />
+        <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+          <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              className="h-3.5 w-3.5 rounded border-sidebar-border"
+              checked={includeContent}
+              onChange={(e) => setIncludeContent(e.target.checked)}
+            />
+            <span>내용 포함 검색 {includeContent && buildingIndex ? '(인덱싱 중...)' : ''}</span>
+          </label>
+        </div>
       </div>
 
       <div className="space-y-3">

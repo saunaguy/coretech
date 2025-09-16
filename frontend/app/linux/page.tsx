@@ -237,7 +237,7 @@ export default function LinuxPage() {
               <CardHeader>
                 <CardTitle>명령어 목록</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-y-auto max-h-[calc(100vh-10rem)] pr-1">
                 <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
               </CardContent>
             </Card>
@@ -258,7 +258,7 @@ export default function LinuxPage() {
                   <CardHeader>
                     <CardTitle>명령어 목록</CardTitle>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="overflow-y-auto max-h-[calc(100vh-9rem)] pr-1">
                     <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
                   </CardContent>
                 </Card>
