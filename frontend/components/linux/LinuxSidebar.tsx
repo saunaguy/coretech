@@ -8,6 +8,7 @@ import { loadLinuxContent } from "@/content/linux/loader"
 
 const LinuxSidebar = ({ topics, onCommandSelect }) => {
   const [searchTerm, setSearchTerm] = useState("")
+  const [rawTerm, setRawTerm] = useState("")
   const [openCategories, setOpenCategories] = useState(() => {
     const acc = {} as Record<string, boolean>
     Object.values(topics || {}).forEach((categories: any) => {
@@ -121,15 +122,22 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
     }))
   }
 
+  // Debounce search input updates for smoother UX
+  useEffect(() => {
+    const id = setTimeout(() => setSearchTerm(rawTerm), 250)
+    return () => clearTimeout(id)
+  }, [rawTerm])
+
   return (
     <nav className="space-y-6">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <div className="relative group">
+        <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
         <Input
           placeholder="명령어 검색..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 bg-background border-sidebar-border focus:ring-sidebar-ring"
+          aria-label="명령어 검색"
+          value={rawTerm}
+          onChange={(e) => setRawTerm(e.target.value)}
+          className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
         />
         <div className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
           <label className="inline-flex items-center gap-2 cursor-pointer select-none">
