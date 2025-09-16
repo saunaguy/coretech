@@ -146,7 +146,15 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                               className="text-sm font-mono group-hover:font-medium transition-all truncate"
                               title={command.title || command.name}
                             >
-                              {`${index + 1}. ${(command.title || command.name || '').replace(/^\s*\d+(?:-\d+)?\s*/, '')}`}
+                              {`${index + 1}. ${(command.title || command.name || '')
+                                // Remove leading codes like "1-1 "
+                                .replace(/^\s*\d+(?:-\d+)?\s*/, '')
+                                // Remove bullet separators like "· " or "- " or ": " immediately after
+                                .replace(/^[·•\-:\|]\s*/, '')
+                                // Remove an extra leading enumerator like "1. "
+                                .replace(/^\d+\.\s*/, '')
+                                .trim()
+                              }`}
                             </span>
                           </button>
                         ))}
