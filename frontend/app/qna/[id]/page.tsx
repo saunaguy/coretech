@@ -1,6 +1,10 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import CommentSection from "@/components/CommentSection" // CommentSection import
+import LikeButton from "@/components/LikeButton"         // LikeButton import
+import { cookies } from 'next/headers'
+import {jwtDecode} from 'jwt-decode'; // jwtDecode 직접 import
 
 export const dynamic = "force-dynamic"
 
@@ -17,7 +21,20 @@ async function getQna(id: string) {
 
 export default async function QnaDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
+  const cookieStore = cookies()
+  const token = cookieStore.get('token')?.value || null
   const q = await getQna(id)
+
+  let currentUserId: string | null = null;
+  if (token) {
+    try {
+      const decodedToken: any = jwtDecode(token); // jwtDecode 직접 사용
+      currentUserId = decodedToken.sub;
+    } catch (error) {
+      console.error("Error decoding token in server component:", error);
+    }
+  }
+
   if (!q) {
     return (
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -25,15 +42,31 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
       </main>
     )
   }
+
+  // Q&A 질문에는 author_id 필드가 있다고 가정합니다.
+  // 백엔드 Question 모델에 author_id가 int로 정의되어 있으므로, 비교 시 타입을 맞춥니다.
+  const isAuthor = currentUserId && q.author_id === parseInt(currentUserId);
+
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>{q.title}</CardTitle>
-            <Button asChild size="sm" variant="outline">
-              <Link href={`/qna/${id}/edit`}>수정</Link>
-            </Button>
+            <div className="flex gap-2"> {/* 버튼들을 감싸는 div 추가 */}
+              {isAuthor && (
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/qna/${id}/edit`}>수정</Link>
+                </Button>
+              )}
+              {/* LikeButton 추가 */}
+              <LikeButton
+                parentId={q.id}
+                parentType="question"
+                initialLikes={q.likes || 0} // Q&A 질문에 likes 필드가 없을 수 있으므로 기본값 0
+                currentUserId={currentUserId}
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -43,6 +76,8 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
           )}
         </CardContent>
       </Card>
+      {/* CommentSection 추가 */}
+      <CommentSection parentId={q.id} parentType="question" />
     </main>
   )
 }

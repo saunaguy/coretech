@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from datetime import datetime
 import os
-from sqlalchemy import create_engine, String, Integer, DateTime, Text, Boolean
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker
+from datetime import datetime
+from typing import List
 
+from sqlalchemy import Boolean, DateTime, Integer, String, Text, create_engine, ForeignKey
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, relationship # relationship 추가
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coretech.db")
 
@@ -79,6 +80,28 @@ class ProgressUser(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
+class Comment(Base):
+    __tablename__ = "comments"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    parent_id: Mapped[int] = mapped_column(Integer, index=True) # 게시글 또는 Q&A 질문 ID
+    parent_type: Mapped[str] = mapped_column(String(50), index=True) # "post" 또는 "question"
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
+    content: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    user: Mapped["User"] = relationship("User", backref="comments")
+
+class Like(Base):
+    __tablename__ = "likes"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    parent_id: Mapped[int] = mapped_column(Integer, index=True) # 게시글 또는 Q&A 질문 ID
+    parent_type: Mapped[str] = mapped_column(String(50), index=True) # "post" 또는 "question"
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    user: Mapped["User"] = relationship("User", backref="likes")
+
+
 def init_db() -> None:
     Base.metadata.create_all(bind=engine)
     # Best-effort migration: add category column if missing
@@ -102,10 +125,23 @@ def init_db() -> None:
                     conn.exec_driver_sql("ALTER TABLE daily_tests ADD COLUMN category TEXT")
                 # Create notices/progress tables if absent (SQLite)
                 conn.exec_driver_sql(
-                    "CREATE TABLE IF NOT EXISTS notices (id INTEGER PRIMARY KEY, title TEXT, body_md TEXT, label TEXT, is_pinned INTEGER DEFAULT 0, author_id INTEGER, created_at TEXT, updated_at TEXT)"
+                    "CREATE TABLE IF NOT EXISTS notices (id INTEGER PRIMARY KEY, title TEXT, "
+                    "body_md TEXT, label TEXT, is_pinned INTEGER DEFAULT 0, "
+                    "author_id INTEGER, created_at TEXT, updated_at TEXT)"
                 )
                 conn.exec_driver_sql(
-                    "CREATE TABLE IF NOT EXISTS progress_user (id INTEGER PRIMARY KEY, user_id INTEGER, category TEXT, percent INTEGER, created_at TEXT)"
+                    "CREATE TABLE IF NOT EXISTS progress_user (id INTEGER PRIMARY KEY, "
+                    "user_id INTEGER, category TEXT, percent INTEGER, created_at TEXT)"
+                )
+                # Add comments table if absent (SQLite)
+                conn.exec_driver_sql(
+                    "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, parent_id INTEGER, "
+                    "parent_type TEXT, user_id INTEGER, content TEXT, created_at TEXT)"
+                )
+                # Add likes table if absent (SQLite)
+                conn.exec_driver_sql(
+                    "CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY, parent_id INTEGER, "
+                    "parent_type TEXT, user_id INTEGER, created_at TEXT)"
                 )
     except Exception:
         # ignore if migration is not applicable

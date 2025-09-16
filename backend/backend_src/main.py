@@ -15,6 +15,9 @@ from .db import (
     Notice as DBNotice,
     ProgressUser as DBProgressUser,
     engine as DBEngine,
+    Comment as DBComment,
+    Like as DBLike,
+    User,
 )
 from .auth import get_current_user
 
@@ -34,14 +37,18 @@ app.add_middleware(
 
 # Routers
 from .auth import router as auth_router
+from .routers import likes_and_comments
 
-app.include_router(auth_router)
+app.include_router(auth_router, prefix="/api/v1/auth")
+app.include_router(likes_and_comments.router)
 
 
 @app.on_event("startup")
 def _startup_main():
     try:
         init_db()
+        from .seed import seed_posts
+        seed_posts()
         # Seed a test user for local testing (email: test@test.com / password: 1212)
         try:
             from .db import SessionLocal, User
@@ -264,8 +271,12 @@ def get_question(qid: int, db: Session = Depends(get_db)):
     q = db.query(DBQuestion).get(qid)
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
+
+    comments = db.query(DBComment).filter(DBComment.parent_id == qid, DBComment.parent_type == 'question').all()
+    likes = db.query(DBLike).filter(DBLike.parent_id == qid, DBLike.parent_type == 'question').count()
+
     tags = q.tags_text.split(",") if q.tags_text else []
-    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags}
+    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments, "likes": likes}
 
 
 @app.put("/api/v1/qna/questions/{qid}")
@@ -312,6 +323,9 @@ def create_post(payload: PostCreate, db: Session = Depends(get_db), current_user
     return {"id": p.id, "title": p.title, "author": getattr(current_user, "username", None)}
 
 
+def comments_count(db: Session, post_id: int) -> int:
+    return db.query(DBComment).filter(DBComment.parent_id == post_id, DBComment.parent_type == 'post').count()
+
 @app.get("/api/v1/board/posts")
 def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
     q = db.query(DBPost)
@@ -320,14 +334,9 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
     else:
         q = q.order_by(DBPost.created_at.desc())
     rows = q.limit(50).all()
-    # Resolve author names (simple per-row lookup to keep it straightforward)
-    try:
-        from .db import User
-    except Exception:
-        User = None  # type: ignore
 
     def author_name(author_id: int | None) -> str | None:
-        if not User or author_id is None:
+        if author_id is None:
             return None
         u = db.query(User).get(author_id)
         return u.username if u else None
@@ -340,6 +349,7 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
             "likes": r.likes,
             "createdAt": r.created_at.isoformat(),
             "author": author_name(getattr(r, "author_id", None)),
+            "comments_count": comments_count(db, r.id),
         }
         for r in rows
     ]
@@ -350,6 +360,10 @@ def get_post(pid: int, db: Session = Depends(get_db)):
     p = db.query(DBPost).get(pid)
     if not p:
         raise HTTPException(status_code=404, detail="Post not found")
+
+    comments = db.query(DBComment).filter(DBComment.parent_id == pid, DBComment.parent_type == 'post').all()
+    likes = db.query(DBLike).filter(DBLike.parent_id == pid, DBLike.parent_type == 'post').count()
+
     # Resolve author username if available
     author_name = None
     try:
@@ -363,9 +377,10 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         "title": p.title,
         "body": p.body,
         "views": p.views,
-        "likes": p.likes,
+        "likes": likes,
         "createdAt": p.created_at.isoformat(),
         "author": author_name,
+        "comments": comments,
     }
 
 

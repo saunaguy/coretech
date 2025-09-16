@@ -28,6 +28,7 @@ export default function BoardNewPage() {
     try {
       const r = await authenticatedFetch(`${base}/api/v1/board/posts`, {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, body }),
       })
       if (r && (r as any).id) {

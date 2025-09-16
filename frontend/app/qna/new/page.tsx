@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Link from "next/link" // Link 컴포넌트 import
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
@@ -64,12 +65,16 @@ export default function QnaNewPage() {
             value={tags}
             onChange={(e) => setTags(e.target.value)}
           />
-          <Button onClick={submit} disabled={loading}>
-            {loading ? "등록 중..." : "등록"}
-          </Button>
+          <div className="flex gap-2"> {/* 버튼들을 감싸는 div 추가 */}
+            <Button onClick={submit} disabled={loading}>
+              {loading ? "등록 중..." : "등록"}
+            </Button>
+            <Button asChild variant="outline"> {/* 목록으로 가기 버튼 추가 */}
+              <Link href="/qna">목록으로</Link>
+            </Button>
+          </div>
         </CardContent>
       </Card>
     </main>
   )
 }
-
