@@ -232,7 +232,7 @@ export default function LinuxPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-row gap-8">
           {/* Desktop Sidebar */}
-          <aside className="w-1/4 hidden lg:block">
+          <aside className="hidden lg:block lg:w-80 xl:w-96 shrink-0">
             <Card className="sticky top-24">
               <CardHeader>
                 <CardTitle>명령어 목록</CardTitle>
@@ -266,7 +266,7 @@ export default function LinuxPage() {
             </div>
           )}
 
-          <main className="w-full lg:w-3/4">
+          <main className="w-full lg:flex-1 min-w-0">
             {loading ? (
               <div className="flex items-center justify-center h-full text-muted-foreground py-12">불러오는 중...</div>
             ) : (

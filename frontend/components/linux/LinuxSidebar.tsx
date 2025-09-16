@@ -85,13 +85,13 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
           <div key={level} className="space-y-2">
             <button
               onClick={() => toggleLevel(level)}
-              className="w-full flex items-center justify-between py-3 px-3 rounded-lg hover:bg-sidebar-accent/10 transition-all duration-200 group"
+              className="w-full flex items-center justify-between py-3 px-3 rounded-lg hover:bg-sidebar-accent/10 transition-all duration-200 group min-w-0"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <div className="w-8 h-8 bg-sidebar-primary/10 rounded-lg flex items-center justify-center">
                   <Folder className="w-4 h-4 text-sidebar-primary" />
                 </div>
-                <span className="font-semibold text-base text-sidebar-foreground group-hover:text-sidebar-primary transition-colors">
+                <span className="font-semibold text-base text-sidebar-foreground group-hover:text-sidebar-primary transition-colors truncate">
                   {level}
                 </span>
               </div>
@@ -110,16 +110,16 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                   <div key={category} className="space-y-1">
                     <button
                       onClick={() => toggleCategory(category)}
-                      className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-sidebar-accent/10 transition-all duration-200 group"
+                      className="w-full flex items-center justify-between py-2 px-3 rounded-md hover:bg-sidebar-accent/10 transition-all duration-200 group min-w-0"
                     >
-                      <div className="flex items-center gap-2">
-                        <FileText className="w-4 h-4 text-sidebar-primary/70" />
-                        <span className="font-medium text-sm text-sidebar-foreground group-hover:text-sidebar-primary transition-colors">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <FileText className="w-4 h-4 text-sidebar-primary/70 shrink-0" />
+                        <span className="font-medium text-sm text-sidebar-foreground group-hover:text-sidebar-primary transition-colors truncate">
                           {category}
                         </span>
                         <Badge
                           variant="secondary"
-                          className="text-xs bg-sidebar-primary/10 text-sidebar-primary border-sidebar-primary/20"
+                          className="text-xs bg-sidebar-primary/10 text-sidebar-primary border-sidebar-primary/20 shrink-0"
                         >
                           {commands.length}
                         </Badge>
@@ -139,10 +139,10 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                           <button
                             key={command.id}
                             onClick={() => onCommandSelect(command)}
-                            className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent/10 transition-all duration-200 group"
+                            className="w-full text-left flex items-center gap-2 py-2 px-3 rounded-md text-sidebar-foreground/80 hover:text-sidebar-foreground hover:bg-sidebar-accent/10 transition-all duration-200 group min-w-0"
                           >
-                            <Terminal className="w-3 h-3 text-sidebar-primary/60 group-hover:text-sidebar-primary transition-colors" />
-                            <span className="text-sm font-mono group-hover:font-medium transition-all">
+                            <Terminal className="w-3 h-3 text-sidebar-primary/60 group-hover:text-sidebar-primary transition-colors shrink-0" />
+                            <span className="text-sm font-mono group-hover:font-medium transition-all truncate">
                               {command.name}
                             </span>
                           </button>
