@@ -129,7 +129,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
   }, [rawTerm])
 
   // Normalize helper: lowercase + remove spaces
-  const normalize = (s: string) => String(s || ).toLowerCase().replace(/\s+/g, )
+  const normalize = (s: string) => String(s || '').toLowerCase().replace(/\s+/g, '')
   return (
     <nav className="space-y-6">
       <div className="relative group">
