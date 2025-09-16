@@ -232,7 +232,7 @@ export default function LinuxPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-row gap-8">
           {/* Desktop Sidebar */}
-          <aside className="hidden lg:block lg:w-80 xl:w-96 shrink-0">
+          <aside className="hidden lg:block lg:w-72 xl:w-80 shrink-0">
             <Card className="sticky top-24">
               <CardHeader>
                 <CardTitle>명령어 목록</CardTitle>
