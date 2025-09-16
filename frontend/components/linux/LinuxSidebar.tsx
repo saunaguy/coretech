@@ -146,7 +146,7 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
                               className="text-sm font-mono group-hover:font-medium transition-all truncate"
                               title={command.title || command.name}
                             >
-                              {`${index + 1}. ${command.title || command.name}`}
+                              {`${index + 1}. ${(command.title || command.name || '').replace(/^\s*\d+(?:-\d+)?\s*/, '')}`}
                             </span>
                           </button>
                         ))}
