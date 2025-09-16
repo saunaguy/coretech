@@ -131,7 +131,9 @@ const LinuxSidebar = ({ topics, onCommandSelect }) => {
   return (
     <nav className="space-y-6">
       <div className="relative group">
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
+        <span className="pointer-events-none absolute inset-y-0 left-2.5 flex items-center">
+          <Search className="w-4 h-4 text-muted-foreground group-focus-within:text-sidebar-primary/80 transition-colors" />
+        </span>
         <Input
           placeholder="명령어 검색..."
           aria-label="명령어 검색"
