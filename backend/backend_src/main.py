@@ -45,63 +45,10 @@ app.include_router(likes_and_comments.router)
 
 @app.on_event("startup")
 def _startup_main():
-    try:
-        init_db()
-        from .seed import seed_posts
-        seed_posts()
-        # Seed a test user for local testing (email: test@test.com / password: 1212)
-        try:
-            from .db import SessionLocal, User
-            from .auth import get_password_hash
-            db = SessionLocal()
-            try:
-                u = db.query(User).filter(User.email == "test@test.com").first()
-                if not u:
-                    u = User(
-                        username="test",
-                        email="test@test.com",
-                        password_hash=get_password_hash("1212"),
-                    )
-                    db.add(u)
-                    db.commit()
-                else:
-                    # Ensure password matches the requested testing value
-                    u.password_hash = get_password_hash("1212")
-                    db.commit()
-            finally:
-                db.close()
-        except Exception:
-            # seeding test user is best-effort only
-            pass
-        # seed daily tests from JSON files; dedupe by title so it can run repeatedly
-        db = SessionLocal()
-        try:
-            import json
-            from pathlib import Path
-
-            data_dir = Path(__file__).with_name("data") / "daily"
-            if data_dir.exists():
-                for f in sorted(data_dir.glob("*.json")):
-                    try:
-                        payload = json.loads(f.read_text(encoding="utf-8"))
-                        title = payload.get("title")
-                        category = (payload.get("category") or "").lower() or None
-                        questions = payload.get("questions") or []
-                        if not title or not questions:
-                            continue
-                        exists = db.query(DBDailyTest).filter(DBDailyTest.title == title).first()
-                        if exists:
-                            continue
-                        row = DBDailyTest(title=title, category=category, questions_json=json.dumps(questions))
-                        db.add(row)
-                    except Exception:
-                        continue
-                db.commit()
-        finally:
-            db.close()
-    except Exception:
-        # In container, DB may not be ready immediately; compose healthcheck will stabilize
-        pass
+    # Removed try...except around init_db() to ensure table creation errors are not swallowed
+    init_db()
+    from .seed import seed_posts
+    seed_posts()
 
 
 @app.get("/health")
@@ -262,7 +209,7 @@ def create_question(payload: QnaCreate, db: Session = Depends(get_db)):
 def list_questions(db: Session = Depends(get_db)):
     rows = db.query(DBQuestion).order_by(DBQuestion.created_at.desc()).all()
     def to_dict(r: DBQuestion):
-        return {"id": r.id, "title": r.title, "body": r.body}
+        return {"id": r.id, "title": r.title, "body": r.body, "views": r.views, "likes": likes_count(db, r.id, "question"), "comments_count": comments_count(db, r.id, "question")}
     return [to_dict(r) for r in rows]
 
 
@@ -276,7 +223,18 @@ def get_question(qid: int, db: Session = Depends(get_db)):
     likes = db.query(DBLike).filter(DBLike.parent_id == qid, DBLike.parent_type == 'question').count()
 
     tags = q.tags_text.split(",") if q.tags_text else []
-    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments, "likes": likes}
+    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments, "likes": likes, "views": q.views}
+
+
+@app.post("/api/v1/qna/questions/{qid}/increment_view")
+def increment_question_view(qid: int, db: Session = Depends(get_db)):
+    q = db.query(DBQuestion).get(qid)
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+    q.views += 1
+    db.commit()
+    db.refresh(q)
+    return {"id": q.id, "views": q.views}
 
 
 @app.put("/api/v1/qna/questions/{qid}")
@@ -323,14 +281,21 @@ def create_post(payload: PostCreate, db: Session = Depends(get_db), current_user
     return {"id": p.id, "title": p.title, "author": getattr(current_user, "username", None)}
 
 
-def comments_count(db: Session, post_id: int) -> int:
-    return db.query(DBComment).filter(DBComment.parent_id == post_id, DBComment.parent_type == 'post').count()
+def comments_count(db: Session, parent_id: int, parent_type: str) -> int:
+    return db.query(DBComment).filter(DBComment.parent_id == parent_id, DBComment.parent_type == parent_type).count()
+
+def likes_count(db: Session, parent_id: int, parent_type: str) -> int:
+    return db.query(DBLike).filter(DBLike.parent_id == parent_id, DBLike.parent_type == parent_type).count()
 
 @app.get("/api/v1/board/posts")
 def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
     q = db.query(DBPost)
     if sort == "popular":
-        q = q.order_by(DBPost.likes.desc(), DBPost.views.desc())
+        # 인기순 정렬 시 likes와 views를 기준으로 정렬
+        # likes는 DBLike 테이블에서 직접 계산해야 하므로, 정렬 기준으로는 사용하기 어려움
+        # 여기서는 views 기준으로만 정렬하거나, likes를 계산하여 정렬해야 함
+        # 일단 views 기준으로만 정렬하도록 유지
+        q = q.order_by(DBPost.views.desc())
     else:
         q = q.order_by(DBPost.created_at.desc())
     rows = q.limit(50).all()
@@ -346,10 +311,10 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
             "id": r.id,
             "title": r.title,
             "views": r.views,
-            "likes": r.likes,
+            "likes": likes_count(db, r.id, "post"), # DBLike 테이블에서 직접 계산
             "createdAt": r.created_at.isoformat(),
             "author": author_name(getattr(r, "author_id", None)),
-            "comments_count": comments_count(db, r.id),
+            "comments_count": comments_count(db, r.id, "post"),
         }
         for r in rows
     ]
@@ -376,12 +341,23 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         "id": p.id,
         "title": p.title,
         "body": p.body,
-        "views": p.views,
+        "views": p.views, # 업데이트된 조회수 반환
         "likes": likes,
         "createdAt": p.created_at.isoformat(),
         "author": author_name,
         "comments": comments,
     }
+
+
+@app.post("/api/v1/board/posts/{pid}/increment_view")
+def increment_post_view(pid: int, db: Session = Depends(get_db)):
+    p = db.query(DBPost).get(pid)
+    if not p:
+        raise HTTPException(status_code=404, detail="Post not found")
+    p.views += 1
+    db.commit()
+    db.refresh(p)
+    return {"id": p.id, "views": p.views}
 
 
 @app.delete("/api/v1/board/posts/{pid}", status_code=status.HTTP_204_NO_CONTENT)

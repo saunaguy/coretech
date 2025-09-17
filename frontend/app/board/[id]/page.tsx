@@ -5,8 +5,10 @@ import DeleteButton from "@/components/board/DeleteButton"
 import CommentSection from "@/components/CommentSection" // CommentSection import
 import LikeButton from "@/components/LikeButton"         // LikeButton import
 import { authenticatedFetch, getUser } from '@/lib/auth' // getUser 함수 import
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
+
 import {jwtDecode} from 'jwt-decode'; // jwtDecode 직접 import
+import ViewTracker from '@/components/ViewTracker';
 
 export const dynamic = "force-dynamic"
 
@@ -18,9 +20,8 @@ async function getPost(id: string, token: string | null, retries = 3, delay = 10
       console.log(`[getPost] Attempt ${i + 1}: Fetching post from URL:`, url);
       console.log(`[getPost] Token present:`, !!token);
 
-      const data = await authenticatedFetch(url, {
+      const data = await authenticatedFetch(url, token, {
         cache: "no-store",
-        headers: token ? { 'Authorization': `Bearer ${token}` } : {}
       });
 
       console.log(`[getPost] Attempt ${i + 1}: Fetched post data:`, data);
@@ -39,18 +40,22 @@ async function getPost(id: string, token: string | null, retries = 3, delay = 10
   return null;
 }
 
+
+
 export default async function BoardDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
-  const cookieStore = cookies()
-  const token = cookieStore.get('token')?.value || null
+  const token = cookies().get('token')?.value || null
+
+  
+
   const post = await getPost(id, token)
 
   // 현재 로그인한 사용자 정보 가져오기 (서버 컴포넌트에서 쿠키를 통해 토큰을 직접 디코딩)
   let currentUserId: string | null = null;
   if (token) {
     try {
-      const decodedToken: any = jwtDecode(token); // jwtDecode 직접 사용
-      currentUserId = decodedToken.sub; // JWT 페이로드의 'sub' 필드를 사용자 ID로 가정
+      const user = getUser(token); // Use getUser
+      currentUserId = user ? user.sub : null; // Access sub from user object
     } catch (error) {
       console.error("Error decoding token in server component:", error);
     }
@@ -76,7 +81,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
 
   // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인
   // post 객체에 user_id 필드가 있다고 가정합니다. 실제 백엔드 응답에 따라 필드 이름이 다를 수 있습니다.
-  const isAuthor = currentUserId && post.author_id === parseInt(currentUserId); // post.author_id와 비교
+  const isAuthor = currentUserId && Number(post.author_id) === Number(currentUserId); // post.author_id와 비교
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">
@@ -98,14 +103,14 @@ export default async function BoardDetailPage({ params }: { params: { id: string
                 parentId={post.id}
                 parentType="post"
                 initialLikes={post.likes}
-                currentUserId={currentUserId}
+                token={token}
               />
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground mb-4 flex gap-3">
-            {post.createdAt && <span>{post.createdAt}</span>}
+            {post.createdAt && <span>{new Date(post.createdAt).toLocaleString()}</span>}
             {typeof post.views === "number" && <span>조회 {post.views}</span>}
             {/* likes는 LikeButton에서 관리하므로 여기서는 제거 */}
             {/* {typeof post.likes === "number" && <span>추천 {post.likes}</span>} */}
@@ -119,7 +124,9 @@ export default async function BoardDetailPage({ params }: { params: { id: string
         </Button>
       </div>
       {/* CommentSection 추가 */}
+      {/* CommentSection 추가 */}
       <CommentSection parentId={post.id} parentType="post" />
+      <ViewTracker id={id} type="post" />
     </main>
   )
 }

@@ -45,6 +45,7 @@ class Question(Base):
     title: Mapped[str] = mapped_column(String(200))
     body: Mapped[str] = mapped_column(Text)
     author_id: Mapped[int] = mapped_column(Integer, index=True)
+    views: Mapped[int] = mapped_column(Integer, default=0) # views 필드 추가
     answered: Mapped[int] = mapped_column(Integer, default=0)
     tags_text: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
@@ -117,12 +118,20 @@ def init_db() -> None:
                 conn.exec_driver_sql(
                     "ALTER TABLE notices ADD COLUMN IF NOT EXISTS is_pinned BOOLEAN DEFAULT FALSE"
                 )
+                conn.exec_driver_sql(
+                    "ALTER TABLE questions ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0"
+                )
         elif engine.dialect.name == "sqlite":
             with engine.begin() as conn:
                 cols = conn.exec_driver_sql("PRAGMA table_info('daily_tests')").all()
                 colnames = {row[1] for row in cols}
                 if "category" not in colnames:
                     conn.exec_driver_sql("ALTER TABLE daily_tests ADD COLUMN category TEXT")
+                # Add views column to questions table if missing (SQLite)
+                cols = conn.exec_driver_sql("PRAGMA table_info('questions')").all()
+                colnames = {row[1] for row in cols}
+                if "views" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE questions ADD COLUMN views INTEGER DEFAULT 0")
                 # Create notices/progress tables if absent (SQLite)
                 conn.exec_driver_sql(
                     "CREATE TABLE IF NOT EXISTS notices (id INTEGER PRIMARY KEY, title TEXT, "

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { Eye, ThumbsUp } from "lucide-react" // 아이콘 임포트
 
 type QAItem = {
   id: string
@@ -7,6 +8,8 @@ type QAItem = {
   answered: boolean
   createdAt: string
   excerpt?: string
+  views?: number // 조회수 추가
+  likes?: number // 추천수 추가
 }
 
 export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]; hrefPrefix?: string }) {
@@ -28,6 +31,12 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
           <div className="text-xs text-muted-foreground mt-1 flex gap-3">
             <span>{q.author}</span>
             <span>{q.createdAt}</span>
+            {typeof q.views === "number" && (
+              <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" /> {q.views}</span>
+            )}
+            {typeof q.likes === "number" && (
+              <span className="inline-flex items-center gap-1"><ThumbsUp className="h-3.5 w-3.5" /> {q.likes}</span>
+            )}
           </div>
         </li>
       ))}

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List
 
 from backend_src.db import get_db, Comment, Post, Question, User
@@ -48,7 +48,7 @@ def get_comments_for_parent(
     if parent_type not in ["post", "question"]:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid parent_type")
 
-    comments = db.query(Comment).filter(
+    comments = db.query(Comment).options(joinedload(Comment.user)).filter(
         Comment.parent_type == parent_type,
         Comment.parent_id == parent_id
     ).order_by(Comment.created_at).all()

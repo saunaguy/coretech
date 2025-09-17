@@ -1,0 +1,54 @@
+"use client";
+
+import { useEffect } from "react";
+
+interface ViewTrackerProps {
+  id: string;
+  type: "post" | "qna";
+}
+
+export default function ViewTracker({ id, type }: ViewTrackerProps) {
+  useEffect(() => {
+    const viewedCookieName = `viewed_${type}_${id}`;
+    console.log(`[ViewTracker] Initial hasViewed for ${type}_${id}:`, hasViewed);
+
+    if (!hasViewed) {
+      console.log(`[ViewTracker] Cookie not found, attempting to set cookie and increment view.`);
+      // Call the API Route to set the cookie
+      fetch("/api/set-viewed-cookie", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, type }),
+        credentials: 'include',
+      })
+        .then((res) => {
+          console.log(`[ViewTracker] set-viewed-cookie response status:`, res.status);
+          return res.json();
+        })
+        .then(async (data) => {
+          console.log(`[ViewTracker] set-viewed-cookie response data:`, data);
+          if (data.success) {
+            console.log(`[ViewTracker] Cookie set successfully, attempting to increment view.`);
+            if (type === "post") {
+              const { incrementPostViewAction } = await import("../app/board/[id]/actions");
+              await incrementPostViewAction(id);
+              console.log(`[ViewTracker] incrementPostViewAction called for post ${id}.`);
+            } else if (type === "qna") {
+              const { incrementQnaViewAction } = await import("../app/qna/[id]/actions");
+              await incrementQnaViewAction(id);
+              console.log(`[ViewTracker] incrementQnaViewAction called for qna ${id}.`);
+            }
+          } else {
+            console.error(`[ViewTracker] set-viewed-cookie data.success is false:`, data);
+          }
+        })
+        .catch((error) => {
+          console.error("Failed to set viewed cookie or increment view:", error);
+        });
+    }
+  }, [id, type]);
+
+  return null; // This component doesn't render anything visible
+}

@@ -7,9 +7,13 @@ def seed_posts():
         # Check if there are any posts already
         if db.query(Post).count() == 0:
             # Create a dummy user for the posts
+            from .auth import get_password_hash
             user = db.query(User).filter(User.email == "test@test.com").first()
             if not user:
-                user = User(username="test", email="test@test.com", password_hash="hashed_password")
+                user = User(username="test", email="test@test.com", password_hash=get_password_hash("testpassword"))
+                db.add(user)
+                db.commit()
+                db.refresh(user) # 비밀번호를 "testpassword"로 설정하고 해싱
                 db.add(user)
                 db.commit()
                 db.refresh(user)

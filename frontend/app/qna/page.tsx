@@ -38,6 +38,8 @@ export default async function QnaPage() {
               answered: false,
               createdAt: "",
               excerpt: q.body || "",
+              views: q.views, // 조회수 추가
+              likes: q.likes, // 추천수 추가
             }))}
           />
         </CardContent>

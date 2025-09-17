@@ -1,6 +1,15 @@
 
 from pydantic import BaseModel
 from typing import List, Optional
+from datetime import datetime
+from ..db import User # Import User model
+
+class UserBase(BaseModel):
+    id: int
+    username: str
+
+    class Config:
+        orm_mode = True
 
 class CommentBase(BaseModel):
     content: str
@@ -12,7 +21,8 @@ class CommentCreate(CommentBase):
 class Comment(CommentBase):
     id: int
     user_id: int
-    created_at: str
+    created_at: datetime
+    author: UserBase # Add author field
 
     class Config:
         orm_mode = True
