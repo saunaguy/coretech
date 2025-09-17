@@ -84,20 +84,32 @@ export default async function HomePage() {
     <div className="min-h-screen bg-background">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* Hero */}
-        <section className="rounded-2xl border bg-gradient-to-br from-primary/10 to-accent/10 p-8 md:p-10 text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground text-balance">CoreTech — Linux · Server · Network</h1>
-          <p className="text-lg md:text-xl text-muted-foreground text-pretty max-w-3xl mx-auto">
+        <section className="rounded-2xl border bg-gradient-to-br from-primary/10 to-accent/10 p-6 md:p-10 text-center space-y-4">
+          <h1 className="text-2xl md:text-4xl font-bold text-foreground text-balance">
+            <span className="md:hidden">CoreTechnet 학습용 웹 페이지</span>
+            <span className="hidden md:inline">CoreTech — Linux · Server · Network</span>
+          </h1>
+          <p className="hidden md:block text-lg md:text-xl text-muted-foreground text-pretty max-w-3xl mx-auto">
             Markdown 강의, 데일리 테스트, Q&A 커뮤니티로 학습을 이어가세요. Docs의 계획에 맞춰 점진적으로 확장됩니다.
           </p>
-          <div className="flex items-center justify-center gap-3 pt-2">
+          <div className="flex items-center justify-center gap-2 md:gap-3 pt-2">
             <Button asChild>
-              <Link href="/lessons">강의 시작하기</Link>
+              <Link href="/lessons" className="whitespace-nowrap">
+                <span className="md:hidden">강의</span>
+                <span className="hidden md:inline">강의 시작하기</span>
+              </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/daily">데일리 테스트</Link>
+              <Link href="/daily" className="whitespace-nowrap">
+                <span className="md:hidden">테스트</span>
+                <span className="hidden md:inline">데일리 테스트</span>
+              </Link>
             </Button>
             <Button asChild variant="outline">
-              <Link href="/qna/new">질문하기</Link>
+              <Link href="/qna/new" className="whitespace-nowrap">
+                <span className="md:hidden">Q&amp;A</span>
+                <span className="hidden md:inline">질문하기</span>
+              </Link>
             </Button>
           </div>
         </section>

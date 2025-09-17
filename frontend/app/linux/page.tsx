@@ -1,6 +1,8 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Menu, X } from "lucide-react" // Added Menu, X
@@ -33,11 +35,11 @@ type Command = {
   loaderKey?: string
 }
 
-const CommandDetailView = ({ command }: { command: Command | null }) => {
+const CommandDetailView = ({ command, isMobile }: { command: Command | null; isMobile: boolean }) => {
   if (!command) {
     return (
       <div className="flex items-center justify-center h-full text-muted-foreground">
-        <p>왼쪽 메뉴에서 학습할 명령어를 선택하세요.</p>
+        <p>{isMobile ? '위의 메뉴에서 골라주세요.' : '왼쪽 메뉴에서 학습할 명령어를 선택하세요.'}</p>
       </div>
     )
   }
@@ -54,6 +56,16 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
       await navigator.clipboard.writeText(text || '');
     } catch (_) {}
   };
+
+  const cleanTitle = (s: string) => {
+    let t = String(s || '').replace(/\u00A0/g, ' ').trim()
+    t = t.replace(/^커리큘럼:\s*/i, '').trim()
+    t = t.replace(/^\d+\s*-\s*\d+\s*/, '').trim()
+    t = t.replace(/^\d+\s*/, '').trim()
+    t = t.replace(/^[·•\-:\|]\s*/, '').trim()
+    t = t.replace(/^\d+\.\s*/, '').trim()
+    return t
+  }
 
   const renderBlock = (block: ContentBlock, index: number) => {
     switch (block.type) {
@@ -137,7 +149,7 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">{command.title}</CardTitle>
+          <CardTitle className="text-3xl font-bold">{cleanTitle(command.title || command.name || '')}</CardTitle>
           <CardDescription className="text-lg">{command.description}</CardDescription>
         </CardHeader>
         {(command.content || command.blocks) && (
@@ -191,12 +203,102 @@ const CommandDetailView = ({ command }: { command: Command | null }) => {
 export default function LinuxPage() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null)
   const [loading, setLoading] = useState(false)
-  const { isMobileSidebarOpen, closeMobileSidebar } = useMobileSidebar() // Use context
+  const { isMobileSidebarOpen, toggleMobileSidebar, closeMobileSidebar } = useMobileSidebar() // Use context
+  const searchParams = useSearchParams()
+  const lastFocusedRef = useRef<HTMLElement | null>(null)
+  const panelRef = useRef<HTMLDivElement | null>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const initialAutoOpenRef = useRef(false)
 
   const handleSelect = (cmd: Command) => {
     setSelectedCommand((prev) => (prev?.id === cmd?.id ? prev : cmd))
     closeMobileSidebar() // Close sidebar on command select
   }
+
+  // Open drawer on initial mobile visit when ?open=1 is present
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const open = searchParams?.get('open')
+    const isMobile = window.innerWidth < 1024
+    if (open && isMobile && !isMobileSidebarOpen) {
+      toggleMobileSidebar()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Track viewport to detect mobile and auto-open once when landing
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const update = () => setIsMobile(window.innerWidth < 1024)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
+  useEffect(() => {
+    if (!isMobile) return
+    if (initialAutoOpenRef.current) return
+    if (!isMobileSidebarOpen) {
+      toggleMobileSidebar()
+    }
+    initialAutoOpenRef.current = true
+    // do not add toggleMobileSidebar to deps to avoid re-run
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, isMobileSidebarOpen])
+
+  // Scroll lock and focus trap handling for mobile drawer
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    if (isMobileSidebarOpen) {
+      lastFocusedRef.current = document.activeElement as HTMLElement
+      // lock scroll
+      const prevOverflow = document.body.style.overflow
+      document.body.style.overflow = 'hidden'
+
+      // focus the first focusable element in panel
+      const panel = panelRef.current
+      if (panel) {
+        const focusables = panel.querySelectorAll<HTMLElement>(
+          'input, button, a, [tabindex]:not([tabindex="-1"])'
+        )
+        if (focusables.length > 0) focusables[0].focus()
+      }
+
+      // ESC to close
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          closeMobileSidebar()
+        }
+        if (e.key === 'Tab' && panelRef.current) {
+          // simple focus trap
+          const focusables = panelRef.current.querySelectorAll<HTMLElement>(
+            'input, button, a, [tabindex]:not([tabindex="-1"])'
+          )
+          if (focusables.length === 0) return
+          const first = focusables[0]
+          const last = focusables[focusables.length - 1]
+          const active = document.activeElement as HTMLElement
+          const shift = e.shiftKey
+          if (!shift && active === last) {
+            e.preventDefault()
+            first.focus()
+          } else if (shift && active === first) {
+            e.preventDefault()
+            last.focus()
+          }
+        }
+      }
+      document.addEventListener('keydown', onKey)
+
+      return () => {
+        document.body.style.overflow = prevOverflow
+        document.removeEventListener('keydown', onKey)
+        // restore focus
+        lastFocusedRef.current?.focus()
+      }
+    }
+  }, [isMobileSidebarOpen, closeMobileSidebar])
 
   useEffect(() => {
     const loadBlocks = async () => {
@@ -232,12 +334,12 @@ export default function LinuxPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="flex flex-row gap-8">
           {/* Desktop Sidebar */}
-          <aside className="w-1/4 hidden lg:block">
+          <aside className="hidden lg:block lg:w-72 xl:w-80 shrink-0">
             <Card className="sticky top-24">
               <CardHeader>
                 <CardTitle>명령어 목록</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-y-auto max-h-[calc(100vh-10rem)] pr-1">
                 <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
               </CardContent>
             </Card>
@@ -245,32 +347,37 @@ export default function LinuxPage() {
 
           {/* Mobile Sidebar Overlay */}
           {isMobileSidebarOpen && (
-            <div className="fixed inset-0 z-50 bg-background/90 backdrop-blur-sm lg:hidden">
-              <div className="absolute inset-0 left-0 bg-black/50" onClick={closeMobileSidebar} /> {/* Moved background overlay first */}
-              <div className="absolute inset-y-0 left-0 w-full bg-card shadow-lg p-4 overflow-y-auto"> {/* Changed w-64 to w-full */}
-                <div className="flex justify-end">
-                  <Button variant="ghost" size="icon" onClick={closeMobileSidebar}>
+            <div className="fixed inset-0 z-[60] bg-background/90 backdrop-blur-sm lg:hidden" role="dialog" aria-modal="true" aria-labelledby="linux-drawer-title">
+              <div className="absolute inset-0 left-0 bg-black/50" onClick={closeMobileSidebar} />
+              <div ref={panelRef} className="absolute inset-y-0 left-0 w-full bg-card shadow-lg overflow-y-auto focus:outline-none">
+                {/* Drawer header */}
+                <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b bg-card/95 backdrop-blur">
+                  <Link href="/" className="text-sm text-sidebar-foreground hover:text-sidebar-primary">홈</Link>
+                  <h2 id="linux-drawer-title" className="text-sm font-semibold">Linux</h2>
+                  <Button variant="ghost" size="icon" onClick={closeMobileSidebar} aria-label="메뉴 닫기">
                     <X className="h-6 w-6" />
-                    <span className="sr-only">메뉴 닫기</span>
                   </Button>
                 </div>
-                <Card className="mt-4">
-                  <CardHeader>
-                    <CardTitle>명령어 목록</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <LinuxSidebar topics={linuxTopics} onCommandSelect={handleSelect} />
-                  </CardContent>
-                </Card>
+                {/* Drawer content */}
+                <div className="px-4 pb-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>명령어 목록</CardTitle>
+                    </CardHeader>
+                    <CardContent className="overflow-y-auto max-h-[calc(100vh-12rem)] pr-1">
+                      <LinuxSidebar autoFocus topics={linuxTopics} onCommandSelect={handleSelect} />
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
             </div>
           )}
 
-          <main className="w-full lg:w-3/4">
+          <main className="w-full lg:flex-1 min-w-0">
             {loading ? (
               <div className="flex items-center justify-center h-full text-muted-foreground py-12">불러오는 중...</div>
             ) : (
-              <CommandDetailView command={selectedCommand} />
+              <CommandDetailView command={selectedCommand} isMobile={isMobile} />
             )}
           </main>
         </div>

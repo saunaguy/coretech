@@ -22,8 +22,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          enableSystem={false}
+          storageKey="coretech-theme-v2"
           disableTransitionOnChange
         >
           <AuthProvider>

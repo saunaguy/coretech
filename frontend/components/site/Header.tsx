@@ -14,9 +14,8 @@ export default function Header() {
   const { toggleMobileSidebar } = useMobileSidebar()
   const { isAuthenticated, user, logout } = useAuth()
 
-  const headerClassName = theme === 'dark' 
-    ? 'bg-[#000080] text-white' 
-    : 'bg-primary text-primary-foreground';
+  // Use CSS variables via tokens to keep colors consistent across themes
+  const headerClassName = 'bg-header text-header-foreground'
 
   return (
     <header className={`sticky top-0 z-50 w-full border-b border-border/40 shadow-sm backdrop-blur ${headerClassName}`}>
@@ -27,7 +26,7 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-baseline space-x-4">
-              <Link href="/linux" className="hover:text-primary transition-colors">Linux 기초</Link>
+              <Link href="/linux?open=1" className="hover:text-primary transition-colors">Linux 기초</Link>
               <Link href="/board" className="hover:text-primary transition-colors">게시판</Link>
               <Link href="/qna" className="hover:text-primary transition-colors">Q&A</Link>
               <Link href="/about" className="hover:text-primary transition-colors">소개</Link>
