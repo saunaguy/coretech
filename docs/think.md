@@ -1,18 +1,62 @@
 Application error: a client-side exception has occurred while loading 192.168.0.12 (see the browser console for more information).
 
-ncaught ReferenceError: Cannot access 'O' before initialization
-    at page-8286af45159ea168.js:1:3271
-    at Object.useMemo (4bd1b696-c61993574a28904b.js:1:51493)
-    at t.useMemo (1684-d958d7f94845f910.js:1:17296)
-    at k (page-8286af45159ea168.js:1:3259)
-    at lS (4bd1b696-c61993574a28904b.js:1:39320)
-    at ot (4bd1b696-c61993574a28904b.js:1:64568)
-    at ov (4bd1b696-c61993574a28904b.js:1:75633)
-    at ic (4bd1b696-c61993574a28904b.js:1:112355)
-    at 4bd1b696-c61993574a28904b.js:1:112200
-    at is (4bd1b696-c61993574a28904b.js:1:112208)
-    at u9 (4bd1b696-c61993574a28904b.js:1:109419)
-    at iH (4bd1b696-c61993574a28904b.js:1:130645)
-    at MessagePort.w (1684-d958d7f94845f910.js:1:26076)이 오류 이해하기
-linux:1 The resource http://192.168.0.12:3000/_next/static/css/ec6e3f063a13cf36.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.이 경고 이해하기
-linux:1 The resource http://192.168.0.12:3000/_next/static/css/ec6e3f063a13cf36.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it has an appropriate `as` value and it is preloaded intentionally.
+Uncaught ReferenceError: hasViewed is not defined
+    at page-bd915e4093810f2d.js:1:3170
+    at ob (4bd1b696-c38af47db0c6c243.js:1:80061)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95807)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95787)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)
+    at oG (4bd1b696-c38af47db0c6c243.js:1:95844)
+    at oX (4bd1b696-c38af47db0c6c243.js:1:95691)이 오류 이해하기
+:8000//api/v1/likes/status?parent_id=4&parent_type=post:1  Failed to load resource: the server responded with a status of 404 (Not Found)이 오류 이해하기
+:8000//api/v1/post/4/comments:1  Failed to load resource: the server responded with a status of 404 (Not Found)이 오류 이해하기
+1684-bd423203950f8c47.js:1 Failed to check like status: Error: Not Found
+    at h (layout-744674ee9a67f2e0.js:1:12084)
+    at async g (page-bd915e4093810f2d.js:1:1151)
+window.console.error @ 1684-bd423203950f8c47.js:1이 오류 이해하기
+1684-bd423203950f8c47.js:1 Failed to fetch comments: Error: Not Found
+    at h (layout-744674ee9a67f2e0.js:1:12084)
+    at async x (page-bd915e4093810f2d.js:1:7840)

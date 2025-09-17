@@ -10,6 +10,9 @@ interface ViewTrackerProps {
 export default function ViewTracker({ id, type }: ViewTrackerProps) {
   useEffect(() => {
     const viewedCookieName = `viewed_${type}_${id}`;
+    // Determine if this item has already been viewed by checking the cookie in the browser
+    const hasViewed = typeof document !== 'undefined'
+      && document.cookie.split('; ').some((c) => c.startsWith(`${viewedCookieName}=`));
     console.log(`[ViewTracker] Initial hasViewed for ${type}_${id}:`, hasViewed);
 
     if (!hasViewed) {

@@ -223,7 +223,19 @@ def get_question(qid: int, db: Session = Depends(get_db)):
     likes = db.query(DBLike).filter(DBLike.parent_id == qid, DBLike.parent_type == 'question').count()
 
     tags = q.tags_text.split(",") if q.tags_text else []
-    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments, "likes": likes, "views": q.views}
+    # Do not return raw ORM instances in JSON
+    comments_data = [
+        {
+            "id": c.id,
+            "content": getattr(c, "content", None),
+            "user_id": getattr(c, "user_id", None),
+            "created_at": c.created_at.isoformat() if hasattr(c.created_at, "isoformat") else str(c.created_at),
+            "parent_id": getattr(c, "parent_id", None),
+            "parent_type": getattr(c, "parent_type", None),
+        }
+        for c in comments
+    ]
+    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments_data, "likes": likes, "views": q.views}
 
 
 @app.post("/api/v1/qna/questions/{qid}/increment_view")
@@ -337,6 +349,17 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         author_name = u.username if u else None
     except Exception:
         author_name = None
+    comments_data = [
+        {
+            "id": c.id,
+            "content": getattr(c, "content", None),
+            "user_id": getattr(c, "user_id", None),
+            "created_at": c.created_at.isoformat() if hasattr(c.created_at, "isoformat") else str(c.created_at),
+            "parent_id": getattr(c, "parent_id", None),
+            "parent_type": getattr(c, "parent_type", None),
+        }
+        for c in comments
+    ]
     return {
         "id": p.id,
         "title": p.title,
@@ -345,7 +368,7 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         "likes": likes,
         "createdAt": p.created_at.isoformat(),
         "author": author_name,
-        "comments": comments,
+        "comments": comments_data,
     }
 
 

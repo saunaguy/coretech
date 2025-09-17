@@ -7,7 +7,7 @@ import LikeButton from "@/components/LikeButton"         // LikeButton import
 import { authenticatedFetch, getUser } from '@/lib/auth' // getUser 함수 import
 import { cookies, headers } from 'next/headers'
 
-import {jwtDecode} from 'jwt-decode'; // jwtDecode 직접 import
+// jwtDecode import not needed; using getUser()
 import ViewTracker from '@/components/ViewTracker';
 
 export const dynamic = "force-dynamic"
@@ -50,12 +50,13 @@ export default async function BoardDetailPage({ params }: { params: { id: string
 
   const post = await getPost(id, token)
 
-  // 현재 로그인한 사용자 정보 가져오기 (서버 컴포넌트에서 쿠키를 통해 토큰을 직접 디코딩)
-  let currentUserId: string | null = null;
+  // 현재 로그인한 사용자 정보 가져오기 (서버 컴포넌트에서 쿠키를 통해 토큰 확인)
+  let currentUsername: string | null = null;
   if (token) {
     try {
-      const user = getUser(token); // Use getUser
-      currentUserId = user ? user.sub : null; // Access sub from user object
+      const user = getUser(token); // Use getUser to decode JWT
+      // Backend token contains { id, username, sub(email) }
+      currentUsername = (user as any)?.username ?? null;
     } catch (error) {
       console.error("Error decoding token in server component:", error);
     }
@@ -79,9 +80,8 @@ export default async function BoardDetailPage({ params }: { params: { id: string
     )
   }
 
-  // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인
-  // post 객체에 user_id 필드가 있다고 가정합니다. 실제 백엔드 응답에 따라 필드 이름이 다를 수 있습니다.
-  const isAuthor = currentUserId && Number(post.author_id) === Number(currentUserId); // post.author_id와 비교
+  // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인 (백엔드 응답은 author(username) 제공)
+  const isAuthor = !!currentUsername && post.author === currentUsername;
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">

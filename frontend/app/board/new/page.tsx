@@ -26,7 +26,7 @@ export default function BoardNewPage() {
     if (!title.trim() || !body.trim()) return
     setLoading(true)
     try {
-      const r = await authenticatedFetch(`${base}/api/v1/board/posts`, {
+      const r = await authenticatedFetch(`${base}/api/v1/board/posts`, null, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, body }),

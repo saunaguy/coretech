@@ -19,13 +19,12 @@ export default function LikeButton({ parentId, parentType, initialLikes, token }
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '');
 
   const checkLikeStatus = async () => {
-    if (!token) return;
     try {
       const url = `${API_BASE_URL}/api/v1/likes/status?parent_id=${parentId}&parent_type=${parentType}`;
-      const response = await authenticatedFetch(url);
+      const response = await authenticatedFetch(url, token);
       if (response && response.is_liked) {
         setIsLiked(true);
       }

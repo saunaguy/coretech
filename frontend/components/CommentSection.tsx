@@ -28,7 +28,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+  const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '');
 
   const fetchComments = async () => {
     setLoading(true);
@@ -52,7 +52,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
     setError(null);
     try {
       const url = `${API_BASE_URL}/api/v1/comments`;
-      const response = await authenticatedFetch(url, {
+      const response = await authenticatedFetch(url, null, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
