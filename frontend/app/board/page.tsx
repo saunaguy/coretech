@@ -26,7 +26,6 @@ type Post = {
 
 export default function BoardPage() {
   const { isAuthenticated } = useAuth()
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [query, setQuery] = useState("")
@@ -37,7 +36,8 @@ export default function BoardPage() {
   const load = async () => {
     setLoading(true)
     try {
-      const r = await fetch(`${base}/api/v1/board/posts`, { cache: "no-store" })
+      // Use relative path so Next.js rewrites proxy to backend
+      const r = await fetch(`/api/v1/board/posts`, { cache: "no-store" })
       if (r.ok) setPosts(await r.json())
     } finally {
       setLoading(false)

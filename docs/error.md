@@ -1,36 +1,876 @@
-Access to fetch at 'http://192.168.0.197:8000/api/v1/board/posts' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.이 오류 이해하기
-page-dbdfd2d7fad91fcb.js:1  POST http://192.168.0.197:8000/api/v1/board/posts net::ERR_FAILED
-d @ page-dbdfd2d7fad91fcb.js:1
-v @ page-e6b77d22651e7f41.js:1
+new:1 Access to fetch at 'http://192.168.0.197:8000//api/v1/auth/verify-token' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+layout-6c62a2e66cbe25c7.js:1  GET http://192.168.0.197:8000//api/v1/auth/verify-token net::ERR_FAILED
+h @ layout-6c62a2e66cbe25c7.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+1684-a40cfc69abe1d430.js:1 Token validation failed: TypeError: Failed to fetch
+    at h (layout-6c62a2e66cbe25c7.js:1:11916)
+    at layout-6c62a2e66cbe25c7.js:1:364
+    at layout-6c62a2e66cbe25c7.js:1:605
+    at ob (4bd1b696-dac63da25e43fab6.js:1:80061)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95807)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+push.6905.window.console.error @ 1684-a40cfc69abe1d430.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+layout-6c62a2e66cbe25c7.js:1  POST http://coretechnet.tplinkdns.com:3000/api/v1/auth/login 401 (Unauthorized)
+i @ layout-6c62a2e66cbe25c7.js:1
+c @ layout-6c62a2e66cbe25c7.js:1
+m @ page-072e5c2c4cd46a50.js:1
 iG @ 4bd1b696-dac63da25e43fab6.js:1
 (익명) @ 4bd1b696-dac63da25e43fab6.js:1
 nS @ 4bd1b696-dac63da25e43fab6.js:1
 i4 @ 4bd1b696-dac63da25e43fab6.js:1
 ce @ 4bd1b696-dac63da25e43fab6.js:1
-s9 @ 4bd1b696-dac63da25e43fab6.js:1이 오류 이해하기
-page-dbdfd2d7fad91fcb.js:1   Uncaught (in promise) TypeError: Failed to fetch
-    at d (page-dbdfd2d7fad91fcb.js:1:8589)
-    at v (page-e6b77d22651e7f41.js:1:1593)
-    at iG (4bd1b696-dac63da25e43fab6.js:1:133062)
-    at 4bd1b696-dac63da25e43fab6.js:1:139164
-    at nS (4bd1b696-dac63da25e43fab6.js:1:18793)
-    at i4 (4bd1b696-dac63da25e43fab6.js:1:134295)
-    at ce (4bd1b696-dac63da25e43fab6.js:1:160375)
-    at s9 (4bd1b696-dac63da25e43fab6.js:1:160197)
+s9 @ 4bd1b696-dac63da25e43fab6.js:1
+:3000/board:1 Access to fetch at 'http://192.168.0.197:8000/api/v1/board/posts' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+page-a3ed433ebc943864.js:1  GET http://192.168.0.197:8000/api/v1/board/posts net::ERR_FAILED 200 (OK)
+_ @ page-a3ed433ebc943864.js:1
+(익명) @ page-a3ed433ebc943864.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+page-a3ed433ebc943864.js:1   Uncaught (in promise) TypeError: Failed to fetch
+    at _ (page-a3ed433ebc943864.js:1:1653)
+    at page-a3ed433ebc943864.js:1:1775
+    at ob (4bd1b696-dac63da25e43fab6.js:1:80061)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95807)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+_ @ page-a3ed433ebc943864.js:1
+(익명) @ page-a3ed433ebc943864.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+layout-6c62a2e66cbe25c7.js:1  POST http://coretechnet.tplinkdns.com:3000/api/v1/board/posts 500 (Internal Server Error)
+h @ layout-6c62a2e66cbe25c7.js:1
+m @ page-ba7b247c823c0ad0.js:1
+iG @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+nS @ 4bd1b696-dac63da25e43fab6.js:1
+i4 @ 4bd1b696-dac63da25e43fab6.js:1
+ce @ 4bd1b696-dac63da25e43fab6.js:1
+s9 @ 4bd1b696-dac63da25e43fab6.js:1
+layout-6c62a2e66cbe25c7.js:1 Uncaught (in promise) Error: API call failed with non-JSON response
+    at h (layout-6c62a2e66cbe25c7.js:1:11957)
+    at async m (page-ba7b247c823c0ad0.js:1:1529)
+h @ layout-6c62a2e66cbe25c7.js:1
 
-    Access to fetch at 'http://192.168.0.197:8000//api/v1/qna/questions' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.이 오류 이해하기
-page-f0429e2116ffd5be.js:1  POST http://192.168.0.197:8000//api/v1/qna/questions net::ERR_FAILED
-f @ page-f0429e2116ffd5be.js:1
+
+new:1 Access to fetch at 'http://192.168.0.197:8000//api/v1/auth/verify-token' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+layout-6c62a2e66cbe25c7.js:1  GET http://192.168.0.197:8000//api/v1/auth/verify-token net::ERR_FAILED
+h @ layout-6c62a2e66cbe25c7.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+1684-a40cfc69abe1d430.js:1 Token validation failed: TypeError: Failed to fetch
+    at h (layout-6c62a2e66cbe25c7.js:1:11916)
+    at layout-6c62a2e66cbe25c7.js:1:364
+    at layout-6c62a2e66cbe25c7.js:1:605
+    at ob (4bd1b696-dac63da25e43fab6.js:1:80061)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95807)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+push.6905.window.console.error @ 1684-a40cfc69abe1d430.js:1
+(익명) @ layout-6c62a2e66cbe25c7.js:1
+layout-6c62a2e66cbe25c7.js:1  POST http://coretechnet.tplinkdns.com:3000/api/v1/auth/login 401 (Unauthorized)
+i @ layout-6c62a2e66cbe25c7.js:1
+c @ layout-6c62a2e66cbe25c7.js:1
+m @ page-072e5c2c4cd46a50.js:1
 iG @ 4bd1b696-dac63da25e43fab6.js:1
 (익명) @ 4bd1b696-dac63da25e43fab6.js:1
 nS @ 4bd1b696-dac63da25e43fab6.js:1
 i4 @ 4bd1b696-dac63da25e43fab6.js:1
 ce @ 4bd1b696-dac63da25e43fab6.js:1
-s9 @ 4bd1b696-dac63da25e43fab6.js:1이 오류 이해하기
-page-f0429e2116ffd5be.js:1   Uncaught (in promise) TypeError: Failed to fetch
-    at f (page-f0429e2116ffd5be.js:1:2144)
-    at iG (4bd1b696-dac63da25e43fab6.js:1:133062)
-    at 4bd1b696-dac63da25e43fab6.js:1:139164
-    at nS (4bd1b696-dac63da25e43fab6.js:1:18793)
-    at i4 (4bd1b696-dac63da25e43fab6.js:1:134295)
-    at ce (4bd1b696-dac63da25e43fab6.js:1:160375)
+s9 @ 4bd1b696-dac63da25e43fab6.js:1
+:3000/board:1 Access to fetch at 'http://192.168.0.197:8000/api/v1/board/posts' from origin 'http://coretechnet.tplinkdns.com:3000' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+page-a3ed433ebc943864.js:1  GET http://192.168.0.197:8000/api/v1/board/posts net::ERR_FAILED 200 (OK)
+_ @ page-a3ed433ebc943864.js:1
+(익명) @ page-a3ed433ebc943864.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+page-a3ed433ebc943864.js:1   Uncaught (in promise) TypeError: Failed to fetch
+    at _ (page-a3ed433ebc943864.js:1:1653)
+    at page-a3ed433ebc943864.js:1:1775
+    at ob (4bd1b696-dac63da25e43fab6.js:1:80061)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95807)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95844)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+    at oX (4bd1b696-dac63da25e43fab6.js:1:95691)
+    at oG (4bd1b696-dac63da25e43fab6.js:1:95787)
+_ @ page-a3ed433ebc943864.js:1
+(익명) @ page-a3ed433ebc943864.js:1
+ob @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+oX @ 4bd1b696-dac63da25e43fab6.js:1
+oG @ 4bd1b696-dac63da25e43fab6.js:1
+ix @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+w @ 1684-a40cfc69abe1d430.js:1
+layout-6c62a2e66cbe25c7.js:1  POST http://coretechnet.tplinkdns.com:3000/api/v1/board/posts 500 (Internal Server Error)
+h @ layout-6c62a2e66cbe25c7.js:1
+m @ page-ba7b247c823c0ad0.js:1
+iG @ 4bd1b696-dac63da25e43fab6.js:1
+(익명) @ 4bd1b696-dac63da25e43fab6.js:1
+nS @ 4bd1b696-dac63da25e43fab6.js:1
+i4 @ 4bd1b696-dac63da25e43fab6.js:1
+ce @ 4bd1b696-dac63da25e43fab6.js:1
+s9 @ 4bd1b696-dac63da25e43fab6.js:1
+layout-6c62a2e66cbe25c7.js:1 Uncaught (in promise) Error: API call failed with non-JSON response
+    at h (layout-6c62a2e66cbe25c7.js:1:11957)
+    at async m (page-ba7b247c823c0ad0.js:1:1529)
+h @ layout-6c62a2e66cbe25c7.js:1

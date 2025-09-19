@@ -28,13 +28,12 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '');
 
   const fetchComments = async () => {
     setLoading(true);
     setError(null);
     try {
-      const url = `${API_BASE_URL}/api/v1/${parentType}/${parentId}/comments`;
+      const url = `/api/v1/${parentType}/${parentId}/comments`;
       const response = await authenticatedFetch(url);
       setComments(response);
     } catch (err: any) {
@@ -51,7 +50,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
     setLoading(true);
     setError(null);
     try {
-      const url = `${API_BASE_URL}/api/v1/comments`;
+      const url = `/api/v1/comments`;
       const response = await authenticatedFetch(url, null, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/auth/verify-token`, token);
+          // Use relative path to avoid CORS and rely on Next.js rewrites
+          await authenticatedFetch(`/api/v1/auth/verify-token`, token);
           const currentUser = getUser(token);
           if (currentUser) {
             setUser(currentUser);
