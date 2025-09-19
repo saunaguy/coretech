@@ -9,7 +9,6 @@ import { authenticatedFetch } from "@/lib/auth"
 import { useAuth } from "@/components/auth/AuthProvider"
 
 export default function BoardNewPage() {
-  const base = (process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
   const router = useRouter()
   const { isAuthenticated } = useAuth()
   const [title, setTitle] = useState("")
@@ -26,7 +25,8 @@ export default function BoardNewPage() {
     if (!title.trim() || !body.trim()) return
     setLoading(true)
     try {
-      const r = await authenticatedFetch(`${base}/api/v1/board/posts`, null, {
+      // Use relative path so Next rewrites proxy to backend
+      const r = await authenticatedFetch(`/api/v1/board/posts`, null, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title, body }),

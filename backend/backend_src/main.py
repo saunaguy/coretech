@@ -48,9 +48,13 @@ def get_db():
 # Routers
 from .auth import router as auth_router
 from .routers import likes_and_comments
+from .routers import board as board_router
+from .routers import qna as qna_router
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(likes_and_comments.router)
+app.include_router(board_router.router)
+app.include_router(qna_router.router)
 
 @app.get("/api/v1/auth/verify-token")
 def verify_token(current_user: User = Depends(get_current_user)):

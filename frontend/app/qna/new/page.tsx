@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation"
 import Link from "next/link" // Link 컴포넌트 import
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { authenticatedFetch } from "@/lib/auth"
 
 export default function QnaNewPage() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  // Use relative path and authenticatedFetch so tokens are attached and Next rewrites proxy to backend
+  // const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
   const router = useRouter()
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
@@ -26,14 +28,13 @@ export default function QnaNewPage() {
           .map((t) => t.trim())
           .filter(Boolean),
       }
-      const r = await fetch(`${base}/api/v1/qna/questions`, {
+      const r = await authenticatedFetch(`/api/v1/qna/questions`, null, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       })
-      if (r.ok) {
-        const data = await r.json()
-        router.push(`/qna/${data.id}`)
+      if (r && (r as any).id) {
+        router.push(`/qna/${(r as any).id}`)
       }
     } finally {
       setLoading(false)
