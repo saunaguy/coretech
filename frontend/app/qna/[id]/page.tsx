@@ -43,18 +43,32 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>
-              {question.category && (
-                <span className="mr-2 text-xs text-muted-foreground align-middle">[{question.category === 'others' ? 'other' : question.category}]</span>
-              )}
-              {question.title}
-              {question.answered ? (
-                <span className="ml-2 text-xs text-green-600 align-middle">완료</span>
-              ) : (
-                <span className="ml-2 text-xs text-amber-600 align-middle">대기</span>
-              )}
+            <CardTitle className="w-full">
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0 flex items-center gap-2">
+                  {question.category && (
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${
+                      (question.category || '').toLowerCase() === 'server'
+                        ? 'bg-blue-100 text-blue-700 border-blue-200'
+                        : (question.category || '').toLowerCase() === 'network'
+                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
+                        : 'bg-slate-100 text-slate-700 border-slate-200'
+                    }`}>
+                      {(question.category || '').toLowerCase() === 'server'
+                        ? 'Server'
+                        : (question.category || '').toLowerCase() === 'network'
+                        ? 'Network'
+                        : 'Other'}
+                    </span>
+                  )}
+                  <span className="font-medium truncate">{question.title}</span>
+                </div>
+                <span className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${question.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                  {question.answered ? '완료' : '대기'}
+                </span>
+              </div>
             </CardTitle>
-            <div className="flex gap-2"> {/* 버튼들을 감싸는 div 추가 */}
+            <div className="flex gap-2">
               <Button asChild size="sm" variant="outline">
                 <Link href={`/qna/${id}/edit`}>수정</Link>
               </Button>
