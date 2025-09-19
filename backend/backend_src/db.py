@@ -149,6 +149,25 @@ def init_db() -> None:
                 conn.exec_driver_sql(
                     "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()"
                 )
+                # Posts table best-effort columns (legacy DBs may miss these)
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS user_id INTEGER"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS likes INTEGER DEFAULT 0"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS is_deleted BOOLEAN DEFAULT FALSE"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE posts ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ"
+                )
                 conn.exec_driver_sql(
                     "ALTER TABLE daily_tests ADD COLUMN IF NOT EXISTS category VARCHAR(50)"
                 )
@@ -172,6 +191,21 @@ def init_db() -> None:
                 colnames = {row[1] for row in cols}
                 if "views" not in colnames:
                     conn.exec_driver_sql("ALTER TABLE questions ADD COLUMN views INTEGER DEFAULT 0")
+                # Posts table columns (SQLite)
+                cols = conn.exec_driver_sql("PRAGMA table_info('posts')").all()
+                colnames = {row[1] for row in cols}
+                if "user_id" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN user_id INTEGER")
+                if "views" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN views INTEGER DEFAULT 0")
+                if "likes" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN likes INTEGER DEFAULT 0")
+                if "is_deleted" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN is_deleted INTEGER DEFAULT 0")
+                if "created_at" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN created_at TEXT")
+                if "updated_at" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE posts ADD COLUMN updated_at TEXT")
                 # Create notices/progress tables if absent (SQLite)
                 conn.exec_driver_sql(
                     "CREATE TABLE IF NOT EXISTS notices (id INTEGER PRIMARY KEY, title TEXT, "
