@@ -8,6 +8,7 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 
 from .db import SessionLocal, User, init_db
 
@@ -109,12 +110,20 @@ def register(payload: RegisterPayload, db: Session = Depends(get_db)):
         username=payload.username,
         email=payload.email,
         password_hash=get_password_hash(payload.password),
-        is_active=False, # Set to false by default for admin approval
-        role="user" # Default role is user
+        is_active=False,  # admin 승인 대기
+        role="user",
     )
-    db.add(user)
-    db.commit()
-    db.refresh(user)
+    try:
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    except IntegrityError:
+        db.rollback()
+        # DB 수준 unique 제약 위반 등
+        raise HTTPException(status_code=400, detail="이미 사용 중인 사용자 이름 또는 이메일입니다.")
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"회원가입 처리 중 오류: {type(e).__name__}")
     return {"id": user.id, "username": user.username, "email": user.email, "is_active": user.is_active, "role": user.role}
 
 
