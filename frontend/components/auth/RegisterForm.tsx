@@ -20,8 +20,8 @@ export default function RegisterForm() {
     setSuccess(null)
 
     try {
-      const base = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '')
-      const response = await fetch(`${base}/api/v1/auth/register`, {
+      // Use relative path so Next.js rewrites proxy to backend in any env
+      const response = await fetch(`/api/v1/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, email, password }),

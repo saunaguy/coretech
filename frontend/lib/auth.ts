@@ -4,7 +4,8 @@ import { setAuthCookie, clearAuthCookie } from './actions';
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
 export const login = async (email: string, password: string) => {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+  // Use relative path so Next.js rewrites proxy to backend
+  const response = await fetch(`/api/v1/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
@@ -41,7 +42,8 @@ export const logout = async () => {
 };
 
 export const register = async (username: string, email: string, password: string) => {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
+  // Use relative path so Next.js rewrites proxy to backend
+  const response = await fetch(`/api/v1/auth/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, email, password }),

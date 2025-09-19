@@ -28,7 +28,8 @@ export default function AdminPage() {
 
     const fetchPendingUsers = async () => {
       try {
-        const users = await authenticatedFetch(`${API}/api/v1/admin/pending-users`);
+        // Use relative path so Next.js rewrites proxy to backend
+        const users = await authenticatedFetch(`/api/v1/admin/pending-users`);
         setPendingUsers(users);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch users.');
@@ -42,7 +43,7 @@ export default function AdminPage() {
 
   const handleApproval = async (userId: number, approve: boolean) => {
     try {
-      await authenticatedFetch(`${API}/api/v1/admin/approve-user`, {
+      await authenticatedFetch(`/api/v1/admin/approve-user`, {
         method: 'POST',
         body: JSON.stringify({ user_id: userId, approve }),
       });
