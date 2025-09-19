@@ -11,7 +11,7 @@ import fs from "fs"
 import path from "path"
 
 async function fetchJson<T>(path: string): Promise<T> {
-  const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  const base = (process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
   console.log(`[fetchJson] Fetching from: ${base}${path}`);
   const res = await fetch(`${base}${path}`, { next: { revalidate: 30 } })
   console.log(`[fetchJson] Response status for ${path}: ${res.status}`);
@@ -85,7 +85,7 @@ function listLessonsForGroup(groupSlug: string, limit = 3): LessonLink[] {
 export default async function HomePage() {
   const groups = listLessonGroups()
   const [board, qna] = await Promise.all([
-    fetchJson<any[]>("/api/v1/board/posts?sort=latest", { cache: "no-store" }),
+    tryFetchJson<any[]>("/api/v1/board/posts?sort=latest", []),
     tryFetchJson<any[]>("/api/v1/qna/questions", []),
   ])
   return (
