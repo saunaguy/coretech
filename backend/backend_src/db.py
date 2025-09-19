@@ -139,6 +139,16 @@ def init_db() -> None:
     try:
         if engine.dialect.name == "postgresql":
             with engine.begin() as conn:
+                # Ensure users table has expected columns (best-effort, no-op if exists)
+                conn.exec_driver_sql(
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS role VARCHAR(20) DEFAULT 'user'"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT FALSE"
+                )
+                conn.exec_driver_sql(
+                    "ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at TIMESTAMPTZ DEFAULT NOW()"
+                )
                 conn.exec_driver_sql(
                     "ALTER TABLE daily_tests ADD COLUMN IF NOT EXISTS category VARCHAR(50)"
                 )
