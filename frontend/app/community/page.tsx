@@ -34,7 +34,17 @@ export default async function CommunityPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <QAList items={qna.map((q: any) => ({ id: String(q.id), question: q.title, author: "", answered: false, createdAt: "", excerpt: q.body || "" }))} />
+          <QAList
+            items={qna.map((q: any) => ({
+              id: String(q.id),
+              question: q.title,
+              author: q.author?.username || "",
+              answered: !!q.answered,
+              createdAt: q.createdAt || q.created_at || "",
+              excerpt: q.body || "",
+              category: q.category,
+            }))}
+          />
         </CardContent>
       </Card>
 

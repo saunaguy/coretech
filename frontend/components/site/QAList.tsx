@@ -10,6 +10,7 @@ type QAItem = {
   excerpt?: string
   views?: number // 조회수 추가
   likes?: number // 추천수 추가
+  category?: string
 }
 
 export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]; hrefPrefix?: string }) {
@@ -19,7 +20,7 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
         <li key={q.id} className="py-3">
           <div className="flex items-start justify-between gap-3">
             <Link href={`${hrefPrefix}/${q.id}`} className="font-medium hover:underline text-foreground">
-              {q.question}
+              {q.category ? `[${q.category === 'others' ? 'other' : q.category}] ` : ''}{q.question}
             </Link>
             <span
               className={`text-[10px] px-2 py-0.5 rounded-full border ${q.answered ? "bg-green-100 text-green-700 border-green-200" : "bg-amber-100 text-amber-700 border-amber-200"}`}

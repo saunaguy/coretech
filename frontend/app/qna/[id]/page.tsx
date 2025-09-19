@@ -44,10 +44,10 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>
-              {question.title}
               {question.category && (
-                <span className="ml-2 text-xs text-muted-foreground align-middle">[{question.category}]</span>
+                <span className="mr-2 text-xs text-muted-foreground align-middle">[{question.category === 'others' ? 'other' : question.category}]</span>
               )}
+              {question.title}
               {question.answered ? (
                 <span className="ml-2 text-xs text-green-600 align-middle">완료</span>
               ) : (

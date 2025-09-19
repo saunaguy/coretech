@@ -37,6 +37,17 @@ def create_comment(
     db.add(db_comment)
     db.commit()
     db.refresh(db_comment)
+
+    # Auto-mark question as answered when admin/operator replies
+    try:
+        if comment.parent_type == "question" and getattr(current_user, "role", "user") in ("admin", "operator"):
+            q = db.query(Question).filter(Question.id == comment.parent_id).first()
+            if q and (q.answered or 0) == 0:
+                q.answered = 1
+                db.commit()
+    except Exception:
+        # Do not block comment creation if status update fails
+        db.rollback()
     return db_comment
 
 @router.get("/{parent_type}/{parent_id}/comments", response_model=List[CommentResponse])

@@ -62,6 +62,16 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
       });
       setComments((prev) => [...prev, response]);
       setNewComment('');
+      // If a privileged user answered a question, server may mark it as answered.
+      // Refresh the page to reflect status badge change.
+      if (parentType === 'question') {
+        try {
+          // lightweight re-fetch of comments list
+          fetchComments();
+          // also refresh the page to update question status/labels
+          if (typeof window !== 'undefined') window.location.reload();
+        } catch {}
+      }
     } finally {
       setLoading(false);
     }

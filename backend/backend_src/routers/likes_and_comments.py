@@ -6,7 +6,7 @@ from typing import List
 from .. import db
 from ..schemas import likes_and_comments as schemas
 from ..auth import get_current_user
-from ..db import Comment, Like, User
+from ..db import Comment, Like, User, Question
 
 router = APIRouter()
 
@@ -88,6 +88,13 @@ def create_comment(comment: schemas.CommentCreate, db: Session = Depends(get_db)
         db.add(new_comment)
         db.commit()
         db.refresh(new_comment)
+
+        # Auto-mark question as answered when admin/operator replies
+        if comment.parent_type == "question" and getattr(current_user, "role", "user") in ("admin", "operator"):
+            q = db.query(Question).filter(Question.id == comment.parent_id).first()
+            if q and (q.answered or 0) == 0:
+                q.answered = 1
+                db.commit()
     except Exception as e:
         db.rollback() # Rollback in case of error
         raise HTTPException(status_code=500, detail=f"Failed to create comment: {e}")

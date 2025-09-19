@@ -72,6 +72,20 @@ def seed_qna():
             db.commit()
             db.refresh(user)
 
+        # Ensure an operator account exists for answering
+        operator = db.query(User).filter(User.email == "operator@example.com").first()
+        if not operator:
+            operator = User(
+                username="operator",
+                email="operator@example.com",
+                password_hash=get_password_hash("operatorpassword"),
+                role="operator",
+                is_active=True,
+            )
+            db.add(operator)
+            db.commit()
+            db.refresh(operator)
+
         # Seed only if table is empty (idempotent)
         if db.query(Question).count() == 0:
             qs = [
@@ -87,7 +101,7 @@ def seed_qna():
                 Question(
                     title="네트워크 지연 이슈 디버깅",
                     body="간헐적으로 RTT가 300ms 이상으로 튑니다. mtr, tcpdump 외 어떤 지표 보면 좋을까요?",
-                    author_id=user.id,
+                    author_id=operator.id,
                     tags_text="network,latency,troubleshooting",
                     category="network",
                     views=12,
