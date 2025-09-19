@@ -14,7 +14,7 @@ from .db import SessionLocal, User, init_db
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-secret")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("JWT_EXPIRE_MINUTES", "1440"))
+ACCESS_TOKEN_EXPIRE_SECONDS = int(os.getenv("JWT_EXPIRE_SECONDS", "1440"))
 
 pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
@@ -38,7 +38,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
+    expire = datetime.utcnow() + (expires_delta or timedelta(seconds=ACCESS_TOKEN_EXPIRE_SECONDS))
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -51,16 +51,26 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        # Tokens carry both email (sub) and user id; prefer explicit id
-        user_id = payload.get("id")
-        if user_id is None:
+        user_id: str = payload.get("id")
+        user_role: str = payload.get("role")
+        user_is_active: bool = payload.get("is_active")
+        if user_id is None or user_role is None or user_is_active is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
     user = db.query(User).filter(User.id == int(user_id)).first()
     if user is None:
         raise credentials_exception
+    # Check if user is active
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User account is not active. Please wait for admin approval.")
     return user
+
+
+async def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role != "admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")
+    return current_user
 
 
 class RegisterPayload(BaseModel):
@@ -99,11 +109,13 @@ def register(payload: RegisterPayload, db: Session = Depends(get_db)):
         username=payload.username,
         email=payload.email,
         password_hash=get_password_hash(payload.password),
+        is_active=False, # Set to false by default for admin approval
+        role="user" # Default role is user
     )
     db.add(user)
     db.commit()
     db.refresh(user)
-    return {"id": user.id, "username": user.username, "email": user.email}
+    return {"id": user.id, "username": user.username, "email": user.email, "is_active": user.is_active, "role": user.role}
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -111,5 +123,7 @@ def login(payload: LoginPayload, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
-    token = create_access_token({"sub": user.email, "username": user.username, "id": str(user.id)})
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account not active. Please wait for admin approval.")
+    token = create_access_token({"sub": user.email, "username": user.username, "id": str(user.id), "role": user.role, "is_active": user.is_active})
     return TokenResponse(access_token=token)

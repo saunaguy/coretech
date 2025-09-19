@@ -1,41 +1,56 @@
 'use client'
 
-import { X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import LinuxSidebar from '@/components/linux/LinuxSidebar'
+import Link from "next/link"
+import { useMobileSidebar } from "@/lib/MobileSidebarContext"
+import { useAuth } from "@/components/auth/AuthProvider"
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
 
-interface MobileSidebarProps {
-  isOpen: boolean
-  onClose: () => void
-  topics: any[] // Assuming topics type
-  onCommandSelect: (command: any) => void // Assuming command type
-}
+export default function MobileSidebar() {
+  const { isMobileSidebarOpen, closeMobileSidebar } = useMobileSidebar()
+  const { isAuthenticated, user, logout } = useAuth()
 
-export default function MobileSidebar({ isOpen, onClose, topics, onCommandSelect }: MobileSidebarProps) {
   return (
-    <div
-      className={`fixed inset-0 z-50 transform ${
-        isOpen ? 'translate-x-0' : '-translate-x-full'
-      } transition-transform duration-300 ease-in-out md:hidden`}
-    >
-      <div className="absolute inset-y-0 left-0 w-64 bg-background shadow-lg p-4">
-        <div className="flex justify-end">
-          <Button variant="ghost" size="icon" onClick={onClose}>
-            <X className="h-6 w-6" />
-            <span className="sr-only">메뉴 닫기</span>
-          </Button>
-        </div>
-        <Card className="mt-4">
-          <CardHeader>
-            <CardTitle>명령어 목록</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <LinuxSidebar topics={topics} onCommandSelect={onCommandSelect} />
-          </CardContent>
-        </Card>
-      </div>
-      <div className="absolute inset-0 left-64 bg-black/50" onClick={onClose} />
-    </div>
+    <Sheet open={isMobileSidebarOpen} onOpenChange={closeMobileSidebar}>
+      <SheetContent side="left" className="w-[250px] sm:w-[300px] flex flex-col">
+        <SheetHeader>
+          <SheetTitle>CoreTech 메뉴</SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="flex-grow py-4">
+          <nav className="flex flex-col space-y-2">
+            <Link href="/linux?open=1" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>Linux 기초</Link>
+            <Link href="/board" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>게시판</Link>
+            <Link href="/qna" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>Q&A</Link>
+            <Link href="/about" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>소개</Link>
+            <Separator className="my-2" />
+            {!isAuthenticated ? (
+              <>
+                <Link href="/login" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>로그인</Link>
+                <Link href="/register" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>회원가입</Link>
+              </>
+            ) : (
+              <>
+                {user?.role === 'admin' && (
+                  <Link href="/admin" className="text-lg font-medium hover:text-primary transition-colors font-semibold text-yellow-500" onClick={closeMobileSidebar}>관리자</Link>
+                )}
+                <span className="text-sm opacity-80 pt-2">환영합니다, {user?.username || user?.email}님!</span>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-lg font-medium"
+                  onClick={() => {
+                    logout()
+                    closeMobileSidebar()
+                  }}
+                >
+                  로그아웃
+                </Button>
+              </>
+            )}
+          </nav>
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
   )
 }

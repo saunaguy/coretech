@@ -9,14 +9,14 @@ export default function LoginPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 px-4 sm:px-6">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Login</CardTitle>
+          <CardTitle className="text-2xl text-center">로그인</CardTitle>
         </CardHeader>
         <CardContent>
           <LoginForm />
           <div className="mt-4 text-center text-sm">
-            Don't have an account?{" "}
+            계정이 없으신가요?{" "}
             <Link href="/register" className="underline">
-              Register
+              회원가입
             </Link>
           </div>
         </CardContent>

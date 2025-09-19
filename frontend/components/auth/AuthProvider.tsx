@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, useEffect } from 'react'
-import { login as apiLogin, logout as apiLogout, getUser, register as apiRegister } from '@/lib/auth'
+import { login as apiLogin, logout as apiLogout, getUser, register as apiRegister, authenticatedFetch } from '@/lib/auth'
 
 interface AuthContextType {
   isAuthenticated: boolean
@@ -15,15 +15,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<any>(null)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Get token from localStorage
-    if (token) {
-      const currentUser = getUser(token); // Pass the token to getUser
-      if (currentUser) {
-        setUser(currentUser);
+    const validateToken = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/auth/verify-token`, token);
+          const currentUser = getUser(token);
+          if (currentUser) {
+            setUser(currentUser);
+          } else {
+            localStorage.removeItem('token');
+            setUser(null);
+          }
+        } catch (error) {
+          console.error("Token validation failed:", error);
+          localStorage.removeItem('token');
+          setUser(null);
+        }
       }
-    }
+      setLoading(false);
+    };
+
+    validateToken();
   }, [])
 
   const login = async (username: string, password: string) => {
@@ -43,6 +59,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = async (username: string, email: string, password: string) => {
     await apiRegister(username, email, password);
+  }
+
+  if (loading) {
+    return <div>Loading authentication...</div>;
   }
 
   return (

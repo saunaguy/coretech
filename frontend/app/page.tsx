@@ -133,7 +133,7 @@ export default async function HomePage() {
             ))}
             {groups.length === 0 && (
               <Card>
-                <CardContent className="p-4 text-muted-foreground">등록된 강의 그룹이 없습니다.</CardContent>
+                
               </Card>
             )}
           </div>

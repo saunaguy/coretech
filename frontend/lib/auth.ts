@@ -11,12 +11,15 @@ export const login = async (email: string, password: string) => {
   });
 
   if (!response.ok) {
-    throw new Error('Login failed');
+    const errorData = await response.json().catch(() => ({ detail: 'Login failed with non-JSON response' }));
+    if (response.status === 403) {
+      throw new Error(errorData.detail || 'Account not active. Please wait for admin approval.');
+    }
+    throw new Error(errorData.detail || 'Login failed');
   }
 
   const data = await response.json();
   if (data.access_token) {
-    // Persist for client-side fetches
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', data.access_token);
     }
@@ -56,10 +59,29 @@ export const getToken = () => {
   if (typeof window === 'undefined') {
     return null;
   }
-  return localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  return token;
 };
 
-export const authenticatedFetch = async (url: string, tokenOverride: string | null = null, options?: RequestInit) => {
+export const authenticatedFetch = async (url: string, arg2?: any, arg3?: any) => {
+  let tokenOverride: string | null = null;
+  let options: RequestInit | undefined = undefined;
+
+  // Determine if arg2 is tokenOverride or options
+  if (typeof arg2 === 'string' || arg2 === null) {
+    tokenOverride = arg2;
+    options = arg3;
+  } else if (typeof arg2 === 'object' && arg2 !== null) {
+    // If arg2 is an object, assume it's the options object and arg3 is undefined
+    options = arg2;
+    tokenOverride = arg3; // This would be undefined, which is fine for tokenOverride
+  }
+
+  // Ensure options is an object if it's still undefined
+  if (options === undefined) {
+    options = {};
+  }
+
   const token = tokenOverride ?? getToken(); // Use override if provided, otherwise get from storage
 
   const headers: Record<string, string> = {

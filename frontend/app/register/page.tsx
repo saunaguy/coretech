@@ -9,14 +9,14 @@ export default function RegisterPage() {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 px-4 sm:px-6">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">Register</CardTitle>
+          <CardTitle className="text-2xl text-center">회원가입</CardTitle>
         </CardHeader>
         <CardContent>
           <RegisterForm />
           <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
+            이미 계정이 있으신가요?{" "}
             <Link href="/login" className="underline">
-              Login
+              로그인
             </Link>
           </div>
         </CardContent>

@@ -16,6 +16,7 @@ async function getPost(id: string, token: string | null, retries = 3, delay = 10
   for (let i = 0; i < retries; i++) {
     try {
       const base = (process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000").replace(/\/+$/, '')
+      console.log(`[getPost] Base URL: ${base}`); // Added console.log
       const url = `${base}/api/v1/board/posts/${id}`;
       console.log(`[getPost] Attempt ${i + 1}: Fetching post from URL:`, url);
       console.log(`[getPost] Token present:`, !!token);

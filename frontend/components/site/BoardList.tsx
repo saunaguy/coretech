@@ -33,7 +33,9 @@ export default function BoardList({
                   <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-x-4 gap-y-1 items-center">
                     <span className="inline-flex items-center gap-1"><User className="h-3.5 w-3.5" />{item.author || "익명"}</span>
                     {item.createdAt && (
-                      <span className="inline-flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{item.createdAt}</span>
+                      <span className="inline-flex items-center gap-1">
+                        <CalendarDays className="h-3.5 w-3.5" />
+                        {new Date(item.createdAt).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })} {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
                     )}
                     {typeof item.views === "number" && (
                       <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{item.views}</span>

@@ -59,7 +59,7 @@ export default async function NoticeListCard() {
                 </div>
                 <div className="text-xs text-muted-foreground mt-1 flex gap-3">
                   {n.author && <span>{n.author}</span>}
-                  {n.created_at && <span>{n.created_at}</span>}
+                  {n.created_at && <span>{new Date(n.created_at).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })} {new Date(n.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>}
                 </div>
               </li>
             ))}

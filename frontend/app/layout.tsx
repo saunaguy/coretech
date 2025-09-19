@@ -5,7 +5,8 @@ import "./globals.css"
 import Header from "@/components/site/Header"
 import { ThemeProvider } from "@/components/site/ThemeProvider"
 import { AuthProvider } from "@/components/auth/AuthProvider"
-import { MobileSidebarProvider } from "@/lib/MobileSidebarContext" // New import
+import { MobileSidebarProvider } from "@/lib/MobileSidebarContext"
+import MobileSidebar from "@/components/site/MobileSidebar" // New import
 
 export const metadata: Metadata = {
   title: "CoreTech",
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <MobileSidebarProvider>
               <Header />
               {children}
+              <MobileSidebar /> {/* Render MobileSidebar here */}
             </MobileSidebarProvider>
           </AuthProvider>
         </ThemeProvider>

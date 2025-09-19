@@ -203,7 +203,7 @@ const CommandDetailView = ({ command, isMobile }: { command: Command | null; isM
 export default function LinuxPage() {
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null)
   const [loading, setLoading] = useState(false)
-  const { isMobileSidebarOpen, toggleMobileSidebar, closeMobileSidebar } = useMobileSidebar() // Use context
+  const [isLocalSidebarOpen, setIsLocalSidebarOpen] = useState(false) // Local state for sidebar
   const searchParams = useSearchParams()
   const lastFocusedRef = useRef<HTMLElement | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
@@ -212,7 +212,7 @@ export default function LinuxPage() {
 
   const handleSelect = (cmd: Command) => {
     setSelectedCommand((prev) => (prev?.id === cmd?.id ? prev : cmd))
-    closeMobileSidebar() // Close sidebar on command select
+    setIsLocalSidebarOpen(false) // Close local sidebar on command select
   }
 
   // Open drawer on initial mobile visit when ?open=1 is present
@@ -220,8 +220,8 @@ export default function LinuxPage() {
     if (typeof window === 'undefined') return
     const open = searchParams?.get('open')
     const isMobile = window.innerWidth < 1024
-    if (open && isMobile && !isMobileSidebarOpen) {
-      toggleMobileSidebar()
+    if (open && isMobile && !isLocalSidebarOpen) {
+      setIsLocalSidebarOpen(true)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -238,18 +238,18 @@ export default function LinuxPage() {
   useEffect(() => {
     if (!isMobile) return
     if (initialAutoOpenRef.current) return
-    if (!isMobileSidebarOpen) {
-      toggleMobileSidebar()
+    if (!isLocalSidebarOpen) {
+      setIsLocalSidebarOpen(true)
     }
     initialAutoOpenRef.current = true
     // do not add toggleMobileSidebar to deps to avoid re-run
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMobile, isMobileSidebarOpen])
+  }, [isMobile, isLocalSidebarOpen])
 
   // Scroll lock and focus trap handling for mobile drawer
   useEffect(() => {
     if (typeof document === 'undefined') return
-    if (isMobileSidebarOpen) {
+    if (isLocalSidebarOpen) {
       lastFocusedRef.current = document.activeElement as HTMLElement
       // lock scroll
       const prevOverflow = document.body.style.overflow
@@ -268,7 +268,7 @@ export default function LinuxPage() {
       const onKey = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           e.preventDefault()
-          closeMobileSidebar()
+          setIsLocalSidebarOpen(false)
         }
         if (e.key === 'Tab' && panelRef.current) {
           // simple focus trap
@@ -298,7 +298,7 @@ export default function LinuxPage() {
         lastFocusedRef.current?.focus()
       }
     }
-  }, [isMobileSidebarOpen, closeMobileSidebar])
+  }, [isLocalSidebarOpen])
 
   useEffect(() => {
     const loadBlocks = async () => {
@@ -345,16 +345,26 @@ export default function LinuxPage() {
             </Card>
           </aside>
 
-          {/* Mobile Sidebar Overlay */}
-          {isMobileSidebarOpen && (
+          {/* Mobile Sidebar Overlay (Local to LinuxPage) */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden fixed top-4 left-4 z-50"
+            onClick={() => setIsLocalSidebarOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+            <span className="sr-only">Linux 메뉴 열기</span>
+          </Button>
+
+          {isLocalSidebarOpen && (
             <div className="fixed inset-0 z-[60] bg-background/90 backdrop-blur-sm lg:hidden" role="dialog" aria-modal="true" aria-labelledby="linux-drawer-title">
-              <div className="absolute inset-0 left-0 bg-black/50" onClick={closeMobileSidebar} />
+              <div className="absolute inset-0 left-0 bg-black/50" onClick={() => setIsLocalSidebarOpen(false)} />
               <div ref={panelRef} className="absolute inset-y-0 left-0 w-full bg-card shadow-lg overflow-y-auto focus:outline-none">
                 {/* Drawer header */}
                 <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b bg-card/95 backdrop-blur">
                   <Link href="/" className="text-sm text-sidebar-foreground hover:text-sidebar-primary">홈</Link>
                   <h2 id="linux-drawer-title" className="text-sm font-semibold">Linux</h2>
-                  <Button variant="ghost" size="icon" onClick={closeMobileSidebar} aria-label="메뉴 닫기">
+                  <Button variant="ghost" size="icon" onClick={() => setIsLocalSidebarOpen(false)} aria-label="메뉴 닫기">
                     <X className="h-6 w-6" />
                   </Button>
                 </div>

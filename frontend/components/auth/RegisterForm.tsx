@@ -32,9 +32,9 @@ export default function RegisterForm() {
         throw new Error(errorData.detail || 'Registration failed')
       }
 
-      setSuccess('Registration successful! You can now log in.')
-      // Optionally redirect to login page after successful registration
-      router.push('/login')
+      setSuccess('Registration successful! Your account is pending admin approval. Please wait for activation.')
+      // Do not redirect immediately, let the user see the message
+      // router.push('/login') // Commented out or removed
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred.')
     }
@@ -45,7 +45,7 @@ export default function RegisterForm() {
       {error && <p className="text-red-500">{error}</p>}
       {success && <p className="text-green-500">{success}</p>}
       <div className="space-y-2">
-        <Label htmlFor="email">ID</Label>
+        <Label htmlFor="email">이메일</Label>
         <Input
           id="email"
           type="text"
@@ -55,7 +55,7 @@ export default function RegisterForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">사용자 이름</Label>
         <Input
           id="username"
           type="text"
@@ -65,7 +65,7 @@ export default function RegisterForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">비밀번호</Label>
         <Input
           id="password"
           type="password"
@@ -75,7 +75,7 @@ export default function RegisterForm() {
         />
       </div>
       <Button type="submit" className="w-full">
-        Register
+        회원가입
       </Button>
     </form>
   )

@@ -30,7 +30,7 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
           {q.excerpt && <div className="text-sm text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap">{q.excerpt}</div>}
           <div className="text-xs text-muted-foreground mt-1 flex gap-3">
             <span>{q.author}</span>
-            <span>{q.createdAt}</span>
+            <span>{new Date(q.createdAt).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })} {new Date(q.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
             {typeof q.views === "number" && (
               <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" /> {q.views}</span>
             )}

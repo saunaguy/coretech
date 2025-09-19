@@ -3,9 +3,10 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException, Query, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict # Added ConfigDict
 from typing import Dict, Tuple, List, Optional
 from sqlalchemy.orm import Session
+from datetime import datetime # Added this import
 from .db import (
     SessionLocal,
     init_db,
@@ -24,16 +25,25 @@ from .auth import get_current_user
 
 app = FastAPI(title="CoreTech API", version="0.1.0")
 
+import os
+
 # CORS for Next.js dev
-cors_origins = ["*"]
+cors_origins_env = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=cors_origins,
+    allow_origins=cors_origins_env,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Routers
 from .auth import router as auth_router
@@ -41,6 +51,61 @@ from .routers import likes_and_comments
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(likes_and_comments.router)
+
+@app.get("/api/v1/auth/verify-token")
+def verify_token(current_user: User = Depends(get_current_user)):
+    return {"message": "Token is valid", "user_id": current_user.id}
+
+class UserSchema(BaseModel):
+    id: int
+    username: str
+    email: str
+    role: str
+    is_active: bool
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True) # Added for Pydantic v2 ORM mode
+
+UserSchema.model_rebuild() # Add this line
+
+class UserApproval(BaseModel):
+    user_id: int
+    approve: bool
+
+@app.post("/api/v1/admin/approve-user", status_code=status.HTTP_200_OK)
+def approve_user(
+    payload: UserApproval,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to approve/reject users")
+
+    user_to_update = db.query(User).filter(User.id == payload.user_id).first()
+    if not user_to_update:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if payload.approve:
+        user_to_update.is_active = True
+        if user_to_update.role != "admin":
+            user_to_update.role = "user"
+    else:
+        user_to_update.is_active = False # Mark as inactive for rejection
+
+    db.commit()
+    db.refresh(user_to_update)
+    return {"message": f"User {payload.user_id} {'approved' if payload.approve else 'rejected'} successfully."}
+
+@app.get("/api/v1/admin/pending-users", response_model=list[UserSchema])
+def get_pending_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    if current_user.role != "admin":
+        raise HTTPException(status_code=403, detail="Not authorized to view pending users")
+    
+    pending_users = db.query(User).filter(User.is_active == False).all()
+    return pending_users
 
 
 @app.on_event("startup")
@@ -166,12 +231,7 @@ class Question(BaseModel):
     tags: List[str] | None = None
 
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+
 
 
 # ---------------------------
@@ -209,7 +269,7 @@ def create_question(payload: QnaCreate, db: Session = Depends(get_db)):
 def list_questions(db: Session = Depends(get_db)):
     rows = db.query(DBQuestion).order_by(DBQuestion.created_at.desc()).all()
     def to_dict(r: DBQuestion):
-        return {"id": r.id, "title": r.title, "body": r.body, "views": r.views, "likes": likes_count(db, r.id, "question"), "comments_count": comments_count(db, r.id, "question")}
+        return {"id": r.id, "title": r.title, "body": r.body, "views": r.views, "likes": likes_count(db, r.id, "question"), "comments_count": comments_count(db, r.id, "question"), "createdAt": r.created_at.isoformat()}
     return [to_dict(r) for r in rows]
 
 
@@ -286,7 +346,7 @@ class PostCreate(BaseModel):
 
 @app.post("/api/v1/board/posts", status_code=status.HTTP_201_CREATED)
 def create_post(payload: PostCreate, db: Session = Depends(get_db), current_user=Depends(get_current_user)):
-    p = DBPost(title=payload.title, body=payload.body, author_id=int(current_user.id))
+    p = DBPost(title=payload.title, body=payload.body, user_id=int(current_user.id))
     db.add(p)
     db.commit()
     db.refresh(p)
@@ -322,8 +382,8 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
         {
             "id": r.id,
             "title": r.title,
-            "views": r.views,
-            "likes": likes_count(db, r.id, "post"), # DBLike 테이블에서 직접 계산
+            "views": r.views or 0,
+            "likes": likes_count(db, r.id, "post") or 0,
             "createdAt": r.created_at.isoformat(),
             "author": author_name(getattr(r, "author_id", None)),
             "comments_count": comments_count(db, r.id, "post"),

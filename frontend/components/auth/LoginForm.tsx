@@ -21,8 +21,8 @@ export default function LoginForm() {
     try {
       await login(email, password)
       router.push('/')
-    } catch (err) {
-      setError('Invalid email or password.')
+    } catch (err: any) {
+      setError(err.message || 'An unexpected error occurred during login.')
     }
   }
 
@@ -30,7 +30,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && <p className="text-red-500">{error}</p>}
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">이메일</Label>
         <Input
           id="email"
           type="text"
@@ -40,7 +40,7 @@ export default function LoginForm() {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">비밀번호</Label>
         <Input
           id="password"
           type="password"
@@ -50,7 +50,7 @@ export default function LoginForm() {
         />
       </div>
       <Button type="submit" className="w-full">
-        Login
+        로그인
       </Button>
     </form>
   )
