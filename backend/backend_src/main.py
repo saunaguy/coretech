@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 from pydantic import BaseModel, ConfigDict # Added ConfigDict
 from typing import Dict, Tuple, List, Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from datetime import datetime # Added this import
 from .db import (
     SessionLocal,
@@ -89,13 +89,13 @@ def approve_user(
         user_to_update.is_active = True
         if user_to_update.role != "admin":
             user_to_update.role = "user"
+        db.commit()
+        db.refresh(user_to_update)
+        return {"message": f"User {payload.user_id} approved successfully."}
     else:
-        user_to_update.is_active = False # Mark as inactive for rejection
-
-    db.commit()
-    db.refresh(user_to_update)
-    return {"message": f"User {payload.user_id} {'approved' if payload.approve else 'rejected'} successfully."}
-
+        db.delete(user_to_update)
+        db.commit()
+        return {"message": f"User {payload.user_id} rejected and deleted successfully."}
 @app.get("/api/v1/admin/pending-users", response_model=list[UserSchema])
 def get_pending_users(
     db: Session = Depends(get_db),
@@ -361,35 +361,29 @@ def likes_count(db: Session, parent_id: int, parent_type: str) -> int:
 
 @app.get("/api/v1/board/posts")
 def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
-    q = db.query(DBPost)
+    q = db.query(DBPost).options(joinedload(DBPost.author))
     if sort == "popular":
-        # 인기순 정렬 시 likes와 views를 기준으로 정렬
-        # likes는 DBLike 테이블에서 직접 계산해야 하므로, 정렬 기준으로는 사용하기 어려움
-        # 여기서는 views 기준으로만 정렬하거나, likes를 계산하여 정렬해야 함
-        # 일단 views 기준으로만 정렬하도록 유지
         q = q.order_by(DBPost.views.desc())
     else:
         q = q.order_by(DBPost.created_at.desc())
     rows = q.limit(50).all()
 
-    def author_name(author_id: int | None) -> str | None:
-        if author_id is None:
-            return None
-        u = db.query(User).get(author_id)
-        return u.username if u else None
-
-    return [
-        {
+    result = []
+    for r in rows:
+        result.append({
             "id": r.id,
             "title": r.title,
             "views": r.views or 0,
-            "likes": likes_count(db, r.id, "post") or 0,
-            "createdAt": r.created_at.isoformat(),
-            "author": author_name(getattr(r, "author_id", None)),
+            "likes": likes_count(db, r.id, "post"),
             "comments_count": comments_count(db, r.id, "post"),
-        }
-        for r in rows
-    ]
+            "createdAt": r.created_at.isoformat(),
+            "author": {
+                "id": r.author.id,
+                "username": r.author.username
+            } if r.author else None
+        })
+
+    return result
 
 
 @app.get("/api/v1/board/posts/{pid}")

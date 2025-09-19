@@ -12,9 +12,17 @@ import path from "path"
 
 async function fetchJson<T>(path: string): Promise<T> {
   const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  console.log(`[fetchJson] Fetching from: ${base}${path}`);
   const res = await fetch(`${base}${path}`, { next: { revalidate: 30 } })
-  if (!res.ok) throw new Error(`Failed to fetch ${path}`)
-  return (await res.json()) as T
+  console.log(`[fetchJson] Response status for ${path}: ${res.status}`);
+  if (!res.ok) {
+    const errorBody = await res.text();
+    console.error(`[fetchJson] Error fetching ${path}: ${res.status} - ${errorBody}`);
+    throw new Error(`Failed to fetch ${path}: ${res.status} - ${errorBody}`)
+  }
+  const data = await res.json();
+  console.log(`[fetchJson] Data for ${path}:`, data);
+  return data as T
 }
 
 async function tryFetchJson<T>(path: string, fallback: T): Promise<T> {
@@ -77,7 +85,7 @@ function listLessonsForGroup(groupSlug: string, limit = 3): LessonLink[] {
 export default async function HomePage() {
   const groups = listLessonGroups()
   const [board, qna] = await Promise.all([
-    tryFetchJson<any[]>("/api/v1/board/posts?sort=latest", []),
+    fetchJson<any[]>("/api/v1/board/posts?sort=latest", { cache: "no-store" }),
     tryFetchJson<any[]>("/api/v1/qna/questions", []),
   ])
   return (
@@ -87,7 +95,7 @@ export default async function HomePage() {
         <section className="rounded-2xl border bg-gradient-to-br from-primary/10 to-accent/10 p-6 md:p-10 text-center space-y-4">
           <h1 className="text-2xl md:text-4xl font-bold text-foreground text-balance">
             <span className="md:hidden">CoreTechnet 학습용 웹 페이지</span>
-            <span className="hidden md:inline">CoreTech — Linux · Server · Network</span>
+            <span className="hidden md:inline">CoreTechNet — Linux · Server · Network</span>
           </h1>
           <p className="hidden md:block text-lg md:text-xl text-muted-foreground text-pretty max-w-3xl mx-auto">
             Markdown 강의, 데일리 테스트, Q&A 커뮤니티로 학습을 이어가세요. Docs의 계획에 맞춰 점진적으로 확장됩니다.
@@ -166,14 +174,17 @@ export default async function HomePage() {
               </CardHeader>
               <CardContent>
                 <BoardList
-                  items={(board || []).slice(0, 5).map((b: any) => ({
-                    id: String(b.id),
-                    title: b.title,
-                    author: "",
-                    views: b.views,
-                    likes: b.likes,
-                    createdAt: b.createdAt || "",
-                  }))}
+                  items={(board || []).slice(0, 5).map((b: any) => {
+                    console.log("Debugging b object:", b);
+                    return {
+                      id: String(b.id),
+                      title: b.title,
+                      author: b.author?.username,
+                      views: b.views,
+                      likes: b.likes,
+                      createdAt: b.createdAt || "",
+                    };
+                  })}
                 />
               </CardContent>
             </Card>
@@ -192,7 +203,7 @@ export default async function HomePage() {
                   items={(qna || []).slice(0, 5).map((q: any) => ({
                     id: String(q.id),
                     question: q.title,
-                    author: "",
+                    author: q.author?.username,
                     answered: false,
                     createdAt: "",
                     excerpt: q.body || "",

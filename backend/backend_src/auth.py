@@ -104,7 +104,7 @@ def register(payload: RegisterPayload, db: Session = Depends(get_db)):
         raise HTTPException(status_code=400, detail="Username already exists")
     exists = db.query(User).filter(User.email == payload.email).first()
     if exists:
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="이미 사용 중인 이메일입니다.")
     user = User(
         username=payload.username,
         email=payload.email,
@@ -122,7 +122,7 @@ def register(payload: RegisterPayload, db: Session = Depends(get_db)):
 def login(payload: LoginPayload, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
     if not user or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="아이디 또는 비밀번호가 올바르지 않습니다.")
     if not user.is_active:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account not active. Please wait for admin approval.")
     token = create_access_token({"sub": user.email, "username": user.username, "id": str(user.id), "role": user.role, "is_active": user.is_active})

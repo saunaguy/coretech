@@ -6,6 +6,7 @@ from typing import List
 
 from sqlalchemy import Boolean, DateTime, Integer, String, Text, create_engine, ForeignKey
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, relationship # relationship 추가
+from pydantic import BaseModel, ConfigDict
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coretech.db")
 
@@ -29,6 +30,8 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+    posts: Mapped[List["Post"]] = relationship(back_populates="author")
+
 
 class Post(Base):
     __tablename__ = "posts"
@@ -41,6 +44,8 @@ class Post(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     updated_at: Mapped[datetime | None] = mapped_column(DateTime, onupdate=datetime.utcnow, nullable=True)
     is_deleted: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    author: Mapped["User"] = relationship("User", back_populates="posts")
 
 
 class Question(Base):
@@ -180,3 +185,21 @@ def init_db() -> None:
     except Exception:
         # ignore if migration is not applicable
         pass
+
+# Pydantic Schemas for API responses
+class UserSummary(BaseModel):
+    id: int
+    username: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+class PostWithAuthor(BaseModel):
+    id: int
+    title: str
+    views: int
+    likes: int
+    comments_count: int
+    created_at: datetime
+    author: UserSummary
+
+    model_config = ConfigDict(from_attributes=True)

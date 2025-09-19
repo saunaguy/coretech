@@ -82,7 +82,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
   }
 
   // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인 (백엔드 응답은 author(username) 제공)
-  const isAuthor = !!currentUsername && post.author === currentUsername;
+  const isAuthor = !!currentUsername && post.author?.username === currentUsername;
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">

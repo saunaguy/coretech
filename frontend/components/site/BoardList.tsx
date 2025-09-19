@@ -1,10 +1,15 @@
 import Link from "next/link"
 import { CalendarDays, Eye, ThumbsUp, User, ChevronRight } from "lucide-react"
 
+type AuthorInfo = {
+  id: number;
+  username: string;
+};
+
 type BoardItem = {
   id: string
   title: string
-  author?: string
+  author?: AuthorInfo
   views?: number
   likes?: number
   createdAt?: string
@@ -31,7 +36,7 @@ export default function BoardList({
                 </div>
                 {showMeta && (
                   <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-x-4 gap-y-1 items-center">
-                    <span className="inline-flex items-center gap-1"><User className="h-3.5 w-3.5" />{item.author || "익명"}</span>
+                    <span className="inline-flex items-center gap-1"><User className="h-3.5 w-3.5" />{item.author?.username || "익명"}</span>
                     {item.createdAt && (
                       <span className="inline-flex items-center gap-1">
                         <CalendarDays className="h-3.5 w-3.5" />

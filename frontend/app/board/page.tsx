@@ -9,6 +9,11 @@ import { Button } from "@/components/ui/button"
 import { CalendarDays, Eye, ThumbsUp, Search, ChevronRight, User } from "lucide-react"
 import { useAuth } from "@/components/auth/AuthProvider"
 
+type AuthorInfo = {
+  id: number;
+  username: string;
+};
+
 type Post = {
   id: number
   title: string
@@ -16,7 +21,7 @@ type Post = {
   createdAt?: string
   views?: number
   likes?: number
-  author?: string
+  author?: AuthorInfo
 }
 
 export default function BoardPage() {
@@ -160,7 +165,7 @@ export default function BoardPage() {
                           {p.title}
                         </div>
                         <div className="text-xs text-muted-foreground mt-1 flex flex-wrap gap-x-4 gap-y-1 items-center">
-                          <span className="inline-flex items-center gap-1"><User className="h-3.5 w-3.5" />{p.author || "익명"}</span>
+                          <span className="inline-flex items-center gap-1"><User className="h-3.5 w-3.5" />{p.author?.username || "익명"}</span>
                           {p.createdAt && (
                             <span className="inline-flex items-center gap-1">
                               <CalendarDays className="h-3.5 w-3.5" /> {fmtDate(p.createdAt)}

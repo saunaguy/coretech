@@ -27,21 +27,16 @@ export default function ViewTracker({ id, type }: ViewTrackerProps) {
         credentials: 'include',
       })
         .then((res) => {
-          console.log(`[ViewTracker] set-viewed-cookie response status:`, res.status);
           return res.json();
         })
         .then(async (data) => {
-          console.log(`[ViewTracker] set-viewed-cookie response data:`, data);
           if (data.success) {
-            console.log(`[ViewTracker] Cookie set successfully, attempting to increment view.`);
             if (type === "post") {
               const { incrementPostViewAction } = await import("../app/board/[id]/actions");
               await incrementPostViewAction(id);
-              console.log(`[ViewTracker] incrementPostViewAction called for post ${id}.`);
             } else if (type === "qna") {
               const { incrementQnaViewAction } = await import("../app/qna/[id]/actions");
               await incrementQnaViewAction(id);
-              console.log(`[ViewTracker] incrementQnaViewAction called for qna ${id}.`);
             }
           } else {
             console.error(`[ViewTracker] set-viewed-cookie data.success is false:`, data);

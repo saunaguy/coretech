@@ -11,6 +11,11 @@ ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/. .
+RUN find . -type f -name "*.tsx" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {} {}.tmp && mv {}.tmp {}" \; 
+RUN find . -type f -name "*.ts" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
+RUN find . -type f -name "*.js" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
+RUN find . -type f -name "*.json" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
+RUN find . -type f -name "*.md" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
 # Ensure optional dirs exist so COPY in runner doesn't fail
 RUN mkdir -p lib content
 RUN npm run build
