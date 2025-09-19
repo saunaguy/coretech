@@ -175,15 +175,22 @@ export default async function HomePage() {
               <CardContent>
                 <BoardList
                   items={(board || []).slice(0, 5).map((b: any) => {
-                    console.log("Debugging b object:", b);
+                    const authorObj = b.author
+                      ? { id: Number(b.author.id ?? 0), username: String(b.author.username ?? "익명") }
+                      : b.user
+                      ? { id: Number(b.user.id ?? 0), username: String(b.user.username ?? "익명") }
+                      : b.username
+                      ? { id: 0, username: String(b.username) }
+                      : undefined
+
                     return {
                       id: String(b.id),
                       title: b.title,
-                      author: b.author?.username,
+                      author: authorObj,
                       views: b.views,
                       likes: b.likes,
-                      createdAt: b.createdAt || "",
-                    };
+                      createdAt: b.createdAt || b.created_at || "",
+                    }
                   })}
                 />
               </CardContent>

@@ -32,11 +32,11 @@ export default function RegisterForm() {
         throw new Error(errorData.detail || 'Registration failed')
       }
 
-      setSuccess('Registration successful! Your account is pending admin approval. Please wait for activation.')
+      setSuccess('회원가입이 완료되었습니다! 관리자의 승인 후 이용 가능합니다.')
       // Do not redirect immediately, let the user see the message
       // router.push('/login') // Commented out or removed
     } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred.')
+      setError(err.message || '알 수 없는 오류가 발생했습니다.')
     }
   }
 

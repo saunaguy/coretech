@@ -63,7 +63,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = De
         raise credentials_exception
     # Check if user is active
     if not user.is_active:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="User account is not active. Please wait for admin approval.")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="계정이 활성화되지 않았습니다. 관리자의 승인 후 이용 가능합니다.")
     return user
 
 
@@ -101,7 +101,7 @@ def _startup():
 def register(payload: RegisterPayload, db: Session = Depends(get_db)):
     exists = db.query(User).filter(User.username == payload.username).first()
     if exists:
-        raise HTTPException(status_code=400, detail="Username already exists")
+        raise HTTPException(status_code=400, detail="이미 사용 중인 사용자 이름입니다.")
     exists = db.query(User).filter(User.email == payload.email).first()
     if exists:
         raise HTTPException(status_code=400, detail="이미 사용 중인 이메일입니다.")
@@ -124,6 +124,6 @@ def login(payload: LoginPayload, db: Session = Depends(get_db)):
     if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="아이디 또는 비밀번호가 올바르지 않습니다.")
     if not user.is_active:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account not active. Please wait for admin approval.")
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="계정이 활성화되지 않았습니다. 관리자의 승인 후 이용 가능합니다.")
     token = create_access_token({"sub": user.email, "username": user.username, "id": str(user.id), "role": user.role, "is_active": user.is_active})
     return TokenResponse(access_token=token)

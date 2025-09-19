@@ -16,6 +16,8 @@ export default function AdminPage() {
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  // Normalize API base URL to avoid double slashes
+  const API = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
   useEffect(() => {
     const user = getUser();
@@ -26,7 +28,7 @@ export default function AdminPage() {
 
     const fetchPendingUsers = async () => {
       try {
-        const users = await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/admin/pending-users`);
+        const users = await authenticatedFetch(`${API}/api/v1/admin/pending-users`);
         setPendingUsers(users);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch users.');
@@ -40,7 +42,7 @@ export default function AdminPage() {
 
   const handleApproval = async (userId: number, approve: boolean) => {
     try {
-      await authenticatedFetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000'}/api/v1/admin/approve-user`, {
+      await authenticatedFetch(`${API}/api/v1/admin/approve-user`, {
         method: 'POST',
         body: JSON.stringify({ user_id: userId, approve }),
       });

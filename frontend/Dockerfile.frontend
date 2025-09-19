@@ -11,12 +11,9 @@ ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/. .
-RUN find . -type f -name "*.tsx" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {} {}.tmp && mv {}.tmp {}" \; 
-RUN find . -type f -name "*.ts" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
-RUN find . -type f -name "*.js" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
-RUN find . -type f -name "*.json" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
-RUN find . -type f -name "*.md" -exec sh -c "iconv -f UTF-8 -t UTF-8 -o {}.tmp && mv {}.tmp {}" \; 
-# Ensure optional dirs exist so COPY in runner doesn't fail
+## Remove fragile iconv normalization steps which can fail on slim images
+## and are unnecessary for Node builds.
+# Ensure optional dirs exist so COPY in runner doesn't fail (kept for safety)
 RUN mkdir -p lib content
 RUN npm run build
 
@@ -27,14 +24,8 @@ ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 # Next.js requires production deps and the .next build output
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./package.json
-COPY --from=build /app/next.config.mjs ./next.config.mjs
-COPY --from=build /app/.next ./.next
-COPY --from=build /app/public ./public
-COPY --from=build /app/app ./app
-COPY --from=build /app/components ./components
-COPY --from=build /app/lib ./lib
-COPY --from=build /app/content ./content
+## Copy the entire built app to avoid COPY "cannot stat" when
+## a subdirectory is missing in some branches/configs.
+COPY --from=build /app ./
 EXPOSE 3000
 CMD ["npm", "start"]
