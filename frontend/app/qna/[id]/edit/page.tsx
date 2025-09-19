@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 
 export default function QnaEditPage() {
-  const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
+  // Use relative paths so Next.js rewrites proxy to backend
   const params = useParams() as { id: string }
   const router = useRouter()
   const [title, setTitle] = useState("")
@@ -16,7 +16,7 @@ export default function QnaEditPage() {
 
   useEffect(() => {
     const load = async () => {
-      const r = await fetch(`${base}/api/v1/qna/questions/${params.id}`)
+      const r = await fetch(`/api/v1/qna/questions/${params.id}`)
       if (r.ok) {
         const q = await r.json()
         setTitle(q.title || "")
@@ -38,7 +38,7 @@ export default function QnaEditPage() {
           .map((t) => t.trim())
           .filter(Boolean),
       }
-      const r = await fetch(`${base}/api/v1/qna/questions/${params.id}`, {
+      const r = await fetch(`/api/v1/qna/questions/${params.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -50,7 +50,7 @@ export default function QnaEditPage() {
   }
 
   const remove = async () => {
-    const r = await fetch(`${base}/api/v1/qna/questions/${params.id}`, { method: "DELETE" })
+    const r = await fetch(`/api/v1/qna/questions/${params.id}`, { method: "DELETE" })
     if (r.status === 204) router.push("/qna")
   }
 

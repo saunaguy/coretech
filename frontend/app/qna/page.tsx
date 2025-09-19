@@ -34,12 +34,13 @@ export default async function QnaPage() {
             items={items.map((q: any) => ({
               id: String(q.id),
               question: q.title,
-              author: "",
-              answered: false,
-              createdAt: "",
+              author: q.author?.username || "",
+              answered: !!q.answered,
+              createdAt: q.createdAt || q.created_at || "",
               excerpt: q.body || "",
-              views: q.views, // 조회수 추가
-              likes: q.likes, // 추천수 추가
+              category: q.category,
+              views: q.views,
+              likes: q.likes,
             }))}
           />
         </CardContent>

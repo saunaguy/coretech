@@ -180,10 +180,11 @@ export default async function HomePage() {
                   items={(qna || []).slice(0, 5).map((q: any) => ({
                     id: String(q.id),
                     question: q.title,
-                    author: "",
-                    answered: false,
-                    createdAt: "",
+                    author: q.author?.username || "",
+                    answered: !!q.answered,
+                    createdAt: q.createdAt || "",
                     excerpt: q.body || "",
+                    category: q.category,
                   }))}
                 />
               </CardContent>

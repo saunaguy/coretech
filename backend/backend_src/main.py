@@ -116,8 +116,9 @@ def get_pending_users(
 def _startup_main():
     # Removed try...except around init_db() to ensure table creation errors are not swallowed
     init_db()
-    from .seed import seed_posts
+    from .seed import seed_posts, seed_qna
     seed_posts()
+    seed_qna()
 
 
 @app.get("/health")

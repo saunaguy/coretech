@@ -57,6 +57,7 @@ class Question(Base):
     views: Mapped[int] = mapped_column(Integer, default=0) # views 필드 추가
     answered: Mapped[int] = mapped_column(Integer, default=0)
     tags_text: Mapped[str | None] = mapped_column(Text, nullable=True)
+    category: Mapped[str | None] = mapped_column(String(50), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
 
@@ -180,6 +181,9 @@ def init_db() -> None:
                 conn.exec_driver_sql(
                     "ALTER TABLE questions ADD COLUMN IF NOT EXISTS views INTEGER DEFAULT 0"
                 )
+                conn.exec_driver_sql(
+                    "ALTER TABLE questions ADD COLUMN IF NOT EXISTS category VARCHAR(50)"
+                )
         elif engine.dialect.name == "sqlite":
             with engine.begin() as conn:
                 cols = conn.exec_driver_sql("PRAGMA table_info('daily_tests')").all()
@@ -191,6 +195,8 @@ def init_db() -> None:
                 colnames = {row[1] for row in cols}
                 if "views" not in colnames:
                     conn.exec_driver_sql("ALTER TABLE questions ADD COLUMN views INTEGER DEFAULT 0")
+                if "category" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE questions ADD COLUMN category TEXT")
                 # Posts table columns (SQLite)
                 cols = conn.exec_driver_sql("PRAGMA table_info('posts')").all()
                 colnames = {row[1] for row in cols}
