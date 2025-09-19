@@ -47,7 +47,7 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
               <div className="flex items-center justify-between gap-3">
                 <div className="min-w-0 flex items-center gap-2">
                   {question.category && (
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${
+                    <span className={`inline-flex items-center h-5 px-2 rounded-full border text-[10px] ${
                       (question.category || '').toLowerCase() === 'server'
                         ? 'bg-blue-100 text-blue-700 border-blue-200'
                         : (question.category || '').toLowerCase() === 'network'
@@ -61,11 +61,11 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
                         : 'Other'}
                     </span>
                   )}
+                  <span className={`inline-flex items-center h-5 px-2 rounded-full border text-[10px] ${question.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                    {question.answered ? '완료' : '대기'}
+                  </span>
                   <span className="font-medium truncate">{question.title}</span>
                 </div>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${question.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
-                  {question.answered ? '완료' : '대기'}
-                </span>
               </div>
             </CardTitle>
             <div className="flex gap-2">

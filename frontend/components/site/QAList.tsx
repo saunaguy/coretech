@@ -34,6 +34,7 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
         return 'Other'
     }
   }
+  const pillBase = 'inline-flex items-center h-5 px-2 rounded-full border text-[10px]';
   return (
     <ul className="divide-y">
       {items.map((q) => (
@@ -41,22 +42,20 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2">
               {q.category && (
-                <span className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${catStyle(q.category)}`}>
+                <span className={`${pillBase} ${catStyle(q.category)}`}>
                   {catLabel(q.category)}
                 </span>
               )}
+              <span className={`${pillBase} ${q.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                {q.answered ? '완료' : '대기'}
+              </span>
               <Link href={`${hrefPrefix}/${q.id}`} className="font-medium hover:underline text-foreground line-clamp-2">
                 {q.question}
               </Link>
             </div>
-            <span
-              className={`text-[10px] px-2 py-0.5 rounded-full border shrink-0 ${q.answered ? "bg-green-100 text-green-700 border-green-200" : "bg-amber-100 text-amber-700 border-amber-200"}`}
-            >
-              {q.answered ? "완료" : "대기"}
-            </span>
           </div>
           {q.excerpt && <div className="text-sm text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap">{q.excerpt}</div>}
-          <div className="text-xs text-muted-foreground mt-1 flex gap-3">
+          <div className="text-xs text-muted-foreground mt-2 flex gap-3">
             <span>{q.author}</span>
             {q.createdAt && (
               <span>
