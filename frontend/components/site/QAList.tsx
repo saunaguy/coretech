@@ -15,24 +15,14 @@ type QAItem = {
 }
 
 export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]; hrefPrefix?: string }) {
-  const catStyle = (cat?: string) => {
+  const catEmoji = (cat?: string) => {
     switch ((cat || '').toLowerCase()) {
       case 'server':
-        return 'bg-blue-100 text-blue-700 border-blue-200'
+        return '🖥️'
       case 'network':
-        return 'bg-emerald-100 text-emerald-700 border-emerald-200'
+        return '🌐'
       default:
-        return 'bg-slate-100 text-slate-700 border-slate-200'
-    }
-  }
-  const catLabel = (cat?: string) => {
-    switch ((cat || '').toLowerCase()) {
-      case 'server':
-        return 'Server'
-      case 'network':
-        return 'Network'
-      default:
-        return 'Other'
+        return '❓'
     }
   }
   const pillBase = 'inline-flex items-center h-5 px-2 rounded-full border text-[10px]';
@@ -42,17 +32,17 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
         <li key={q.id} className="py-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2">
-              {q.category && (
-                <span className={`${pillBase} ${catStyle(q.category)}`}>
-                  {catLabel(q.category)}
-                </span>
-              )}
-              <span className={`${pillBase} ${q.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
-                {q.answered ? '완료' : '대기'}
+              <span aria-hidden className="text-lg leading-none">
+                {catEmoji(q.category)}
               </span>
               <Link href={`${hrefPrefix}/${q.id}`} className="font-medium hover:underline text-foreground line-clamp-2">
                 {q.question}
               </Link>
+            </div>
+            <div className="flex-shrink-0">
+              <span className={`${pillBase} ${q.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
+                {q.answered ? '완료' : '대기'}
+              </span>
             </div>
           </div>
           {q.excerpt && <div className="text-sm text-muted-foreground mt-1 line-clamp-2 whitespace-pre-wrap">{q.excerpt}</div>}
