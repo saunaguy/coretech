@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import FastAPI, HTTPException, Query, status, Depends
+from fastapi import FastAPI, HTTPException, Query, status, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from pydantic import BaseModel, ConfigDict
@@ -22,6 +22,13 @@ from .db import (
 )
 from .auth import get_current_user
 
+# Load environment from .env in local/dev scenarios
+try:
+    from dotenv import load_dotenv  # type: ignore
+    load_dotenv()
+except Exception:
+    pass
+
 
 app = FastAPI(title="CoreTech API", version="0.1.0")
 
@@ -37,6 +44,51 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Sliding inactivity window: refresh JWT and cookie on each authenticated request
+from jose import jwt, JWTError
+from datetime import timedelta
+from .auth import (
+    SECRET_KEY,
+    ALGORITHM,
+    COOKIE_NAME,
+    COOKIE_MAX_AGE_SECONDS,
+    COOKIE_SECURE,
+    COOKIE_SAMESITE,
+    INACTIVITY_EXPIRE_SECONDS,
+    create_access_token,
+)
+
+
+@app.middleware("http")
+async def sliding_session_middleware(request: Request, call_next):
+    # Skip auth endpoints to avoid re-setting cookies on logout/login
+    path = request.url.path
+    if path.startswith("/api/v1/auth"):
+        return await call_next(request)
+
+    response = await call_next(request)
+    token = request.cookies.get(COOKIE_NAME)
+    if not token:
+        return response
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        claims = {k: payload.get(k) for k in ("sub", "username", "id", "role", "is_active") if payload.get(k) is not None}
+        if claims and response.status_code < 400:
+            fresh = create_access_token(claims, expires_delta=timedelta(seconds=INACTIVITY_EXPIRE_SECONDS))
+            response.set_cookie(
+                key=COOKIE_NAME,
+                value=fresh,
+                max_age=COOKIE_MAX_AGE_SECONDS,
+                expires=COOKIE_MAX_AGE_SECONDS,
+                httponly=True,
+                secure=COOKIE_SECURE,
+                samesite=COOKIE_SAMESITE,
+                path="/",
+            )
+    except JWTError:
+        response.delete_cookie(COOKIE_NAME, path="/")
+    return response
 
 def get_db():
     db = SessionLocal()

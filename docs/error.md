@@ -1,13 +1,46 @@
-172.18.0.4:48838 - "GET /api/v1/auth/verify-token HTTP/1.1" 200 OK
+#22 11.33
+#22 11.33 > Build failed because of webpack errors
+#22 11.34 npm notice
+#22 11.34 npm notice New major version of npm available! 10.8.2 
+-> 11.6.0
+#22 11.34 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
+#22 11.34 npm notice To update run: npm install -g npm@11.6.0   
+#22 11.34 npm notice
+#22 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
 
-coretech=# select * from questions;
- id |             title             |                                       body                                       | author_id | views | answered |            tags_text            | category |         created_at         
-----+-------------------------------+----------------------------------------------------------------------------------+-----------+-------+----------+---------------------------------+----------+----------------------------
-  1 | 서버 설정이 자주 초기화됩니다 | 재부팅 후 /etc 설정이 일부 사라집니다. 어떤 로그나 설정을 확인해야 할까요?       |         4 |     5 |        0 | linux,server,config             | server   | 2025-09-19 06:38:13.477033
-  2 | 네트워크 지연 이슈 디버깅     | 간헐적으로 RTT가 300ms 이상으로 튑니다. mtr, tcpdump 외 어떤 지표 보면 좋을까요? |         4 |    12 |        1 | network,latency,troubleshooting | network  | 2025-09-19 06:38:13.477035
-  3 | 기타: 셸 스크립트 배열 처리   | bash에서 공백이 포함된 인자를 안전하게 배열로 다루는 패턴이 궁금합니다.          |         4 |     3 |        0 | bash,shell,arrays               | others   | 2025-09-19 06:38:13.477035
-  4 | ㄴㄴ                          | ㄴㄴ                                                                             |         5 |     0 |        0 | server                          | others   | 2025-09-19 06:39:10.187698
-  5 | ss                            | ss                                                                               |         5 |     0 |        0 |                                 | others   | 2025-09-19 06:52:11.22956
-  6 | 123                           | 123                                                                              |         1 |     0 |        0 |                                 | others   | 2025-09-19 06:56:12.394266
-  7 | 서버에 바퀴벌레나와써요 ㅠ    | ㅠㅁㅠㅠㅠㅠㅠ                                                                   |         1 |     0 |        0 | network,nginx,docker            | server   | 2025-09-19 07:03:20.96077
-(7 rows)
+#21 [backend 4/5] RUN pip install --no-cache-dir -r requirements.txt
+#21 CANCELED
+------
+ > [frontend build 6/6] RUN npm run build:
+11.31
+11.31 https://nextjs.org/docs/messages/module-not-found
+11.31
+11.33
+11.33 > Build failed because of webpack errors
+11.34 npm notice
+11.34 npm notice New major version of npm available! 10.8.2 -> 11.6.0
+11.34 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
+11.34 npm notice To update run: npm install -g npm@11.6.0       
+11.34 npm notice
+------
+Dockerfile.frontend:20
+
+--------------------
+
+  18 |     # Ensure optional dirs exist so COPY in runner doesn't fail (kept for safety)
+
+  19 |     RUN mkdir -p lib content
+
+  20 | >>> RUN npm run build
+
+  21 |
+
+  22 |     FROM node:20-bullseye-slim AS runner
+
+--------------------
+
+target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+
+
+
+View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/6c68iz93o0hkgfxnvcyrcmxbl

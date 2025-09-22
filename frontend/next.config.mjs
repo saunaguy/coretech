@@ -15,6 +15,7 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_BASE_URL: process.env.API_BASE_URL,
     INTERNAL_API_BASE_URL: process.env.API_BASE_URL,
+    NEXT_PUBLIC_INACTIVITY_SECONDS: process.env.INACTIVITY_EXPIRE_SECONDS,
   },
   async rewrites() {
     const target = (process.env.INTERNAL_API_BASE_URL || process.env.API_BASE_URL || 'http://backend:8000').replace(/\/+$/, '')

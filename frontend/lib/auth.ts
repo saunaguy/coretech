@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode';
-import { setAuthCookie, clearAuthCookie } from './actions';
 
 const API_BASE_URL = (process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8000').replace(/\/+$/, '');
 
@@ -9,6 +8,7 @@ export const login = async (email: string, password: string) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
+    credentials: 'include',
   });
 
   if (!response.ok) {
@@ -24,10 +24,7 @@ export const login = async (email: string, password: string) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', data.access_token);
     }
-    // Also set a cookie so server components can see auth state
-    const maxAge = 60 * 60 * 24; // 1 day
-    const secure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-    await setAuthCookie(data.access_token, maxAge, secure);
+    // Cookie is set by backend Set-Cookie via rewrite; no client-side server action needed
   }
   return data;
 };
@@ -36,9 +33,13 @@ export const logout = async () => {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('token');
   }
-  // Clear cookie for SSR/server
-  const secure = typeof window !== 'undefined' && window.location.protocol === 'https:';
-  await clearAuthCookie(secure);
+  // Ask backend to clear its HttpOnly cookie
+  try {
+    await fetch(`/api/v1/auth/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+  } catch {}
 };
 
 export const register = async (username: string, email: string, password: string) => {
@@ -98,8 +99,18 @@ export const authenticatedFetch = async (url: string, arg2?: any, arg3?: any) =>
   const response = await fetch(url, {
     ...options,
     headers,
+    credentials: options?.credentials ?? 'same-origin',
   });
 
+  if (response.status === 401) {
+    try {
+      await logout();
+    } catch {}
+    if (typeof window !== 'undefined') {
+      window.location.href = '/auto-logout';
+    }
+    throw new Error('Unauthorized');
+  }
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({ detail: 'API call failed with non-JSON response' }));
     throw new Error(errorData.detail || 'API call failed');

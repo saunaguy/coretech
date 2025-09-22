@@ -23,7 +23,13 @@ services:
     container_name: coretech-backend
     environment:
       SECRET_KEY: my-fixed-secret-key-for-dev
-      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
+      # Sliding inactivity timeout (seconds)
+      INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-1800}
+      # Cookie config for auth
+      COOKIE_MAX_AGE_SECONDS: ${COOKIE_MAX_AGE_SECONDS:-86400}
+      COOKIE_SECURE: ${COOKIE_SECURE:-false}
+      COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
+      COOKIE_NAME: ${COOKIE_NAME:-access_token}
       DATABASE_URL: ${DATABASE_URL:-sqlite:///./coretech.db}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}
     ports:
@@ -39,6 +45,7 @@ services:
       args:
         # Pass API_BASE_URL into the image build so Next.js can embed it
         NEXT_PUBLIC_API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
+        INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-60}
     container_name: coretech-frontend
     environment:
       NODE_ENV: development

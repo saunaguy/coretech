@@ -7,7 +7,7 @@ interface AuthContextType {
   isAuthenticated: boolean
   user: any
   login: (username: string, password: string) => Promise<void>
-  logout: () => void
+  logout: () => Promise<void>
   register: (username: string, email: string, password: string) => Promise<void>
 }
 
@@ -53,9 +53,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const logout = () => {
-    apiLogout()
-    setUser(null)
+  const logout = async () => {
+    try {
+      await apiLogout()
+    } finally {
+      setUser(null)
+    }
   }
 
   const register = async (username: string, email: string, password: string) => {

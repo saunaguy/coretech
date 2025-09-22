@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/site/ThemeProvider"
 import { AuthProvider } from "@/components/auth/AuthProvider"
 import { MobileSidebarProvider } from "@/lib/MobileSidebarContext"
 import MobileSidebar from "@/components/site/MobileSidebar" // New import
+import IdleLogout from "@/components/auth/IdleLogout"
 
 export const metadata: Metadata = {
   title: "CoreTech",
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AuthProvider>
             <MobileSidebarProvider>
               <Header />
+              <IdleLogout />
               {children}
               <MobileSidebar /> {/* Render MobileSidebar here */}
             </MobileSidebarProvider>

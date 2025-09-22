@@ -9,6 +9,8 @@ WORKDIR /app
 ENV NODE_ENV=production
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+ARG INACTIVITY_EXPIRE_SECONDS
+ENV INACTIVITY_EXPIRE_SECONDS=${INACTIVITY_EXPIRE_SECONDS}
 COPY --from=deps /app/node_modules ./node_modules
 COPY frontend/. .
 ## Remove fragile iconv normalization steps which can fail on slim images
