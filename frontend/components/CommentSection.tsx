@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { format } from 'date-fns';
 
 interface Comment {
   id: number;
@@ -111,7 +112,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
                 작성자: {comment.author?.username || '알 수 없는 사용자'}
                 <span className="ml-2">
                   {comment.created_at && !isNaN(new Date(comment.created_at).getTime())
-                    ? new Date(comment.created_at).toLocaleString()
+                    ? format(new Date(comment.created_at), 'yyyy-MM-dd HH:mm')
                     : '날짜 정보 없음'}
                 </span>
               </p>

@@ -6,6 +6,7 @@ import CommentSection from "@/components/CommentSection" // CommentSection impor
 import LikeButton from "@/components/LikeButton"         // LikeButton import
 import { authenticatedFetch, getUser } from '@/lib/auth' // getUser 함수 import
 import { cookies, headers } from 'next/headers'
+import { format } from 'date-fns';
 
 // jwtDecode import not needed; using getUser()
 import ViewTracker from '@/components/ViewTracker';
@@ -111,7 +112,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground mb-4 flex gap-3">
-            {post.createdAt && <span>{new Date(post.createdAt).toLocaleString()}</span>}
+            {post.createdAt && <span>{format(new Date(post.createdAt), 'yyyy-MM-dd HH:mm')}</span>}
             {typeof post.views === "number" && <span>조회 {post.views}</span>}
             {/* likes는 LikeButton에서 관리하므로 여기서는 제거 */}
             {/* {typeof post.likes === "number" && <span>추천 {post.likes}</span>} */}

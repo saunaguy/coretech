@@ -1,8 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { getUser, authenticatedFetch } from '../../lib/auth';
+import { format } from 'date-fns';
+import { Toaster, toast } from 'sonner';
 
 interface PendingUser {
   id: number;
@@ -13,6 +16,7 @@ interface PendingUser {
 
 export default function AdminPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const [pendingUsers, setPendingUsers] = useState<PendingUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +42,9 @@ export default function AdminPage() {
       }
     };
 
-    fetchPendingUsers();
+    if (typeof window !== 'undefined') {
+      fetchPendingUsers();
+    }
   }, [router]);
 
   const handleApproval = async (userId: number, approve: boolean) => {
@@ -49,8 +55,9 @@ export default function AdminPage() {
       });
       // Remove the user from the list on successful action
       setPendingUsers(currentUsers => currentUsers.filter(user => user.id !== userId));
+      toast.success(`사용자 ${approve ? '허가' : '거부'} 처리되었습니다.`);
     } catch (err) {
-      alert(`사용자 ${approve ? '허가' : '거부'}에 실패했습니다.`);
+      toast.error(`사용자 ${approve ? '허가' : '거부'}에 실패했습니다: ${err instanceof Error ? err.message : '알 수 없는 오류'}`);
     }
   };
 
@@ -64,7 +71,24 @@ export default function AdminPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">관리자 대시보드 - 승인 요청</h1>
+      <Toaster richColors position="top-right" />
+      <h1 className="text-2xl font-bold mb-4">관리자 대시보드</h1>
+      <div className="mb-4 border-b border-gray-200">
+        <nav className="flex space-x-4">
+          <Link href="/admin">
+            <span className={`py-2 px-4 text-sm font-medium ${pathname === '/admin' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}>
+              승인 요청
+            </span>
+          </Link>
+          <Link href="/admin/users">
+            <span className={`py-2 px-4 text-sm font-medium ${pathname === '/admin/users' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}>
+              전체 사용자 관리
+            </span>
+          </Link>
+        </nav>
+      </div>
+
+      <h2 className="text-xl font-semibold mb-3">승인 요청</h2>
       {pendingUsers.length === 0 ? (
         <p>승인 요청 들어온 아이디가 없습니다.</p>
       ) : (
@@ -74,7 +98,7 @@ export default function AdminPage() {
               <div>
                 <p className="font-semibold">{user.username}</p>
                 <p className="text-sm text-gray-600">{user.email}</p>
-                <p className="text-xs text-gray-400">Joined: {new Date(user.created_at).toLocaleDateString()}</p>
+                <p className="text-xs text-gray-400">Joined: {format(new Date(user.created_at), 'yyyy-MM-dd HH:mm')}</p>
               </div>
               <div className="space-x-2">
                 <button

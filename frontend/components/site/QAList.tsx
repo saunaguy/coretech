@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Eye, ThumbsUp } from "lucide-react" // 아이콘 임포트
+import { format } from "date-fns";
 
 type QAItem = {
   id: string
@@ -59,9 +60,7 @@ export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]
             <span>{q.author}</span>
             {q.createdAt && (
               <span>
-                {new Date(q.createdAt).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })}
-                {' '}
-                {new Date(q.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                {format(new Date(q.createdAt), 'yyyy-MM-dd HH:mm')}
               </span>
             )}
             {typeof q.views === "number" && (

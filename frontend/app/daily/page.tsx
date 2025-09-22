@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { format } from "date-fns"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { MOCK_DAILY_TESTS } from "@/lib/daily-data"
@@ -18,7 +19,7 @@ const TestItemCard = ({ item }) => (
             <Badge variant={item.difficulty === '초급' ? 'default' : item.difficulty === '중급' ? 'destructive' : 'outline'} className="shrink-0">{item.difficulty}</Badge>
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-            {new Date(item.createdAt).toLocaleDateString()} 생성
+            {format(new Date(item.createdAt), 'yyyy-MM-dd HH:mm')} 생성
         </p>
     </Link>
 );

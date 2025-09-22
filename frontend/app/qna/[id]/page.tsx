@@ -6,6 +6,7 @@ import LikeButton from "@/components/LikeButton"
 import { cookies } from 'next/headers'
 import ViewTracker from '@/components/ViewTracker'
 import { authenticatedFetch } from '@/lib/auth'
+import { format } from 'date-fns';
 
 export const dynamic = "force-dynamic"
 
@@ -84,7 +85,7 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
         </CardHeader>
         <CardContent>
           <div className="text-xs text-muted-foreground mb-4 flex gap-3">
-            {createdAt && <span>{new Date(createdAt).toLocaleString()}</span>}
+            {createdAt && <span>{format(new Date(createdAt), 'yyyy-MM-dd HH:mm')}</span>}
             {typeof question.views === "number" && <span>조회 {question.views}</span>}
           </div>
           <div className="whitespace-pre-wrap leading-relaxed">{question.body}</div>

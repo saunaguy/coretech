@@ -76,7 +76,7 @@ export default function BoardPage() {
   const fmtDate = (iso?: string) => {
     if (!iso) return null
     const d = parseISO(iso)
-    return isValid(d) ? format(d, "yyyy-MM-dd") : iso
+    return isValid(d) ? format(d, "yyyy-MM-dd HH:mm") : iso
   }
 
   return (

@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { CheckCircle, XCircle, HelpCircle } from "lucide-react"
+import { format } from "date-fns";
 
 export default function DailyTestInteractive({ item }) {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -62,7 +63,7 @@ export default function DailyTestInteractive({ item }) {
           </div>
         </div>
         <CardDescription>
-          {new Date(createdAt).toLocaleDateString()}
+          {format(new Date(createdAt), 'yyyy-MM-dd HH:mm')}
         </CardDescription>
       </CardHeader>
       <CardContent className="p-6 space-y-6">

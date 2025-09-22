@@ -22,7 +22,7 @@ services:
       dockerfile: backend/Dockerfile.backend
     container_name: coretech-backend
     environment:
-      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      SECRET_KEY: my-fixed-secret-key-for-dev
       JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-1440}
       DATABASE_URL: ${DATABASE_URL:-sqlite:///./coretech.db}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:3000,http://127.0.0.1:3000}

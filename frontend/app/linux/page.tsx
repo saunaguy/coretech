@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Menu, X } from "lucide-react" // Added Menu, X
@@ -201,6 +201,7 @@ const CommandDetailView = ({ command, isMobile }: { command: Command | null; isM
 }
 
 export default function LinuxPage() {
+  const router = useRouter()
   const [selectedCommand, setSelectedCommand] = useState<Command | null>(null)
   const [loading, setLoading] = useState(false)
   const [isLocalSidebarOpen, setIsLocalSidebarOpen] = useState(false) // Local state for sidebar
@@ -349,10 +350,10 @@ export default function LinuxPage() {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden fixed top-4 left-4 z-50"
+            className="md:hidden fixed top-4 left-1/2 -translate-x-1/2 z-[60]"
             onClick={() => setIsLocalSidebarOpen(true)}
           >
-            <Menu className="h-5 w-5" />
+            <span>▽</span>
             <span className="sr-only">Linux 메뉴 열기</span>
           </Button>
 
@@ -364,7 +365,7 @@ export default function LinuxPage() {
                 <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b bg-card/95 backdrop-blur">
                   <Link href="/" className="text-sm text-sidebar-foreground hover:text-sidebar-primary">홈</Link>
                   <h2 id="linux-drawer-title" className="text-sm font-semibold">Linux</h2>
-                  <Button variant="ghost" size="icon" onClick={() => setIsLocalSidebarOpen(false)} aria-label="메뉴 닫기">
+                  <Button variant="ghost" size="icon" onClick={() => router.push('/')} aria-label="홈으로 이동">
                     <X className="h-6 w-6" />
                   </Button>
                 </div>

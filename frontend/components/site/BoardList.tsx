@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { CalendarDays, Eye, ThumbsUp, User, ChevronRight } from "lucide-react"
+import { format } from "date-fns";
 
 type AuthorInfo = {
   id: number;
@@ -40,7 +41,7 @@ export default function BoardList({
                     {item.createdAt && (
                       <span className="inline-flex items-center gap-1">
                         <CalendarDays className="h-3.5 w-3.5" />
-                        {new Date(item.createdAt).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })} {new Date(item.createdAt).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
+                        {format(new Date(item.createdAt), 'yyyy-MM-dd HH:mm')}</span>
                     )}
                     {typeof item.views === "number" && (
                       <span className="inline-flex items-center gap-1"><Eye className="h-3.5 w-3.5" />{item.views}</span>

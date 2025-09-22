@@ -3,10 +3,10 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException, Query, status, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from pydantic import BaseModel, ConfigDict # Added ConfigDict
+from pydantic import BaseModel, ConfigDict
 from typing import Dict, Tuple, List, Optional
 from sqlalchemy.orm import Session, joinedload
-from datetime import datetime # Added this import
+from datetime import datetime
 from .db import (
     SessionLocal,
     init_db,
@@ -50,66 +50,21 @@ from .auth import router as auth_router
 from .routers import likes_and_comments
 from .routers import board as board_router
 from .routers import qna as qna_router
+from .routers import admin as admin_router
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(likes_and_comments.router)
 app.include_router(board_router.router)
 app.include_router(qna_router.router)
+app.include_router(admin_router.router, prefix="/api/v1/admin")
+
+@app.get("/api/v1/hello")
+def hello_world():
+    return {"message": "Hello from FastAPI!"}
 
 @app.get("/api/v1/auth/verify-token")
 def verify_token(current_user: User = Depends(get_current_user)):
     return {"message": "Token is valid", "user_id": current_user.id}
-
-class UserSchema(BaseModel):
-    id: int
-    username: str
-    email: str
-    role: str
-    is_active: bool
-    created_at: datetime
-
-    model_config = ConfigDict(from_attributes=True) # Added for Pydantic v2 ORM mode
-
-UserSchema.model_rebuild() # Add this line
-
-class UserApproval(BaseModel):
-    user_id: int
-    approve: bool
-
-@app.post("/api/v1/admin/approve-user", status_code=status.HTTP_200_OK)
-def approve_user(
-    payload: UserApproval,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not authorized to approve/reject users")
-
-    user_to_update = db.query(User).filter(User.id == payload.user_id).first()
-    if not user_to_update:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    if payload.approve:
-        user_to_update.is_active = True
-        if user_to_update.role != "admin":
-            user_to_update.role = "user"
-        db.commit()
-        db.refresh(user_to_update)
-        return {"message": f"User {payload.user_id} approved successfully."}
-    else:
-        db.delete(user_to_update)
-        db.commit()
-        return {"message": f"User {payload.user_id} rejected and deleted successfully."}
-@app.get("/api/v1/admin/pending-users", response_model=list[UserSchema])
-def get_pending_users(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    if current_user.role != "admin":
-        raise HTTPException(status_code=403, detail="Not authorized to view pending users")
-    
-    pending_users = db.query(User).filter(User.is_active == False).all()
-    return pending_users
 
 
 @app.on_event("startup")
@@ -234,6 +189,7 @@ class Question(BaseModel):
     title: str
     body: str
     tags: List[str] | None = None
+
 
 
 

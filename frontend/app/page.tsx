@@ -139,11 +139,6 @@ export default async function HomePage() {
                 </CardContent>
               </Card>
             ))}
-            {groups.length === 0 && (
-              <Card>
-                
-              </Card>
-            )}
           </div>
         </section>
 

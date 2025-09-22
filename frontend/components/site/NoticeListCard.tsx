@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { format } from "date-fns";
 
 async function fetchJson<T>(path: string, revalidate = 30): Promise<T> {
   const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
@@ -59,7 +60,7 @@ export default async function NoticeListCard() {
                 </div>
                 <div className="text-xs text-muted-foreground mt-1 flex gap-3">
                   {n.author && <span>{n.author}</span>}
-                  {n.created_at && <span>{new Date(n.created_at).toLocaleDateString('ko-KR', { year: '2-digit', month: '2-digit', day: '2-digit' })} {new Date(n.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>}
+                  {n.created_at && <span>{format(new Date(n.created_at), 'yyyy-MM-dd HH:mm')}</span>}
                 </div>
               </li>
             ))}
