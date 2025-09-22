@@ -15,33 +15,28 @@ type QAItem = {
 }
 
 export default function QAList({ items, hrefPrefix = "/qna" }: { items: QAItem[]; hrefPrefix?: string }) {
-  const catEmoji = (cat?: string) => {
-    switch ((cat || '').toLowerCase()) {
-      case 'server':
-        return '🖥️'
-      case 'network':
-        return '🌐'
-      default:
-        return '❓'
-    }
+  const catInfo = (cat?: string) => {
+    const key = (cat || '').toLowerCase()
+    if (key === 'server') return { emoji: '🖥', text: 'server' }
+    if (key === 'network') return { emoji: '🌐', text: 'network' }
+    return { emoji: '❓', text: 'other' }
   }
-  const pillBase = 'inline-flex items-center h-5 px-2 rounded-full border text-[10px]';
   return (
     <ul className="divide-y">
       {items.map((q) => (
         <li key={q.id} className="py-3">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex items-center gap-2">
-              <span aria-hidden className="text-lg leading-none">
-                {catEmoji(q.category)}
+              <span className="inline-block font-mono text-sm text-muted-foreground shrink-0 w-28" aria-label={catInfo(q.category).text}>
+                [{catInfo(q.category).emoji} {catInfo(q.category).text}]
               </span>
               <Link href={`${hrefPrefix}/${q.id}`} className="font-medium hover:underline text-foreground line-clamp-2">
                 {q.question}
               </Link>
             </div>
             <div className="flex-shrink-0">
-              <span className={`${pillBase} ${q.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
-                {q.answered ? '완료' : '대기'}
+              <span className="text-lg" role="img" aria-label={q.answered ? '완료' : '대기'}>
+                {q.answered ? '✅' : '⏳'}
               </span>
             </div>
           </div>

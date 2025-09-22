@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import CommentSection from "@/components/CommentSection"
 import LikeButton from "@/components/LikeButton"
 import { cookies } from 'next/headers'
+import { jwtDecode } from 'jwt-decode'
 import ViewTracker from '@/components/ViewTracker'
 import { authenticatedFetch } from '@/lib/auth'
 import { format } from 'date-fns';
@@ -25,7 +26,8 @@ async function getQuestion(id: string, token: string | null) {
 
 export default async function QnaDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
-  const token = cookies().get('token')?.value || null
+  // Read HttpOnly auth cookie set by backend (access_token)
+  const token = cookies().get('access_token')?.value || null
 
   const question = await getQuestion(id, token)
 
@@ -38,6 +40,17 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
   }
 
   const createdAt = (question.createdAt || question.created_at || '')
+  // Determine edit permission: owner or admin
+  let canEdit = false
+  if (token) {
+    try {
+      const payload: any = jwtDecode(token)
+      const uid = Number(payload?.id)
+      const role = String(payload?.role || '')
+      const authorId = Number(question?.author?.id ?? -1)
+      canEdit = role === 'admin' || (uid > 0 && uid === authorId)
+    } catch {}
+  }
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -70,9 +83,11 @@ export default async function QnaDetailPage({ params }: { params: { id: string }
               </div>
             </CardTitle>
             <div className="flex gap-2">
-              <Button asChild size="sm" variant="outline">
-                <Link href={`/qna/${id}/edit`}>수정</Link>
-              </Button>
+              {canEdit && (
+                <Button asChild size="sm" variant="outline" className="whitespace-nowrap">
+                  <Link className="whitespace-nowrap" href={`/qna/${id}/edit`}>수정</Link>
+                </Button>
+              )}
               {/* LikeButton 추가 */}
               <LikeButton
                 parentId={question.id}
