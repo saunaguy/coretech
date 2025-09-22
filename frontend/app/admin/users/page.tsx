@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { getUser, authenticatedFetch } from '../../../lib/auth';
 import { format } from 'date-fns';
 
@@ -16,6 +17,7 @@ interface User {
 
 export default function AdminUsersPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -86,7 +88,22 @@ export default function AdminUsersPage() {
   return (
     <div className="container mx-auto p-4">
       <Toaster richColors position="top-right" />
-      <h1 className="text-2xl font-bold mb-4">관리자 대시보드 - 전체 사용자 관리</h1>
+      <h1 className="text-2xl font-bold mb-4">관리자 대시보드</h1>
+      <div className="mb-4 border-b border-gray-200">
+        <nav className="flex space-x-4">
+          <Link href="/admin">
+            <span className={`py-2 px-4 text-sm font-medium ${pathname === '/admin' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}>
+              승인 요청
+            </span>
+          </Link>
+          <Link href="/admin/users">
+            <span className={`py-2 px-4 text-sm font-medium ${pathname === '/admin/users' ? 'border-b-2 border-blue-500 text-blue-600' : 'text-gray-500 hover:text-gray-700'}`}>
+              전체 사용자 관리
+            </span>
+          </Link>
+        </nav>
+      </div>
+      <h2 className="text-xl font-semibold mb-3">전체 사용자 관리</h2>
       {users.length === 0 ? (
         <p>등록된 사용자가 없습니다.</p>
       ) : (
