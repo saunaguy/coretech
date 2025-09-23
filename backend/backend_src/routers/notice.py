@@ -48,12 +48,19 @@ class NoticeDetail(BaseModel):
 def list_notices(limit: int = Query(20, ge=1, le=200), db: Session = Depends(get_db)):
     q = db.query(Notice).order_by(Notice.is_pinned.desc(), Notice.created_at.desc())
     items: List[Notice] = q.limit(limit).all()
+    # Resolve author names best-effort
+    author_names: dict[int, str] = {}
+    for n in items:
+        if getattr(n, "author_id", None) and n.author_id not in author_names:
+            u = db.query(User).filter(User.id == n.author_id).first()
+            if u:
+                author_names[n.author_id] = u.username
     return [
         {
             "id": n.id,
             "title": n.title,
             "label": n.label,
-            "author": None,  # could be joined later when author table used
+            "author": author_names.get(getattr(n, "author_id", 0)),
             "created_at": n.created_at.isoformat() if getattr(n, "created_at", None) else None,
         }
         for n in items
@@ -66,13 +73,18 @@ def get_notice(notice_id: int, db: Session = Depends(get_db)):
     if not n:
         raise HTTPException(status_code=404, detail="Notice not found")
     # Optionally resolve author name later
+    username: Optional[str] = None
+    if getattr(n, "author_id", None):
+        u = db.query(User).filter(User.id == n.author_id).first()
+        if u:
+            username = u.username
     return {
         "id": n.id,
         "title": n.title,
         "body_md": n.body_md,
         "label": n.label,
         "is_pinned": bool(getattr(n, "is_pinned", False)),
-        "author": None,
+        "author": username,
         "created_at": n.created_at.isoformat() if getattr(n, "created_at", None) else None,
         "updated_at": n.updated_at.isoformat() if getattr(n, "updated_at", None) else None,
     }
@@ -82,6 +94,9 @@ def get_notice(notice_id: int, db: Session = Depends(get_db)):
 def create_notice(payload: NoticeCreate, db: Session = Depends(get_db), current_user: User = Depends(require_admin)):
     if not payload.title.strip() or not payload.body_md.strip():
         raise HTTPException(status_code=400, detail="제목과 내용은 필수입니다.")
+    allowed_labels = {"공지", "중요", "업데이트", "이벤트"}
+    if payload.label and payload.label not in allowed_labels:
+        raise HTTPException(status_code=400, detail="허용되지 않은 라벨입니다.")
     n = Notice(
         title=payload.title.strip(),
         body_md=payload.body_md,
@@ -112,4 +127,3 @@ def delete_notice(notice_id: int, db: Session = Depends(get_db), current_user: U
     db.delete(n)
     db.commit()
     return
-

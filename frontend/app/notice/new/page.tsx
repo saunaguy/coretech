@@ -1,10 +1,12 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { authenticatedFetch } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export default function NewNoticePage() {
   const { user, isAuthenticated } = useAuth()
@@ -14,6 +16,7 @@ export default function NewNoticePage() {
   const [body, setBody] = useState("")
   const [pinned, setPinned] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [showHelp, setShowHelp] = useState(false)
 
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'admin') {
@@ -44,8 +47,32 @@ export default function NewNoticePage() {
     }
   }
 
+  const insertTemplate = () => {
+    const template = `# 제목을 입력하세요\n\n> 간단한 안내 문구를 여기에 작성합니다.\n\n---\n\n## 요약\n- 핵심 내용 1\n- 핵심 내용 2\n\n## 상세 내용\n자유롭게 Markdown으로 작성하세요. **굵게**, _기울임_, \n코드 블록:\n\n\`\`\`bash\n# 예시 명령어\necho "hello"\n\`\`\`\n\n## 표 예시\n| 항목 | 내용 |\n| --- | --- |\n| 안내 | 설명을 적습니다 |\n| 일정 | 2025-01-01 |\n\n---\n\n감사합니다.`
+    setBody((prev) => (prev?.trim() ? prev + "\n\n" + template : template))
+  }
+
+  const insertTable = () => {
+    const table = `\n\n| 항목 | 내용 |\n| --- | --- |\n| 예시 | 값을 입력하세요 |\n`
+    setBody((prev) => (prev || "") + table)
+  }
+
+  const helper = useMemo(() => (
+    <div className="text-xs text-muted-foreground space-y-2">
+      <div className="font-medium">Markdown 가이드</div>
+      <ul className="list-disc pl-5 space-y-1">
+        <li>제목: <code># 제목</code></li>
+        <li>굵게/기울임: <code>**굵게**</code>, <code>_기울임_</code></li>
+        <li>목록: <code>- 항목</code></li>
+        <li>코드 블록: <code>```언어</code> ... <code>```</code></li>
+        <li>표: <code>| 열1 | 열2 |</code> + <code>| --- | --- |</code></li>
+        <li>구분선: <code>---</code></li>
+      </ul>
+    </div>
+  ), [])
+
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+    <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
       <h1 className="text-2xl font-bold">새 공지 등록</h1>
       <div className="space-y-3">
         <input
@@ -70,18 +97,40 @@ export default function NewNoticePage() {
             <input type="checkbox" checked={pinned} onChange={(e) => setPinned(e.target.checked)} />
             상단 고정
           </label>
+          <div className="flex-1" />
+          <Button variant="outline" size="sm" onClick={insertTemplate}>템플릿 넣기</Button>
+          <Button variant="outline" size="sm" onClick={insertTable}>표 추가</Button>
+          <Button variant="ghost" size="sm" onClick={() => setShowHelp((s) => !s)}>{showHelp ? '가이드 닫기' : '가이드 보기'}</Button>
         </div>
-        <textarea
-          className="w-full border rounded-md px-3 py-2 text-sm bg-background min-h-[240px]"
-          placeholder="Markdown 형식으로 내용을 작성하세요"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
-        <div className="pt-2">
+        {showHelp && (
+          <div className="border rounded-md p-3">
+            {helper}
+          </div>
+        )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="border rounded-md overflow-hidden">
+            <div className="border-b px-3 py-2 text-xs text-muted-foreground">작성</div>
+            <textarea
+              className="w-full p-3 text-sm bg-background min-h-[360px] outline-none"
+              placeholder="Markdown 형식으로 내용을 작성하세요"
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+            />
+          </div>
+          <div className="border rounded-md overflow-hidden">
+            <div className="border-b px-3 py-2 text-xs text-muted-foreground">미리보기</div>
+            <div className="p-3 prose dark:prose-invert min-h-[360px]">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {body || '여기에 미리보기가 표시됩니다.'}
+              </ReactMarkdown>
+            </div>
+          </div>
+        </div>
+        <div className="pt-2 flex gap-2">
           <Button onClick={submit} disabled={submitting}>등록</Button>
+          <Button variant="outline" onClick={() => setBody("")}>초기화</Button>
         </div>
       </div>
     </main>
   )
 }
-
