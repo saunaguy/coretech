@@ -46,7 +46,8 @@ async function getPost(id: string, token: string | null, retries = 3, delay = 10
 
 export default async function BoardDetailPage({ params }: { params: { id: string } }) {
   const { id } = params
-  const token = cookies().get('token')?.value || null
+  // Use the HttpOnly auth cookie set by backend (COOKIE_NAME defaults to "access_token")
+  const token = cookies().get('access_token')?.value || null
 
   
 

@@ -66,6 +66,9 @@ export const getToken = () => {
   return token;
 };
 
+// Auth-aware fetch with safer 401 handling.
+// - Does NOT auto-logout on generic 401s anymore.
+// - Auto-logout only for verify-token or when explicitly requested via options.autoLogoutOn401 = true
 export const authenticatedFetch = async (url: string, arg2?: any, arg3?: any) => {
   let tokenOverride: string | null = null;
   let options: RequestInit | undefined = undefined;
@@ -103,12 +106,14 @@ export const authenticatedFetch = async (url: string, arg2?: any, arg3?: any) =>
   });
 
   if (response.status === 401) {
-    try {
-      await logout();
-    } catch {}
-    if (typeof window !== 'undefined') {
-      window.location.href = '/auto-logout';
+    // Only auto-logout if this is the token verification endpoint or explicitly requested
+    const isVerifyEndpoint = typeof url === 'string' && url.includes('/api/v1/auth/verify-token');
+    const wantsAutoLogout = !!(options as any)?.autoLogoutOn401;
+    if (isVerifyEndpoint || wantsAutoLogout) {
+      try { await logout(); } catch {}
+      try { if (typeof window !== 'undefined') window.location.href = '/auto-logout'; } catch {}
     }
+    // Propagate error to caller for contextual handling
     throw new Error('Unauthorized');
   }
   if (!response.ok) {
