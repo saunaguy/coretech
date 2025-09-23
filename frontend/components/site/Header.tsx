@@ -5,8 +5,16 @@ import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
 import { Sun, Moon, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useMobileSidebar } from "@/lib/MobileSidebarContext"
 import { useAuth } from "@/components/auth/AuthProvider"
+
+import React, { useState, useRef } from "react"
 
 export default function Header() {
   const router = useRouter()
@@ -14,8 +22,42 @@ export default function Header() {
   const { toggleMobileSidebar } = useMobileSidebar()
   const { isAuthenticated, user, logout } = useAuth()
 
+  // State for dropdowns
+  const [isLearningDropdownOpen, setIsLearningDropdownOpen] = useState(false)
+  const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false)
+
+  // Refs for managing timeouts
+  const learningTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const communityTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   // Use CSS variables via tokens to keep colors consistent across themes
   const headerClassName = 'bg-header text-header-foreground'
+
+  // Hover handlers for Learning dropdown
+  const handleLearningMouseEnter = () => {
+    if (learningTimeoutRef.current) {
+      clearTimeout(learningTimeoutRef.current)
+    }
+    setIsLearningDropdownOpen(true)
+  }
+  const handleLearningMouseLeave = () => {
+    learningTimeoutRef.current = setTimeout(() => {
+      setIsLearningDropdownOpen(false)
+    }, 150) // Small delay to allow moving to dropdown content
+  }
+
+  // Hover handlers for Community dropdown
+  const handleCommunityMouseEnter = () => {
+    if (communityTimeoutRef.current) {
+      clearTimeout(communityTimeoutRef.current)
+    }
+    setIsCommunityDropdownOpen(true)
+  }
+  const handleCommunityMouseLeave = () => {
+    communityTimeoutRef.current = setTimeout(() => {
+      setIsCommunityDropdownOpen(false)
+    }, 150) // Small delay to allow moving to dropdown content
+  }
 
   return (
     <header className={`sticky top-0 z-50 w-full border-b border-border/40 shadow-sm backdrop-blur ${headerClassName}`}>
@@ -26,10 +68,62 @@ export default function Header() {
           </div>
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-baseline space-x-4">
-              <Link href="/linux?open=1" className="hover:text-primary transition-colors">Linux 기초</Link>
-              <Link href="/board" className="hover:text-primary transition-colors">게시판</Link>
-              <Link href="/qna" className="hover:text-primary transition-colors">Q&A</Link>
-              <Link href="/about" className="hover:text-primary transition-colors">소개</Link>
+              {/* 학습 Dropdown */}
+              <DropdownMenu open={isLearningDropdownOpen} onOpenChange={setIsLearningDropdownOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="hover:text-primary transition-colors"
+                    onMouseEnter={handleLearningMouseEnter}
+                    onMouseLeave={handleLearningMouseLeave}
+                  >
+                    학습
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onMouseEnter={handleLearningMouseEnter}
+                  onMouseLeave={handleLearningMouseLeave}
+                >
+                  <DropdownMenuItem>
+                    <Link href="/linux?open=1">Linux 기초</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/labs">실습</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* 커뮤니티 Dropdown */}
+              <DropdownMenu open={isCommunityDropdownOpen} onOpenChange={setIsCommunityDropdownOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="hover:text-primary transition-colors"
+                    onMouseEnter={handleCommunityMouseEnter}
+                    onMouseLeave={handleCommunityMouseLeave}
+                  >
+                    커뮤니티
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onMouseEnter={handleCommunityMouseEnter}
+                  onMouseLeave={handleCommunityMouseLeave}
+                >
+                  <DropdownMenuItem>
+                    <Link href="/notice">공지사항</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/board">게시판</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/qna">Q&A</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/about">소개</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {!isAuthenticated ? (
                 <>
                   <Link href="/login" className="hover:text-primary transition-colors">로그인</Link>
