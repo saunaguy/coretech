@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useCallback, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
 import { authenticatedFetch } from '@/lib/auth'
@@ -17,6 +17,27 @@ export default function NewNoticePage() {
   const [pinned, setPinned] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [showHelp, setShowHelp] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null)
+  const editorBoxRef = useRef<HTMLDivElement | null>(null)
+  const previewBoxRef = useRef<HTMLDivElement | null>(null)
+
+  const syncHeights = useCallback(() => {
+    const ta = textareaRef.current
+    if (ta) {
+      ta.style.height = 'auto'
+      ta.style.overflow = 'hidden'
+      ta.style.resize = 'none'
+      ta.style.height = `${ta.scrollHeight}px`
+    }
+    const e = editorBoxRef.current
+    const p = previewBoxRef.current
+    if (e && p) {
+      // measure full box heights (header + content)
+      const target = Math.max(e.scrollHeight, p.scrollHeight, 360)
+      e.style.height = `${target}px`
+      p.style.height = `${target}px`
+    }
+  }, [])
 
   useEffect(() => {
     if (!isAuthenticated || user?.role !== 'admin') {
@@ -24,6 +45,29 @@ export default function NewNoticePage() {
       router.replace('/notice')
     }
   }, [isAuthenticated, user, router])
+
+  useEffect(() => {
+    // Sync when body/help toggled changes layout
+    syncHeights()
+  }, [body, showHelp, syncHeights])
+
+  useEffect(() => {
+    // Respond to container resizes (e.g., fonts/images in preview)
+    const e = editorBoxRef.current
+    const p = previewBoxRef.current
+    if (!e || !p) return
+    const ro = new ResizeObserver(() => syncHeights())
+    ro.observe(e)
+    ro.observe(p)
+    const onResize = () => syncHeights()
+    window.addEventListener('resize', onResize)
+    // initial
+    syncHeights()
+    return () => {
+      try { ro.disconnect() } catch {}
+      window.removeEventListener('resize', onResize)
+    }
+  }, [syncHeights])
 
   const submit = async () => {
     if (!title.trim() || !body.trim()) {
@@ -107,17 +151,18 @@ export default function NewNoticePage() {
             {helper}
           </div>
         )}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <div className="border rounded-md overflow-hidden">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-stretch">
+          <div ref={editorBoxRef} className="border rounded-md overflow-hidden">
             <div className="border-b px-3 py-2 text-xs text-muted-foreground">작성</div>
             <textarea
+              ref={textareaRef}
               className="w-full p-3 text-sm bg-background min-h-[360px] outline-none"
               placeholder="Markdown 형식으로 내용을 작성하세요"
               value={body}
               onChange={(e) => setBody(e.target.value)}
             />
           </div>
-          <div className="border rounded-md overflow-hidden">
+          <div ref={previewBoxRef} className="border rounded-md overflow-hidden">
             <div className="border-b px-3 py-2 text-xs text-muted-foreground">미리보기</div>
             <div className="p-3 md-prose md-prose-lg min-h-[360px]">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
