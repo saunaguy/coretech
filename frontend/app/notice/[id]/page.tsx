@@ -52,7 +52,7 @@ export default async function NoticeDetailPage({ params }: { params: { id: strin
           {data.author && <span>{data.author}</span>}
           {data.created_at && <span>{format(new Date(data.created_at), 'yyyy-MM-dd HH:mm')}</span>}
         </div>
-        <article className="p-4 prose dark:prose-invert">
+        <article className="p-4 md-prose md-prose-lg">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{data.body_md}</ReactMarkdown>
         </article>
       </div>

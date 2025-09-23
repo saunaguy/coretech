@@ -95,7 +95,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
           {comments.map((comment) => (
             <div key={comment.id} className="border-b pb-2 last:border-b-0">
               <ReactMarkdown
-                className="prose prose-sm dark:prose-invert break-words px-4"
+                className="md-prose md-prose-sm break-words px-4"
                 remarkPlugins={[remarkGfm]}
                 components={{
                   pre: ({ node, ...props }) => (

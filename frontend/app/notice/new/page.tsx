@@ -119,7 +119,7 @@ export default function NewNoticePage() {
           </div>
           <div className="border rounded-md overflow-hidden">
             <div className="border-b px-3 py-2 text-xs text-muted-foreground">미리보기</div>
-            <div className="p-3 prose dark:prose-invert min-h-[360px]">
+            <div className="p-3 md-prose md-prose-lg min-h-[360px]">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {body || '여기에 미리보기가 표시됩니다.'}
               </ReactMarkdown>
