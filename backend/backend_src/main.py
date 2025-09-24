@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException, Query, status, Depends, Request
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 import os
 from pydantic import BaseModel, ConfigDict
@@ -44,6 +46,134 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Static content (public lessons)
+CONTENT_DIR = (Path(__file__).resolve().parent.parent / "content").resolve()
+if CONTENT_DIR.exists():
+    app.mount("/content", StaticFiles(directory=str(CONTENT_DIR)), name="content")
+
+# ---------------------------
+# Lesson search over markdown files (public)
+# ---------------------------
+from time import time
+import re
+
+_LESSON_SEARCH_CACHE: Dict[str, Dict[str, str]] | None = None  # key: rel path, value: metadata
+_LESSON_SEARCH_BUILT_AT: float = 0.0
+_LESSON_SEARCH_TTL_SECONDS = 45.0
+
+def _lesson_index_needs_rebuild() -> bool:
+    if _LESSON_SEARCH_CACHE is None:
+        return True
+    return (time() - _LESSON_SEARCH_BUILT_AT) > _LESSON_SEARCH_TTL_SECONDS
+
+def _read_text(p: Path) -> str:
+    try:
+        return p.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        try:
+            return p.read_text(encoding="utf-8")
+        except Exception:
+            return ""
+
+def _first_heading(md_text: str) -> str:
+    for line in md_text.splitlines():
+        s = line.strip()
+        if s.startswith("#"):
+            return s.lstrip("# ")[:120]
+    return ""
+
+def _build_lesson_index():
+    global _LESSON_SEARCH_CACHE, _LESSON_SEARCH_BUILT_AT
+    root = CONTENT_DIR / "lesson"
+    idx: Dict[str, Dict[str, str]] = {}
+    if root.exists():
+        for sec_dir in sorted(root.glob("*")):
+            if not sec_dir.is_dir():
+                continue
+            section = sec_dir.name  # e.g., 1-1
+            for md in sorted(sec_dir.glob("*.md")):
+                rel = md.relative_to(root).as_posix()  # e.g., 1-1/3.md
+                txt = _read_text(md)
+                title = _first_heading(txt) or rel
+                plain = txt.lower()
+                norm = re.sub(r"[^a-z0-9가-힣]+", "", plain)
+                title_plain = title.lower()
+                title_norm = re.sub(r"[^a-z0-9가-힣]+", "", title_plain)
+                try:
+                    idx_num = md.stem  # filename without .md
+                except Exception:
+                    idx_num = ""
+                idx[rel] = {
+                    "text": plain,
+                    "norm": norm,
+                    "title_plain": title_plain,
+                    "title_norm": title_norm,
+                    "title": title,
+                    "section": section,
+                    "index": idx_num,
+                }
+    _LESSON_SEARCH_CACHE = idx
+    _LESSON_SEARCH_BUILT_AT = time()
+
+
+@app.get("/api/v1/lesson-search")
+def lesson_search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1, le=200)):
+    """Case-insensitive substring search over lesson markdown files.
+
+    Returns: [{ section, index, title, snippet }]
+    """
+    try:
+        if _lesson_index_needs_rebuild():
+            _build_lesson_index()
+        assert _LESSON_SEARCH_CACHE is not None
+        needle = q.lower().strip()
+        norm_needle = re.sub(r"[^a-z0-9가-힣]+", "", needle)
+        tokens = [t for t in re.split(r"\s+", needle) if t]
+        norm_tokens = [re.sub(r"[^a-z0-9가-힣]+", "", t) for t in tokens]
+
+        results: List[Dict[str, str]] = []
+        for rel, meta in _LESSON_SEARCH_CACHE.items():
+            text = meta.get("text", "")
+            norm = meta.get("norm", "")
+            t_plain = meta.get("title_plain", "")
+            t_norm = meta.get("title_norm", "")
+
+            hit = False
+            # 1) plain substring in title or body
+            if needle and (needle in text or needle in t_plain):
+                hit = True
+            # 2) normalized substring (ignore punctuation/whitespace)
+            elif norm_needle and (norm_needle in norm or norm_needle in t_norm):
+                hit = True
+            # 3) all tokens present (plain)
+            elif tokens and all(tok in text for tok in tokens):
+                hit = True
+            # 4) all tokens present (normalized)
+            elif norm_tokens and all(ntok in norm for ntok in norm_tokens):
+                hit = True
+
+            if hit:
+                # Pick first match position for snippet from plain text
+                pos = text.find(needle) if needle else 0
+                if pos < 0:
+                    pos = text.find(tokens[0]) if tokens else 0
+                if pos < 0:
+                    pos = 0
+                start = max(0, pos - 80)
+                end = min(len(text), pos + 120)
+                snippet = text[start:end].replace("\n", " ")
+                results.append({
+                    "section": meta.get("section", ""),
+                    "index": meta.get("index", ""),
+                    "title": meta.get("title", rel),
+                    "snippet": snippet,
+                })
+                if len(results) >= limit:
+                    break
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"search_failed: {type(e).__name__}: {e}")
 
 # Sliding inactivity window: refresh JWT and cookie on each authenticated request
 from jose import jwt, JWTError

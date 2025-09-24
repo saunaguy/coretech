@@ -1,84 +1,63 @@
-# 197 서버 게시판 500 오류 분석 노트
+## 렌더링/검색 아키텍처 비교 (/linux vs /linuxtest2)
 
-## 현상
-- 게시글 작성 시 500 Internal Server Error 발생.
-- 프론트 로그: `API call failed with non-JSON response` (백엔드에서 500으로 HTML 에러 텍스트를 반환했기 때문).
-- 백엔드 로그 요약:
-  - `sqlalchemy.exc.IntegrityError: null value in column "author_id" of relation "posts" violates not-null constraint`
-  - INSERT 구문은 `posts (user_id, title, body, ...)`로 실행됨 → DB는 `author_id NOT NULL` 컬럼을 요구.
+### 개요
+- /linux: 프론트 번들에 포함된 TS 블록(.ts)을 동적 import하여 클라이언트에서 렌더.
+- /linuxtest2: 백엔드 정적 컨텐츠(`/content/lesson/**.md`)를 선택 시마다 fetch하여 클라이언트에서 렌더. 본문 검색은 백엔드 API(`/api/v1/lesson-search`) 사용.
 
-## 원인 추정 (핵심)
-- 코드 모델은 `Post.user_id`를 사용(SQLAlchemy 모델 참조). 관계도 `Post.user_id -> User.id`.
-- 197 서버의 실제 DB 스키마는 과거 버전(legacy)로 보이며, `posts.author_id` 컬럼이 `NOT NULL` 제약으로 남아 있음.
-- 결과적으로, 애플리케이션은 `user_id`만 INSERT하고 `author_id`는 NULL → DB 제약 위반으로 실패.
-- 192.168.0.12 환경에서는 SQLite 또는 최신 스키마로 동작(여기엔 `author_id`가 없거나 nullable)해서 문제가 없었던 것으로 추정.
+### 리소스/효율
+- 번들 크기
+  - /linux: 컨텐츠 블록이 TS로 번들에 포함 → 초기 JS/메모리 부담↑(항목 증가 시 선형 증가).
+  - /linuxtest2: 컨텐츠는 번들 밖(정적 파일) → 초기 JS 작아짐. 선택한 문서만 네트워크로 가져옴.
+- 네트워크 비용
+  - /linux: 최초 진입 시 네트워크 비용 거의 없음(이미 번들 내). 항목 전환 시 추가 요청 없음.
+  - /linuxtest2: 문서당 1회 GET(텍스트 수 KB~수십 KB). 브라우저 캐시로 재방문 시 304/메모리 캐시 가능.
+- 클라이언트 CPU/메모리
+  - /linux: 큰 번들 파싱/실행 비용, 메모리 상에 블록 데이터 보관. 긴 세션에서 누적 부담.
+  - /linuxtest2: 필요 문서만 파싱(Markdown→HTML). 세션 메모리 사용량↓.
+- 서버 부하
+  - /linux: Next 서버 렌더 부담 적음(클라 렌더 중심). 컨텐츠 변경은 프론트 재배포 필요.
+  - /linuxtest2: FastAPI가 정적 파일 서빙만 수행(가벼움). 검색 API는 45초 TTL 캐시 인메모리 인덱스 사용 → 요청당 수십 ms 수준(수백 파일 기준), 메모리 수 MB 내.
+- 빌드/배포
+  - /linux: 컨텐츠 변경 시 프론트 빌드 필요. 빌드 시간/산출물 크기↑.
+  - /linuxtest2: 컨텐츠 파일 교체만으로 즉시 반영(서버 재시작 불필요). 프론트 재배포 불필요.
 
-## 왜 이런 스키마 불일치가 생겼나
-- `backend/backend_src/db.py:init_db()`는 PostgreSQL 경로에서 `posts` 테이블에 여러 컬럼을 "없으면 추가"(ADD COLUMN IF NOT EXISTS)만 수행.
-- 하지만 `author_id → user_id`로의 컬럼 이름 변경(또는 데이터 마이그레이션)은 수행하지 않음.
-- 따라서, 기존 DB에 `author_id NOT NULL`가 남아 있는 경우, 신규 코드가 넣는 `user_id`와 공존하면서 제약 위반이 발생.
+### 기능/UX
+- 검색
+  - /linux: “내용 포함 검색”은 TS 블록에만 동작.
+  - /linuxtest2: 백엔드 본문 검색(API)로 제목/본문 동시 검색. TTL 캐시로 빠른 응답.
+- SEO/접근성
+  - /linux: 클라 렌더 위주. SEO 영향 제한적.
+  - /linuxtest2: 현재 클라 fetch 렌더. 필요 시 SSR로 확장 가능(서버에서 MD 렌더 후 전송) → SEO 강화 여지.
+- 운영/확장성
+  - /linux: 컨텐츠가 코드와 결합 → 협업/버전 관리 용이하지만 배포 동반.
+  - /linuxtest2: 컨텐츠는 파일 교체로 즉시 갱신. 백업/롤백/외부 파이프라인(크롤러) 연동 유리.
 
-## 해결 전략 옵션
-1) 권장: DB 스키마 표준화(마이그레이션)
-   - 표준 키 컬럼을 `user_id`로 통일.
-   - 상황별 안전한 SQL 절차:
-     - 케이스 A: `author_id`만 있고 `user_id`가 없을 때
-       ```sql
-       ALTER TABLE posts RENAME COLUMN author_id TO user_id;
-       -- 필요 시 FK 추가
-       ALTER TABLE posts
-         ADD CONSTRAINT posts_user_id_fkey
-         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-       ```
-     - 케이스 B: `author_id`와 `user_id`가 모두 있을 때
-       ```sql
-       -- 우선 user_id가 비어있는 행에 author_id 값을 복사
-       UPDATE posts SET user_id = author_id
-       WHERE user_id IS NULL AND author_id IS NOT NULL;
+### 실패/장애 포인트
+- /linux: 빌드 실패/번들 과대화가 주요 리스크.
+- /linuxtest2: 정적 경로 불일치(섹션/인덱스), 파일 누락 시 404. 에러 카드에 실제 요청 URL 제공으로 진단 용이.
 
-       -- 더 이상 사용하지 않을 author_id 제약을 완화(또는 컬럼 제거)
-       ALTER TABLE posts ALTER COLUMN author_id DROP NOT NULL;
-       -- 안정화 후 완전히 정리하려면 컬럼 제거(운영 절차에 맞춰 실행)
-       -- ALTER TABLE posts DROP COLUMN author_id;
+### 현재 구성 디테일
+- 백엔드 정적 마운트: `/content` → `backend/content`
+- 문서 경로: `content/lesson/{장-절}/{번호}.md` (예: `lesson/1-1/3.md`)
+- 검색 API: `GET /api/v1/lesson-search?q=...&limit=50`
+  - 인덱스: 45s TTL, 메모리 캐시(경로→본문/제목/섹션/번호)
+  - 결과: `{ section, index, title, snippet }[]`
+- 프론트 `/linuxtest2`
+  - 좌: `/linux`와 동일한 사이드바 UI, “내용 포함 검색” 활성 시 검색 API 사용
+  - 우: Markdown 렌더(`md-prose` 스타일). 컨텐츠는 `${NEXT_PUBLIC_API_BASE_URL}/content/lesson/...`에서 직접 fetch
+  - 로더 키 매핑: `01-1-10` → `lesson/1-1/10.md`, `01-1-2-5` → `lesson/1-2/5.md`
 
-       -- 필요 시 FK 보완
-       DO $$ BEGIN
-         IF NOT EXISTS (
-           SELECT 1 FROM information_schema.table_constraints
-           WHERE table_name = 'posts' AND constraint_name = 'posts_user_id_fkey'
-         ) THEN
-           ALTER TABLE posts
-             ADD CONSTRAINT posts_user_id_fkey
-             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
-         END IF;
-       END $$;
-       ```
-   - 위 작업 후 애플리케이션 코드는 변경 없이 정상 동작해야 함.
+### 선택 가이드
+- 공개 문서, 빠른 갱신/운영 편의 우선 → `/linuxtest2` 권장.
+- 오프라인/네트워크 최소화, 번들 일원화 우선 → `/linux` 유지.
+- SEO가 매우 중요 → `/linuxtest2`를 SSR로 확장 고려(서버에서 MD→HTML 렌더 후 전송).
 
-2) 임시 우회(권장하지 않음, 급한 불끄기)
-   - 애플리케이션 레이어에서 `create_post` 시 `author_id`도 같이 채워 넣기(원시 SQL 또는 조건부 업데이트).
-   - 또는 DB에서 `author_id`를 `NULLABLE`로 바꾸기만 하고 그대로 두기.
-   - 장기적으로 스키마 통일이 필요하므로, 임시 우회는 지양.
+### 추가 개선 여지
+- SSR 렌더 옵션 토글(/linuxtest2-ssr): SEO/초기 페인트 개선.
+- 코드 하이라이트/TOC/내부 링크 리라이트.
+- 정적 헤더 튜닝: `Cache-Control`, `ETag` 설정 명시(Starlette StaticFiles 기본값 확인 후 보강).
 
-3) 코드 측 대응(마이그레이션이 어려운 환경)
-   - ORM 모델에 `author_id`를 추가하여 양쪽 컬럼을 동시 유지/세팅.
-   - 이벤트 훅으로 `user_id` 세팅 시 `author_id`도 자동 세팅.
-   - 다만 스키마 복잡도 증가 및 기술 부채가 커져서 권장하지 않음.
-
-## 확인 및 적용 절차 제안
-1) 현재 197 서버 DB 스키마 확인
-   - `SELECT column_name, is_nullable FROM information_schema.columns WHERE table_name='posts';`
-   - `\d posts` (psql)로 인덱스/제약도 확인.
-2) 위 케이스 A/B에 맞춰 마이그레이션 SQL 적용(트랜잭션 권장).
-3) API 재시도
-   - 게시글 작성(POST /api/v1/board/posts) → 201 반환 확인.
-   - 게시글 목록(GET /api/v1/board/posts) → 정상 JSON 확인.
-4) 프론트 에러 해소 확인
-   - 더 이상 `non-JSON response` 에러가 뜨지 않아야 함.
-
-## 관련 파일 메모
-- `backend/backend_src/routers/board.py`: INSERT 시 `Post(user_id=...)`로 동작 확인.
-- `backend/backend_src/db.py`: `Post` 모델 정의는 `user_id` 기준. `init_db()` 내 Postgres 경로에 `author_id` 이관 로직은 없음.
-
-## 결론
-- 문제의 본질은 코드-DB 스키마 불일치(legacy `author_id NOT NULL` 잔존)이며, 운영 DB 마이그레이션으로 표준 컬럼(`user_id`)로 통일하는 것이 가장 깔끔하고 재발 방지에 유리함.
+### 한눈에 요약
+- 요점: 공개 강의 운영/갱신 용이성과 번들 경량화가 중요하면 `/linuxtest2`가 더 효율적.
+- /linux 장점: 오프라인에 가까운 빠른 전환(추가 네트워크 없음), 구조 단순. 단점: 번들 비대화, 컨텐츠 변경 시 재빌드 필요, 본문 검색 한계.
+- /linuxtest2 장점: 컨텐츠 교체 즉시 반영, 초기 JS 가벼움, 백엔드 본문 검색 가능, 확장(SSR/스토리지/권한) 용이. 단점: 문서 선택 시 네트워크 요청, 경로 관리 필요.

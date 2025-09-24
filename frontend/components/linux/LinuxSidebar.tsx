@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { loadLinuxContent } from "@/content/linux/loader"
 
-const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false }) => {
+const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false, remoteLessonSearch = false }) => {
   const [searchTerm, setSearchTerm] = useState("")
   const [rawTerm, setRawTerm] = useState("")
   const [openCategories, setOpenCategories] = useState(() => {
@@ -59,48 +59,82 @@ const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false }) => {
   const [includeContent, setIncludeContent] = useState(false)
   const [buildingIndex, setBuildingIndex] = useState(false)
   const [contentIndex, setContentIndex] = useState<Record<string, string>>({})
+  const [remoteMatches, setRemoteMatches] = useState<Set<string> | null>(null) // keys like "1-1-3"
 
   useEffect(() => {
     const build = async () => {
       if (!includeContent || buildingIndex) return
       setBuildingIndex(true)
       try {
-        const flatten: any[] = []
-        for (const level in topics) {
-          const cats = topics[level] || {}
-          for (const category in cats) {
-            const cmds = cats[category] || []
-            for (const cmd of cmds) flatten.push(cmd)
+        if (remoteLessonSearch) {
+          // Remote search is executed on demand per search term; no index build here.
+          setContentIndex({})
+        } else {
+          const flatten: any[] = []
+          for (const level in topics) {
+            const cats = topics[level] || {}
+            for (const category in cats) {
+              const cmds = cats[category] || []
+              for (const cmd of cmds) flatten.push(cmd)
+            }
           }
+          const entries = await Promise.all(flatten.map(async (cmd) => {
+            try {
+              const key = cmd.loaderKey
+              if (!key) return [cmd.id, ''] as const
+              const mod = await loadLinuxContent(String(key))
+              const blocks = (mod as any).default || []
+              const text = blocks.map((b: any) => {
+                if (!b) return ''
+                if (typeof b === 'string') return b
+                if (b.type === 'heading' || b.type === 'paragraph' || b.type === 'quote' || b.type === 'aside' || b.type === 'callout') return b.text || ''
+                if (b.type === 'list') return (b.items || []).join(' ')
+                if (b.type === 'code') return b.text || ''
+                return ''
+              }).join(' ')
+              return [cmd.id, normalize(String(text))] as const
+            } catch {
+              return [cmd.id, ''] as const
+            }
+          }))
+          const idx: Record<string, string> = {}
+          for (const [id, text] of entries) idx[String(id)] = text
+          setContentIndex(idx)
         }
-        const entries = await Promise.all(flatten.map(async (cmd) => {
-          try {
-            const key = cmd.loaderKey
-            if (!key) return [cmd.id, ''] as const
-            const mod = await loadLinuxContent(String(key))
-            const blocks = (mod as any).default || []
-            const text = blocks.map((b: any) => {
-              if (!b) return ''
-              if (typeof b === 'string') return b
-              if (b.type === 'heading' || b.type === 'paragraph' || b.type === 'quote' || b.type === 'aside' || b.type === 'callout') return b.text || ''
-              if (b.type === 'list') return (b.items || []).join(' ')
-              if (b.type === 'code') return b.text || ''
-              return ''
-            }).join(' ')
-            return [cmd.id, normalize(String(text))] as const
-          } catch {
-            return [cmd.id, ''] as const
-          }
-        }))
-        const idx: Record<string, string> = {}
-        for (const [id, text] of entries) idx[String(id)] = text
-        setContentIndex(idx)
       } finally {
         setBuildingIndex(false)
       }
     }
     build()
-  }, [includeContent, topics])
+  }, [includeContent, topics, remoteLessonSearch])
+
+  // Remote content search: call backend API and map results to keys like "1-1-3"
+  useEffect(() => {
+    const run = async () => {
+      if (!remoteLessonSearch) { setRemoteMatches(null); return }
+      const term = normalize(searchTerm)
+      if (!includeContent || !term) { setRemoteMatches(null); return }
+      try {
+        setBuildingIndex(true)
+        const url = `/api/v1/lesson-search?q=${encodeURIComponent(searchTerm)}&limit=500`
+        const res = await fetch(url)
+        if (!res.ok) { setRemoteMatches(null); return }
+        const data = await res.json()
+        const setKeys = new Set<string>()
+        for (const item of data || []) {
+          const s = String(item.section || '').trim()
+          const i = String(item.index || '').trim()
+          if (s && i) setKeys.add(`${s}-${i}`)
+        }
+        setRemoteMatches(setKeys)
+      } catch {
+        setRemoteMatches(null)
+      } finally {
+        setBuildingIndex(false)
+      }
+    }
+    run()
+  }, [remoteLessonSearch, includeContent, searchTerm])
 
   const filteredTopics = useMemo(() => {
     const needle = normalize(searchTerm)
@@ -120,8 +154,31 @@ const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false }) => {
             normalize(command.title).includes(needle) ||
             normalize(command.description).includes(needle)
           if (baseMatch) return true
-          if (includeContent && contentIndex && contentIndex[command.id]) {
-            return contentIndex[command.id].includes(needle)
+          if (includeContent) {
+            if (remoteLessonSearch && remoteMatches) {
+              // Map command to section-index via loaderKey or title/name fallback
+              const key = String(command.loaderKey || '')
+              const nums = key.split('-').map((p) => parseInt(p, 10)).filter((n) => !isNaN(n))
+              let sec: string | null = null
+              let idx: string | null = null
+              if (nums.length >= 4) { sec = `${nums[1]}-${nums[2]}`; idx = String(nums[3]) }
+              else if (nums.length === 3) { sec = `${nums[0]}-${nums[1]}`; idx = String(nums[2]) }
+              // Fallback: parse from title/name like "2-3-4 ..."
+              if (!sec || !idx) {
+                const label = String(command.title || command.name || '')
+                const m = label.match(/(\d+)-(\d+)-(\d+)/)
+                if (m) { sec = `${parseInt(m[1],10)}-${parseInt(m[2],10)}`; idx = String(parseInt(m[3],10)) }
+              }
+              // Fallback: parse from id like plan-2-3-4
+              if ((!sec || !idx) && command.id) {
+                const m = String(command.id).match(/^(?:plan|lab|env)-(\d+)-(\d+)-(\d+)/)
+                if (m) { sec = `${parseInt(m[1],10)}-${parseInt(m[2],10)}`; idx = String(parseInt(m[3],10)) }
+              }
+              if (sec && idx) return remoteMatches.has(`${sec}-${idx}`)
+              return false
+            } else if (!remoteLessonSearch && contentIndex && contentIndex[command.id]) {
+              return contentIndex[command.id].includes(needle)
+            }
           }
           return false
         })

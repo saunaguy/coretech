@@ -164,4 +164,6 @@
   .md-prose table { width: 100%; border-collapse: collapse; margin: 0.8rem 0; }
   .md-prose th, .md-prose td { border: 1px solid var(--border); padding: 0.5rem 0.7rem; vertical-align: top; }
   .md-prose thead th { background: color-mix(in oklab, var(--accent) 12%, transparent); }
+
+  /* Note: avoid aliasing to generic `.prose` to prevent unintended global effects */
 }

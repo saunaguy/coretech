@@ -1,46 +1,42 @@
-#22 11.33
-#22 11.33 > Build failed because of webpack errors
-#22 11.34 npm notice
-#22 11.34 npm notice New major version of npm available! 10.8.2 
--> 11.6.0
-#22 11.34 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
-#22 11.34 npm notice To update run: npm install -g npm@11.6.0   
-#22 11.34 npm notice
-#22 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
-
-#21 [backend 4/5] RUN pip install --no-cache-dir -r requirements.txt
-#21 CANCELED
-------
- > [frontend build 6/6] RUN npm run build:
-11.31
-11.31 https://nextjs.org/docs/messages/module-not-found
-11.31
-11.33
-11.33 > Build failed because of webpack errors
-11.34 npm notice
-11.34 npm notice New major version of npm available! 10.8.2 -> 11.6.0
-11.34 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.0
-11.34 npm notice To update run: npm install -g npm@11.6.0       
-11.34 npm notice
-------
-Dockerfile.frontend:20
-
---------------------
-
-  18 |     # Ensure optional dirs exist so COPY in runner doesn't fail (kept for safety)
-
-  19 |     RUN mkdir -p lib content
-
-  20 | >>> RUN npm run build
-
-  21 |
-
-  22 |     FROM node:20-bullseye-slim AS runner
-
---------------------
-
-target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+콘텐츠를 불러오지 못했습니다: HTTP 404
+시도한 경로: /api/content/lesson/1-1/2.md
 
 
-
-View build details: docker-desktop://dashboard/build/desktop-linux/desktop-linux/6c68iz93o0hkgfxnvcyrcmxbl
+요청 URL
+http://192.168.0.12:3000/api/content/lesson/1-1/2.md
+요청 메서드
+GET
+상태 코드
+404 Not Found
+원격 주소
+192.168.0.12:3000
+리퍼러 정책
+strict-origin-when-cross-origin
+connection
+close
+content-length
+22
+content-type
+application/json
+date
+Wed, 24 Sep 2025 02:51:40 GMT
+server
+uvicorn
+vary
+Accept-Encoding
+accept
+*/*
+accept-encoding
+gzip, deflate
+accept-language
+ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+connection
+keep-alive
+cookie
+viewed_qna_2=true; viewed_qna_14=true
+host
+192.168.0.12:3000
+referer
+http://192.168.0.12:3000/linuxtest2
+user-agent
+Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
