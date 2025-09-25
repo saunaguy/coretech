@@ -1,63 +1,38 @@
-## 렌더링/검색 아키텍처 비교 (/linux vs /linuxtest2)
+## /lesson 전환 후 정리 가이드
 
-### 개요
-- /linux: 프론트 번들에 포함된 TS 블록(.ts)을 동적 import하여 클라이언트에서 렌더.
-- /linuxtest2: 백엔드 정적 컨텐츠(`/content/lesson/**.md`)를 선택 시마다 fetch하여 클라이언트에서 렌더. 본문 검색은 백엔드 API(`/api/v1/lesson-search`) 사용.
+현재 프런트 학습 경로는 단일 `/lesson`로 통일되었습니다. 백엔드의 정적 파일(`/content/lesson/**.md`)을 클라이언트에서 fetch하여 렌더하고, 본문 검색은 `/api/v1/lesson-search?q=&limit=` API를 사용합니다(최대 200).
 
-### 리소스/효율
-- 번들 크기
-  - /linux: 컨텐츠 블록이 TS로 번들에 포함 → 초기 JS/메모리 부담↑(항목 증가 시 선형 증가).
-  - /linuxtest2: 컨텐츠는 번들 밖(정적 파일) → 초기 JS 작아짐. 선택한 문서만 네트워크로 가져옴.
-- 네트워크 비용
-  - /linux: 최초 진입 시 네트워크 비용 거의 없음(이미 번들 내). 항목 전환 시 추가 요청 없음.
-  - /linuxtest2: 문서당 1회 GET(텍스트 수 KB~수십 KB). 브라우저 캐시로 재방문 시 304/메모리 캐시 가능.
-- 클라이언트 CPU/메모리
-  - /linux: 큰 번들 파싱/실행 비용, 메모리 상에 블록 데이터 보관. 긴 세션에서 누적 부담.
-  - /linuxtest2: 필요 문서만 파싱(Markdown→HTML). 세션 메모리 사용량↓.
-- 서버 부하
-  - /linux: Next 서버 렌더 부담 적음(클라 렌더 중심). 컨텐츠 변경은 프론트 재배포 필요.
-  - /linuxtest2: FastAPI가 정적 파일 서빙만 수행(가벼움). 검색 API는 45초 TTL 캐시 인메모리 인덱스 사용 → 요청당 수십 ms 수준(수백 파일 기준), 메모리 수 MB 내.
-- 빌드/배포
-  - /linux: 컨텐츠 변경 시 프론트 빌드 필요. 빌드 시간/산출물 크기↑.
-  - /linuxtest2: 컨텐츠 파일 교체만으로 즉시 반영(서버 재시작 불필요). 프론트 재배포 불필요.
+### 삭제해도 되는 것 (안전)
+- `frontend/app/linux/` 전체: 이전 리액트 기반 학습 화면. 현재 라우트/네비에서 진입 경로 없음.
+- `frontend/app/linuxtest/` 전체: 옛 마크다운 뷰어 경로. 현 라우팅에서 사용하지 않음.
+- `frontend/e2e/linuxtest2.spec.ts`: `/lesson`용 `lesson.spec.ts`로 대체됨.
 
-### 기능/UX
-- 검색
-  - /linux: “내용 포함 검색”은 TS 블록에만 동작.
-  - /linuxtest2: 백엔드 본문 검색(API)로 제목/본문 동시 검색. TTL 캐시로 빠른 응답.
-- SEO/접근성
-  - /linux: 클라 렌더 위주. SEO 영향 제한적.
-  - /linuxtest2: 현재 클라 fetch 렌더. 필요 시 SSR로 확장 가능(서버에서 MD 렌더 후 전송) → SEO 강화 여지.
-- 운영/확장성
-  - /linux: 컨텐츠가 코드와 결합 → 협업/버전 관리 용이하지만 배포 동반.
-  - /linuxtest2: 컨텐츠는 파일 교체로 즉시 갱신. 백업/롤백/외부 파이프라인(크롤러) 연동 유리.
+### 상황 봐서 정리 권장 (사용 계획에 따라)
+- `frontend/content/linux/pages/` 디렉터리: 과거 `/linuxtest`에서 사용한 로컬 MD 모음. `/lesson`은 백엔드의 `/content/lesson/**.md`만 사용하므로 필요 없다면 삭제 가능. 외부 문서/직접 링크 의존성 여부 확인 후 제거 권장.
+- `components/linux/LinuxSidebar.tsx`의 로컬 인덱싱 분기: 현재 `/lesson`에서는 `remoteLessonSearch={true}`로 원격 검색만 사용. 로컬 인덱싱을 영구 비활성화할 계획이면
+  - `loadLinuxContent` import 및 관련 인덱싱 코드 제거
+  - 혹은 동적 import로 전환하여 번들 경량화 권장
 
-### 실패/장애 포인트
-- /linux: 빌드 실패/번들 과대화가 주요 리스크.
-- /linuxtest2: 정적 경로 불일치(섹션/인덱스), 파일 누락 시 404. 에러 카드에 실제 요청 URL 제공으로 진단 용이.
+### 유지해야 하는 것 (필수/권장)
+- `frontend/app/lesson/page.tsx`: 새 학습 메인 화면.
+- `frontend/lib/linux-data.ts`: 사이드바 토픽/항목 정의. `/lesson`에서도 그대로 사용됨.
+- `frontend/content/linux/01`, `02`, `03`, `04`, `05`, `basics`, `loader.ts`: 추후 로컬 인덱싱(옵션) 또는 콘텐츠 구성 참조에 대비해 유지 권장.
+- `frontend/app/lessons/**`: 별도 강의자료 섹션으로 `/lesson` 전환과 무관. 그대로 유지.
+- 백엔드 `GET /api/v1/lesson-search` 및 `/content/lesson/**` 서빙 로직: `/lesson`의 검색/본문 로딩에 필요.
 
-### 현재 구성 디테일
-- 백엔드 정적 마운트: `/content` → `backend/content`
-- 문서 경로: `content/lesson/{장-절}/{번호}.md` (예: `lesson/1-1/3.md`)
-- 검색 API: `GET /api/v1/lesson-search?q=...&limit=50`
-  - 인덱스: 45s TTL, 메모리 캐시(경로→본문/제목/섹션/번호)
-  - 결과: `{ section, index, title, snippet }[]`
-- 프론트 `/linuxtest2`
-  - 좌: `/linux`와 동일한 사이드바 UI, “내용 포함 검색” 활성 시 검색 API 사용
-  - 우: Markdown 렌더(`md-prose` 스타일). 컨텐츠는 `${NEXT_PUBLIC_API_BASE_URL}/content/lesson/...`에서 직접 fetch
-  - 로더 키 매핑: `01-1-10` → `lesson/1-1/10.md`, `01-1-2-5` → `lesson/1-2/5.md`
+### 라우팅/네비게이션 반영 상태
+- 홈 그리드, 헤더, 모바일 사이드바의 "Linux 기초" 링크: `/lesson`으로 변경됨.
+- `/linuxtest2` → `/lesson` 이전 완료(페이지 파일 이동). 별도 리다이렉트는 없음.
 
-### 선택 가이드
-- 공개 문서, 빠른 갱신/운영 편의 우선 → `/linuxtest2` 권장.
-- 오프라인/네트워크 최소화, 번들 일원화 우선 → `/linux` 유지.
-- SEO가 매우 중요 → `/linuxtest2`를 SSR로 확장 고려(서버에서 MD→HTML 렌더 후 전송).
+### 선택 사항 (필요 시)
+- 외부 북마크/SEO 고려해 `/linux`, `/linuxtest2`를 `/lesson`으로 리다이렉트하는 얇은 페이지 추가 가능.
 
-### 추가 개선 여지
-- SSR 렌더 옵션 토글(/linuxtest2-ssr): SEO/초기 페인트 개선.
-- 코드 하이라이트/TOC/내부 링크 리라이트.
-- 정적 헤더 튜닝: `Cache-Control`, `ETag` 설정 명시(Starlette StaticFiles 기본값 확인 후 보강).
+### 검색/제한 값
+- 프런트: `limit=200`으로 호출
+- 백엔드: `limit` 검증 상한 `le=200`(FastAPI) — 필요 시 상향 조정 가능
 
-### 한눈에 요약
-- 요점: 공개 강의 운영/갱신 용이성과 번들 경량화가 중요하면 `/linuxtest2`가 더 효율적.
-- /linux 장점: 오프라인에 가까운 빠른 전환(추가 네트워크 없음), 구조 단순. 단점: 번들 비대화, 컨텐츠 변경 시 재빌드 필요, 본문 검색 한계.
-- /linuxtest2 장점: 컨텐츠 교체 즉시 반영, 초기 JS 가벼움, 백엔드 본문 검색 가능, 확장(SSR/스토리지/권한) 용이. 단점: 문서 선택 시 네트워크 요청, 경로 관리 필요.
+### 정리 후 체크리스트
+- 타입체크/빌드 통과 확인: `npm run build`(프런트)
+- 라우팅 점검: `/lesson` 진입, 사이드바 선택, 본문 로딩 OK
+- 검색 점검: 내용 포함 검색 활성화 시 결과 반환 OK(422 미발생)
+- 사용하지 않는 폴더/파일 삭제 후, 번들 크기/빌드 시간 감소 확인

@@ -85,7 +85,7 @@ export default function Header() {
                   onMouseLeave={handleLearningMouseLeave}
                 >
                   <DropdownMenuItem>
-                    <Link href="/linux?open=1">Linux 기초</Link>
+                    <Link href="/lesson">Linux 기초</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href="/labs">실습</Link>

@@ -116,7 +116,7 @@ const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false, remoteLesson
       if (!includeContent || !term) { setRemoteMatches(null); return }
       try {
         setBuildingIndex(true)
-        const url = `/api/v1/lesson-search?q=${encodeURIComponent(searchTerm)}&limit=500`
+        const url = `/api/v1/lesson-search?q=${encodeURIComponent(searchTerm)}&limit=200`
         const res = await fetch(url)
         if (!res.ok) { setRemoteMatches(null); return }
         const data = await res.json()
@@ -224,7 +224,7 @@ const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false, remoteLesson
           aria-label="명령어 검색"
           value={rawTerm}
           onChange={(e) => setRawTerm(e.target.value)}
-          autoFocus={autoFocus as any}
+          autoFocus={Boolean(autoFocus)}
           className="pl-9 bg-background border-sidebar-border focus:ring-sidebar-ring"
         />
         </div>

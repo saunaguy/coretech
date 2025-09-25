@@ -3,7 +3,7 @@ import { Terminal, Server, Globe, Users } from "lucide-react"
 
 export default function CategoryGrid() {
   const items = [
-    { href: "/linux", title: "Linux 기초", desc: "입문부터 차근차근", icon: Terminal, bg: "bg-blue-100", hover: "group-hover:bg-blue-200", color: "text-blue-600" },
+    { href: "/lesson", title: "Linux 기초", desc: "입문부터 차근차근", icon: Terminal, bg: "bg-blue-100", hover: "group-hover:bg-blue-200", color: "text-blue-600" },
     { href: "/server", title: "서버 관리", desc: "서비스/관리 시작하기", icon: Server, bg: "bg-emerald-100", hover: "group-hover:bg-emerald-200", color: "text-emerald-600" },
     { href: "/network", title: "네트워크", desc: "진단/포트/프로토콜", icon: Globe, bg: "bg-purple-100", hover: "group-hover:bg-purple-200", color: "text-purple-600" },
     { href: "/practice", title: "실습", desc: "문제 풀며 익히기", icon: Users, bg: "bg-orange-100", hover: "group-hover:bg-orange-200", color: "text-orange-600" },

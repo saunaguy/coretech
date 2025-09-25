@@ -20,7 +20,7 @@ export default function MobileSidebar() {
         </SheetHeader>
         <ScrollArea className="flex-grow py-4">
           <nav className="flex flex-col space-y-2">
-            <Link href="/linux?open=1" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>Linux 기초</Link>
+            <Link href="/lesson" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>Linux 기초</Link>
             <Link href="/board" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>게시판</Link>
             <Link href="/qna" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>Q&A</Link>
             <Link href="/about" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>소개</Link>
