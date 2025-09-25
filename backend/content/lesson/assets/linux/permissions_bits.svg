@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="220" viewBox="0 0 760 220">
+  <style>
+    .title { font: 700 16px 'Segoe UI', Arial, sans-serif; fill:#0f172a; }
+    .box { fill:#f8fafc; stroke:#111827; stroke-width:1.5; }
+    .label { font: 600 13px 'Segoe UI', Arial, sans-serif; fill:#111827; }
+    .sub { font: 12px 'Segoe UI', Arial, sans-serif; fill:#374151; }
+    .em { fill:#0ea5e9; font-weight:700; }
+  </style>
+  <rect x="10" y="10" width="740" height="200" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="30" y="40" class="title">권한 비트 한눈에: rwx | rwx | rwx</text>
+
+  <g transform="translate(30,60)">
+    <rect class="box" x="0" y="0" width="220" height="60"/>
+    <text x="10" y="24" class="label">소유자(User)</text>
+    <text x="10" y="44" class="sub">r(4) w(2) x(1) → <tspan class="em">7</tspan></text>
+
+    <rect class="box" x="240" y="0" width="220" height="60"/>
+    <text x="250" y="24" class="label">그룹(Group)</text>
+    <text x="250" y="44" class="sub">r(4) w(2) x(1) → <tspan class="em">5</tspan></text>
+
+    <rect class="box" x="480" y="0" width="220" height="60"/>
+    <text x="490" y="24" class="label">기타(Other)</text>
+    <text x="490" y="44" class="sub">r(4) w(2) x(1) → <tspan class="em">5</tspan></text>
+  </g>
+
+  <g transform="translate(30,130)">
+    <rect class="box" x="0" y="0" width="360" height="60"/>
+    <text x="10" y="25" class="sub">특수비트: SUID(4) SGID(2) Sticky(1) → 앞자리</text>
+    <text x="10" y="45" class="sub">예) 4755 = SUID + rwxr-xr-x, 1777 = Sticky + rwxrwxrwx</text>
+
+    <rect class="box" x="400" y="0" width="300" height="60"/>
+    <text x="410" y="25" class="sub">디렉터리의 x: 디렉터리 진입/검색 권한</text>
+    <text x="410" y="45" class="sub">r만 있고 x 없으면 목록은 보여도 진입 불가</text>
+  </g>
+</svg>
+

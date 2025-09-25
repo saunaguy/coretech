@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import Link from 'next/link'
 
-const CONTENT_ROOT = path.join(process.cwd(), 'content', 'lessons')
+const CONTENT_ROOT = path.join(process.cwd(), 'backend', 'content', 'lesson')
 
 function baseName(filename: string) {
   return filename.replace(/\.md$/i, '')

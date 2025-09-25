@@ -34,20 +34,16 @@ function humanizeName(filename: string): string {
 }
 
 function listLessonGroups(): { slug: string; title: string }[] {
-  const contentRoot = path.join(process.cwd(), "content", "lessons")
-  const indexPath = path.join(contentRoot, "index.json")
-  if (fs.existsSync(indexPath)) {
-    try {
-      const idx = JSON.parse(fs.readFileSync(indexPath, "utf-8")) as { groups?: { slug: string; title: string }[] }
-      if (idx?.groups?.length) return idx.groups
-    } catch {}
-  }
+  const contentRoot = path.join(process.cwd(), "backend", "content", "lesson")
   const entries = fs.existsSync(contentRoot) ? fs.readdirSync(contentRoot, { withFileTypes: true }) : []
-  return entries.filter((e) => e.isDirectory()).map((e) => ({ slug: e.name, title: e.name }))
+  return entries
+    .filter((e) => e.isDirectory())
+    .map((e) => ({ slug: e.name, title: e.name }))
+    .sort((a, b) => a.slug.localeCompare(b.slug, "ko"))
 }
 
 function listLessonsForGroup(groupSlug: string, limit = 3): LessonLink[] {
-  const dir = path.join(process.cwd(), "content", "lessons", groupSlug)
+  const dir = path.join(process.cwd(), "backend", "content", "lesson", groupSlug)
   if (!fs.existsSync(dir)) return []
   const entries = fs.readdirSync(dir, { withFileTypes: true })
   // 1) pick markdown files in root
@@ -55,20 +51,6 @@ function listLessonsForGroup(groupSlug: string, limit = 3): LessonLink[] {
     slug: `${groupSlug}/${e.name.replace(/\.md$/i, "")}`,
     title: humanizeName(e.name),
   }))
-  // 2) if none, peek one-level subdirs
-  if (files.length === 0) {
-    for (const e of entries.filter((d) => d.isDirectory())) {
-      const subdir = path.join(dir, e.name)
-      const md = fs
-        .readdirSync(subdir)
-        .filter((f) => f.toLowerCase().endsWith(".md"))
-        .sort((a, b) => a.localeCompare(b, "ko"))
-        .slice(0, Math.max(1, Math.floor(limit / 2)))
-        .map((f) => ({ slug: `${groupSlug}/${e.name}/${f.replace(/\.md$/i, "")}`, title: humanizeName(f) }))
-      files.push(...md)
-      if (files.length >= limit) break
-    }
-  }
   return files.slice(0, limit)
 }
 

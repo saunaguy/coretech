@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="740" height="420" viewBox="0 0 740 420">
+  <style>
+    .box { fill:#f8fafc; stroke:#0f172a; stroke-width:1.5; }
+    .title { font: 700 15px 'Segoe UI', Arial, sans-serif; fill:#0f172a; }
+    .label { font: 600 13px 'Segoe UI', Arial, sans-serif; fill:#111827; }
+    .sub { font: 12px 'Segoe UI', Arial, sans-serif; fill:#374151; }
+    .map { font: 12px 'Segoe UI', Arial, sans-serif; fill:#2563eb; }
+  </style>
+  <rect x="10" y="10" width="720" height="400" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="30" y="40" class="title">OSI 7 계층 vs TCP/IP 4 계층 (한눈에 보기)</text>
+
+  <!-- OSI stack -->
+  <text x="60" y="70" class="label">OSI 7</text>
+  <g transform="translate(40,85)">
+    <rect class="box" x="0" y="0" width="220" height="38"/>
+    <text x="10" y="25" class="sub">7 응용 (HTTP, FTP, SMTP)</text>
+    <rect class="box" x="0" y="40" width="220" height="38"/>
+    <text x="10" y="65" class="sub">6 표현 (암호화/압축)</text>
+    <rect class="box" x="0" y="80" width="220" height="38"/>
+    <text x="10" y="105" class="sub">5 세션 (연결/세션)</text>
+    <rect class="box" x="0" y="120" width="220" height="38"/>
+    <text x="10" y="145" class="sub">4 전송 (TCP/UDP)</text>
+    <rect class="box" x="0" y="160" width="220" height="38"/>
+    <text x="10" y="185" class="sub">3 네트워크 (IP, ICMP)</text>
+    <rect class="box" x="0" y="200" width="220" height="38"/>
+    <text x="10" y="225" class="sub">2 데이터링크 (Ethernet, MAC)</text>
+    <rect class="box" x="0" y="240" width="220" height="38"/>
+    <text x="10" y="265" class="sub">1 물리 (케이블, 신호)</text>
+  </g>
+
+  <!-- TCP/IP stack -->
+  <text x="320" y="70" class="label">TCP/IP 4</text>
+  <g transform="translate(300,85)">
+    <rect class="box" x="0" y="0" width="220" height="90"/>
+    <text x="10" y="25" class="sub">응용</text>
+    <text x="10" y="45" class="map">OSI 5~7</text>
+    <rect class="box" x="0" y="95" width="220" height="65"/>
+    <text x="10" y="120" class="sub">전송 (TCP/UDP)</text>
+    <text x="10" y="140" class="map">OSI 4</text>
+    <rect class="box" x="0" y="165" width="220" height="60"/>
+    <text x="10" y="190" class="sub">인터넷 (IP, ICMP)</text>
+    <text x="10" y="210" class="map">OSI 3</text>
+    <rect class="box" x="0" y="230" width="220" height="60"/>
+    <text x="10" y="255" class="sub">네트워크 인터페이스</text>
+    <text x="10" y="275" class="map">OSI 1~2</text>
+  </g>
+
+  <!-- MTU/MSS/PMTUD notes -->
+  <g transform="translate(540,85)">
+    <text x="0" y="0" class="label">전송 단위</text>
+    <rect class="box" x="0" y="10" width="180" height="60"/>
+    <text x="10" y="35" class="sub">MTU: L2 최대 프레임 (e.g. 1500)</text>
+    <text x="10" y="55" class="sub">MSS: L4 Payload 최대 (MTU-헤더)</text>
+    <rect class="box" x="0" y="80" width="180" height="90"/>
+    <text x="10" y="105" class="sub">PMTUD: DF + ICMP로</text>
+    <text x="10" y="125" class="sub">경로 MTU 탐색</text>
+    <text x="10" y="145" class="sub">ICMP 차단 → 블랙홀</text>
+  </g>
+</svg>
+

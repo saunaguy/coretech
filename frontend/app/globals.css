@@ -166,4 +166,29 @@
   .md-prose thead th { background: color-mix(in oklab, var(--accent) 12%, transparent); }
 
   /* Note: avoid aliasing to generic `.prose` to prevent unintended global effects */
+  
+  /* Collapsible details/summary styling for Markdown (.prose as well) */
+  .prose details, .md-prose details {
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    padding: 0.5rem 0.75rem;
+    margin: 0.75rem 0;
+  }
+  .prose summary, .md-prose summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .prose summary::-webkit-details-marker, .md-prose summary::-webkit-details-marker { display: none; }
+  .prose summary::before, .md-prose summary::before {
+    content: "▸";
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .prose details[open] > summary::before, .md-prose details[open] > summary::before { transform: rotate(90deg); }
+  .prose details > *:not(summary), .md-prose details > *:not(summary) { margin-top: 0.5rem; }
 }

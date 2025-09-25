@@ -125,3 +125,30 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Collapsible details/summary styling for Markdown content */
+  .prose details {
+    border: 1px solid var(--border);
+    border-radius: 0.6rem;
+    background: color-mix(in oklab, var(--accent) 6%, transparent);
+    padding: 0.5rem 0.75rem;
+    margin: 0.75rem 0;
+  }
+  .prose summary {
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .prose summary::-webkit-details-marker { display: none; }
+  .prose summary::before {
+    content: "▸";
+    transition: transform 0.2s ease;
+    display: inline-block;
+  }
+  .prose details[open] > summary::before { transform: rotate(90deg); }
+  .prose details > *:not(summary) { margin-top: 0.5rem; }
+}

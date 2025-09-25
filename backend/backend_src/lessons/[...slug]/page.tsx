@@ -8,7 +8,7 @@ export default async function LessonPage({ params }: { params: { slug: string[] 
   const segs = params.slug
   const file = segs[segs.length - 1] + ".md"
   const group = segs[0] || ""
-  const p = path.join(process.cwd(), "content", "lessons", group, file)
+  const p = path.join(process.cwd(), "backend", "content", "lesson", group, file)
   let html = ""
   try {
     const md = await fs.readFile(p, "utf-8")

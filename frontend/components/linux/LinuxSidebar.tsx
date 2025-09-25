@@ -191,7 +191,7 @@ const LinuxSidebar = ({ topics, onCommandSelect, autoFocus = false, remoteLesson
       }
     }
     return filtered
-  }, [searchTerm, topics, includeContent, contentIndex])
+  }, [searchTerm, topics, includeContent, contentIndex, remoteLessonSearch, remoteMatches])
 
   const toggleCategory = (category) => {
     setOpenCategories((prev) => ({

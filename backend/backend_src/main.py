@@ -129,8 +129,11 @@ def lesson_search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1
         assert _LESSON_SEARCH_CACHE is not None
         needle = q.lower().strip()
         norm_needle = re.sub(r"[^a-z0-9가-힣]+", "", needle)
+        # tokenize by whitespace, keep non-empty tokens
         tokens = [t for t in re.split(r"\s+", needle) if t]
+        # normalize tokens by stripping punctuation; drop tokens that become empty
         norm_tokens = [re.sub(r"[^a-z0-9가-힣]+", "", t) for t in tokens]
+        norm_tokens = [t for t in norm_tokens if t]
 
         results: List[Dict[str, str]] = []
         for rel, meta in _LESSON_SEARCH_CACHE.items():

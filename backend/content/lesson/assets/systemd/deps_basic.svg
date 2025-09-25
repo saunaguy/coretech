@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="260" viewBox="0 0 720 260">
+  <style>
+    .title { font: 700 16px 'Segoe UI', Arial, sans-serif; fill:#0f172a; }
+    .box { fill:#f8fafc; stroke:#111827; stroke-width:1.5; }
+    .req { stroke:#dc2626; fill:none; stroke-width:2; marker-end:url(#m1); }
+    .want { stroke:#0ea5e9; fill:none; stroke-width:2; stroke-dasharray:6 4; marker-end:url(#m2); }
+    .order { stroke:#111827; fill:none; stroke-width:1.6; marker-end:url(#m3); }
+    .label { font: 600 13px 'Segoe UI', Arial, sans-serif; fill:#111827; }
+    .legend { font: 12px 'Segoe UI', Arial, sans-serif; fill:#374151; }
+  </style>
+  <defs>
+    <marker id="m1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#dc2626"/>
+    </marker>
+    <marker id="m2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#0ea5e9"/>
+    </marker>
+    <marker id="m3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,3 L0,6 Z" fill="#111827"/>
+    </marker>
+  </defs>
+  <rect x="10" y="10" width="700" height="240" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="30" y="40" class="title">systemd 의존성: After/Wants/Requires</text>
+
+  <g transform="translate(60,70)">
+    <rect class="box" x="0" y="0" width="210" height="54"/>
+    <text x="15" y="33" class="label">mariadb.service</text>
+
+    <rect class="box" x="300" y="0" width="210" height="54"/>
+    <text x="315" y="33" class="label">my-app.service</text>
+
+    <!-- After: ordering from mariadb -> my-app -->
+    <path class="order" d="M210,27 L298,27"/>
+
+    <!-- Requires: solid red from app to db -->
+    <path class="req" d="M405,54 C405,90 105,90 105,54"/>
+
+    <!-- Wants: dashed blue from app to (network.target) -->
+    <rect class="box" x="150" y="120" width="210" height="54"/>
+    <text x="165" y="153" class="label">network.target</text>
+    <path class="want" d="M405,27 C500,27 500,147 360,147"/>
+  </g>
+
+  <g transform="translate(30,185)">
+    <rect x="0" y="0" width="16" height="4" fill="#111827"/><text x="22" y="6" class="legend">After/Before: 순서만 보장</text>
+    <rect x="210" y="-6" width="16" height="6" fill="#dc2626"/><text x="230" y="6" class="legend">Requires: 실패 시 주 유닛도 중지</text>
+    <rect x="460" y="-6" width="16" height="6" fill="#0ea5e9"/><text x="480" y="6" class="legend">Wants: 실패해도 계속</text>
+  </g>
+</svg>
+
