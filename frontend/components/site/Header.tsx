@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useMobileSidebar } from "@/lib/MobileSidebarContext"
 import { useAuth } from "@/components/auth/AuthProvider"
-
-import React, { useState, useRef } from "react"
+import React, { useState } from "react"
 
 export default function Header() {
   const router = useRouter()
@@ -22,106 +21,70 @@ export default function Header() {
   const { toggleMobileSidebar } = useMobileSidebar()
   const { isAuthenticated, user, logout } = useAuth()
 
-  // State for dropdowns
-  const [isLearningDropdownOpen, setIsLearningDropdownOpen] = useState(false)
-  const [isCommunityDropdownOpen, setIsCommunityDropdownOpen] = useState(false)
+  // State for hover menus
+  const [learningOpen, setLearningOpen] = useState(false)
+  const [communityOpen, setCommunityOpen] = useState(false)
 
-  // Refs for managing timeouts
-  const learningTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const communityTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-
-  // Use CSS variables via tokens to keep colors consistent across themes
   const headerClassName = 'bg-header text-header-foreground'
-
-  // Hover handlers for Learning dropdown
-  const handleLearningMouseEnter = () => {
-    if (learningTimeoutRef.current) {
-      clearTimeout(learningTimeoutRef.current)
-    }
-    setIsLearningDropdownOpen(true)
-  }
-  const handleLearningMouseLeave = () => {
-    learningTimeoutRef.current = setTimeout(() => {
-      setIsLearningDropdownOpen(false)
-    }, 150) // Small delay to allow moving to dropdown content
-  }
-
-  // Hover handlers for Community dropdown
-  const handleCommunityMouseEnter = () => {
-    if (communityTimeoutRef.current) {
-      clearTimeout(communityTimeoutRef.current)
-    }
-    setIsCommunityDropdownOpen(true)
-  }
-  const handleCommunityMouseLeave = () => {
-    communityTimeoutRef.current = setTimeout(() => {
-      setIsCommunityDropdownOpen(false)
-    }, 150) // Small delay to allow moving to dropdown content
-  }
 
   return (
     <header className={`sticky top-0 z-50 w-full border-b border-border/40 shadow-sm backdrop-blur ${headerClassName}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center min-w-0"> {/* Added min-w-0 to prevent shrinking */}
-            <Link href="/" className="text-xl font-bold flex-shrink-0">CoreTechNet</Link> {/* Added flex-shrink-0 */}
+          <div className="flex items-center min-w-0">
+            <Link href="/" className="text-xl font-bold flex-shrink-0">CoreTechNet</Link>
           </div>
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-baseline space-x-4">
-              {/* 학습 Dropdown */}
-              <DropdownMenu open={isLearningDropdownOpen} onOpenChange={setIsLearningDropdownOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="hover:text-primary transition-colors"
-                    onMouseEnter={handleLearningMouseEnter}
-                    onMouseLeave={handleLearningMouseLeave}
-                  >
-                    학습
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onMouseEnter={handleLearningMouseEnter}
-                  onMouseLeave={handleLearningMouseLeave}
-                >
-                  <DropdownMenuItem>
-                    <Link href="/lesson">Linux 기초</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/labs">실습</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
+
+              {/* 학습 Dropdown with Hover */}
+              <DropdownMenu open={learningOpen} onOpenChange={setLearningOpen}>
+                <div onMouseEnter={() => setLearningOpen(true)} onMouseLeave={() => setLearningOpen(false)}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="hover:text-primary transition-colors border-none outline-none ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0"
+                    >
+                      학습
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent sideOffset={4}>
+                    <DropdownMenuItem asChild>
+                      <Link href="/lesson">Linux 기초</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/practice">실습</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </div>
               </DropdownMenu>
 
-              {/* 커뮤니티 Dropdown */}
-              <DropdownMenu open={isCommunityDropdownOpen} onOpenChange={setIsCommunityDropdownOpen}>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    className="hover:text-primary transition-colors"
-                    onMouseEnter={handleCommunityMouseEnter}
-                    onMouseLeave={handleCommunityMouseLeave}
-                  >
-                    커뮤니티
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                  onMouseEnter={handleCommunityMouseEnter}
-                  onMouseLeave={handleCommunityMouseLeave}
-                >
-                  <DropdownMenuItem>
-                    <Link href="/notice">공지사항</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/board">게시판</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/qna">Q&A</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/about">소개</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
+              {/* 커뮤니티 Dropdown with Hover */}
+              <DropdownMenu open={communityOpen} onOpenChange={setCommunityOpen}>
+                <div onMouseEnter={() => setCommunityOpen(true)} onMouseLeave={() => setCommunityOpen(false)}>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="hover:text-primary transition-colors border-none outline-none ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0"
+                    >
+                      커뮤니티
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent sideOffset={4}>
+                    <DropdownMenuItem asChild>
+                      <Link href="/notice">공지사항</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/board">게시판</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/qna">Q&A</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/about">소개</Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </div>
               </DropdownMenu>
 
               {!isAuthenticated ? (
@@ -153,8 +116,8 @@ export default function Header() {
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden" // Visible only on small screens
-              onClick={toggleMobileSidebar} // Use context to toggle
+              className="md:hidden"
+              onClick={toggleMobileSidebar}
             >
               <Menu className="h-5 w-5" />
               <span className="sr-only">메뉴 열기</span>
@@ -164,7 +127,7 @@ export default function Header() {
               variant="ghost"
               size="sm"
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="flex-shrink-0" // Added flex-shrink-0
+              className="flex-shrink-0"
             >
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -173,7 +136,6 @@ export default function Header() {
           </div>
         </div>
       </div>
-      {/* Mobile Sidebar is now rendered by LinuxPage using context */}
     </header>
   )
 }

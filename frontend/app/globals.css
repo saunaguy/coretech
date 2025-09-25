@@ -9,8 +9,7 @@
   --card: oklch(0.98 0 0);
   --card-foreground: oklch(0.27 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.27 0 0);
-  --primary: oklch(0.55 0.25 240);
+  --primary: oklch(0.98 0 0);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.98 0 0);
   --secondary-foreground: oklch(0.27 0 0);
@@ -34,7 +33,7 @@
   --sidebar-border: oklch(0.9 0 0);
   --sidebar-ring: oklch(0.55 0.25 240);
   /* Header (light): use brand primary (blue) */
-  --header: var(--primary);
+  --header: oklch(0.55 0.25 240);
   --header-foreground: var(--primary-foreground);
 }
 
@@ -46,7 +45,7 @@
   --card-foreground: oklch(0.95 0 0);
   --popover: oklch(0.26 0 0);
   --popover-foreground: oklch(0.95 0 0);
-  --primary: oklch(0.55 0.25 240);
+  --primary: oklch(0.24 0.08 300);
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.3 0 0);
   --secondary-foreground: oklch(0.95 0 0);
@@ -69,7 +68,7 @@
   --sidebar-border: oklch(0.34 0 0);
   --sidebar-ring: oklch(0.55 0.25 240);
   /* Deep purple for header in dark mode */
-  --header: oklch(0.24 0.08 300);
+  --header: oklch(0.55 0.25 240);
   --header-foreground: oklch(0.98 0 0);
 }
 
