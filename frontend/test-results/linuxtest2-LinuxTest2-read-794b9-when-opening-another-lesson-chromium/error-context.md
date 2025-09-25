@@ -1,0 +1,65 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - alert [ref=e2]
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - link "CoreTechNet" [ref=e7] [cursor=pointer]:
+        - /url: /
+      - generic [ref=e8]:
+        - navigation [ref=e9]:
+          - button "학습" [ref=e10]
+          - button "커뮤니티" [ref=e11]
+          - link "로그인" [ref=e12] [cursor=pointer]:
+            - /url: /login
+          - link "회원가입" [ref=e13] [cursor=pointer]:
+            - /url: /register
+        - button "테마 전환" [ref=e14]:
+          - img [ref=e15]
+          - img
+          - generic [ref=e21]: 테마 전환
+  - generic [ref=e24]:
+    - complementary [ref=e25]:
+      - generic [ref=e26]:
+        - generic [ref=e28]: 명령어 목록
+        - navigation [ref=e30]:
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - generic:
+                - img
+              - textbox "명령어 검색" [ref=e33]
+            - generic [ref=e35] [cursor=pointer]:
+              - checkbox "내용 포함 검색" [ref=e36]
+              - generic [ref=e37] [cursor=pointer]: 내용 포함 검색
+          - generic [ref=e38]:
+            - button "🖥️ 운영체제와 설치" [ref=e40]:
+              - generic [ref=e41]:
+                - img [ref=e43]
+                - generic [ref=e45]: 🖥️ 운영체제와 설치
+              - img [ref=e47]
+            - button "⚙️ 리눅스 핵심 명령어" [ref=e50]:
+              - generic [ref=e51]:
+                - img [ref=e53]
+                - generic [ref=e55]: ⚙️ 리눅스 핵심 명령어
+              - img [ref=e57]
+            - button "🧰 리눅스 서버 운영 & 트러블슈팅" [ref=e60]:
+              - generic [ref=e61]:
+                - img [ref=e63]
+                - generic [ref=e65]: 🧰 리눅스 서버 운영 & 트러블슈팅
+              - img [ref=e67]
+            - button "🌐 네트워크" [ref=e70]:
+              - generic [ref=e71]:
+                - img [ref=e73]
+                - generic [ref=e75]: 🌐 네트워크
+              - img [ref=e77]
+            - button "🧪 실습 코너" [ref=e80]:
+              - generic [ref=e81]:
+                - img [ref=e83]
+                - generic [ref=e85]: 🧪 실습 코너
+              - img [ref=e87]
+    - main [ref=e89]:
+      - generic [ref=e90]:
+        - generic [ref=e92]: 문서를 선택하세요
+        - paragraph [ref=e94]: 좌측에서 항목을 선택해주세요.
+```

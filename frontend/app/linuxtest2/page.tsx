@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useMemo, useState, useEffect, useRef } from "react"
 import LinuxSidebar from "@/components/linux/LinuxSidebar"
 import { linuxTopics } from "@/lib/linux-data"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -67,6 +67,12 @@ export default function LinuxTest2Page() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [attemptUrl, setAttemptUrl] = useState<string | null>(null)
+  const readerRef = useRef<HTMLDivElement | null>(null)
+
+  // Prevent browser from restoring previous scroll on same-page updates
+  useEffect(() => {
+    try { (window.history as any).scrollRestoration = 'manual' } catch {}
+  }, [])
 
   const { section, index } = useMemo(() => parseSectionAndIndex(selected?.id, selected?.loaderKey), [selected?.id, selected?.loaderKey])
 
@@ -94,7 +100,29 @@ export default function LinuxTest2Page() {
     fetchMd()
   }, [section, index])
 
-  const handleSelect = (cmd: Command) => setSelected(cmd)
+  // Scroll reader and window to top whenever a new document is loaded
+  useEffect(() => {
+    if (!md) return
+    try {
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      readerRef.current?.scrollTo?.({ top: 0, left: 0 })
+      // Also ensure inner prose container is scrolled to top if independently scrollable
+      const prose = readerRef.current?.querySelector('.md-prose') as HTMLElement | null
+      if (prose) prose.scrollTop = 0
+    } catch {}
+  }, [md])
+
+  const handleSelect = (cmd: Command) => {
+    setSelected(cmd)
+    try {
+      window.scrollTo(0, 0)
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+      readerRef.current?.scrollTo?.({ top: 0, left: 0 })
+    } catch {}
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -125,7 +153,7 @@ export default function LinuxTest2Page() {
                   </CardDescription>
                 )}
               </CardHeader>
-              <CardContent>
+              <CardContent ref={readerRef}>
                 {loading && <div className="text-muted-foreground">불러오는 중...</div>}
                 {error && (
                   <div className="text-destructive space-y-2">
