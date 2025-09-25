@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('LinuxTest2 reader scroll behavior', () => {
+test.describe('Linux reader scroll behavior', () => {
   test('scroll resets to top when opening another lesson', async ({ page }) => {
-    await page.goto('/linuxtest2')
+    await page.goto('/linux')
 
     // Ensure sidebar rendered
     await expect(page.getByText('명령어 목록')).toBeVisible()
@@ -25,10 +25,9 @@ test.describe('LinuxTest2 reader scroll behavior', () => {
     // Wait until markdown content shows up
     await expect(page.locator('.md-prose')).toBeVisible({ timeout: 10000 })
 
-    // Scroll the right reader container near bottom (not the whole window)
+    // Scroll the window near bottom (right pane no longer scrolls internally)
     await page.evaluate(() => {
-      const reader = document.querySelector('main .md-prose')?.parentElement as HTMLElement | null
-      if (reader) reader.scrollTo(0, reader.scrollHeight)
+      window.scrollTo(0, document.body.scrollHeight)
       return 0
     })
 
@@ -39,13 +38,9 @@ test.describe('LinuxTest2 reader scroll behavior', () => {
     // Wait for content to update (the header title changes or content rerenders)
     await page.waitForTimeout(400)
 
-    // Expect the reader container to be at top (allow small tolerance)
-    const readerTop = await page.evaluate(() => {
-      const reader = document.querySelector('main .md-prose')?.parentElement as HTMLElement | null
-      return reader ? reader.scrollTop : -1
-    })
-    expect(readerTop).toBeGreaterThanOrEqual(0)
-    expect(readerTop).toBeLessThan(5)
+    // Expect the window to be at top (allow small tolerance)
+    const y = await page.evaluate(() => window.scrollY)
+    expect(y).toBeLessThan(5)
   })
 })
 
