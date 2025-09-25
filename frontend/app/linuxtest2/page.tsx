@@ -100,13 +100,10 @@ export default function LinuxTest2Page() {
     fetchMd()
   }, [section, index])
 
-  // Scroll reader and window to top whenever a new document is loaded
+  // Scroll only the right reader pane to top whenever a new document is loaded
   useEffect(() => {
     if (!md) return
     try {
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
       readerRef.current?.scrollTo?.({ top: 0, left: 0 })
       // Also ensure inner prose container is scrolled to top if independently scrollable
       const prose = readerRef.current?.querySelector('.md-prose') as HTMLElement | null
@@ -117,10 +114,9 @@ export default function LinuxTest2Page() {
   const handleSelect = (cmd: Command) => {
     setSelected(cmd)
     try {
-      window.scrollTo(0, 0)
-      document.documentElement.scrollTop = 0
-      document.body.scrollTop = 0
       readerRef.current?.scrollTo?.({ top: 0, left: 0 })
+      const prose = readerRef.current?.querySelector('.md-prose') as HTMLElement | null
+      if (prose) prose.scrollTop = 0
     } catch {}
   }
 
@@ -153,7 +149,7 @@ export default function LinuxTest2Page() {
                   </CardDescription>
                 )}
               </CardHeader>
-              <CardContent ref={readerRef}>
+              <CardContent ref={readerRef} className="overflow-y-auto max-h-[calc(100vh-10rem)] pr-1">
                 {loading && <div className="text-muted-foreground">불러오는 중...</div>}
                 {error && (
                   <div className="text-destructive space-y-2">

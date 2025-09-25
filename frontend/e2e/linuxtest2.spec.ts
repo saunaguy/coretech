@@ -25,9 +25,10 @@ test.describe('LinuxTest2 reader scroll behavior', () => {
     // Wait until markdown content shows up
     await expect(page.locator('.md-prose')).toBeVisible({ timeout: 10000 })
 
-    // Scroll near bottom
+    // Scroll the right reader container near bottom (not the whole window)
     await page.evaluate(() => {
-      window.scrollTo(0, document.body.scrollHeight)
+      const reader = document.querySelector('main .md-prose')?.parentElement as HTMLElement | null
+      if (reader) reader.scrollTo(0, reader.scrollHeight)
       return 0
     })
 
@@ -38,9 +39,13 @@ test.describe('LinuxTest2 reader scroll behavior', () => {
     // Wait for content to update (the header title changes or content rerenders)
     await page.waitForTimeout(400)
 
-    // Expect window to be at top (allow small tolerance)
-    const y = await page.evaluate(() => window.scrollY)
-    expect(y).toBeLessThan(5)
+    // Expect the reader container to be at top (allow small tolerance)
+    const readerTop = await page.evaluate(() => {
+      const reader = document.querySelector('main .md-prose')?.parentElement as HTMLElement | null
+      return reader ? reader.scrollTop : -1
+    })
+    expect(readerTop).toBeGreaterThanOrEqual(0)
+    expect(readerTop).toBeLessThan(5)
   })
 })
 
