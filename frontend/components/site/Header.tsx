@@ -90,6 +90,9 @@ export default function Header() {
                   <DropdownMenuItem>
                     <Link href="/practice">실습</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href="/daily">데일리</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
