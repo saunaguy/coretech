@@ -414,11 +414,35 @@ def create_question(payload: QnaCreate, db: Session = Depends(get_db)):
 
 
 @app.get("/api/v1/qna/questions")
-def list_questions(db: Session = Depends(get_db)):
-    rows = db.query(DBQuestion).order_by(DBQuestion.created_at.desc()).all()
+def list_questions(category: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(DBQuestion)
+    if category and category != 'all':
+        if category == 'others':
+            query = query.filter(DBQuestion.category.notin_(['server', 'network']))
+        else:
+            query = query.filter(DBQuestion.category == category)
+    
+    rows = query.order_by(DBQuestion.created_at.desc()).all()
+
     def to_dict(r: DBQuestion):
-        return {"id": r.id, "title": r.title, "body": r.body, "views": r.views, "likes": likes_count(db, r.id, "question"), "comments_count": comments_count(db, r.id, "question"), "createdAt": r.created_at.isoformat()}
+        return {"id": r.id, "title": r.title, "body": r.body, "views": r.views, "likes": likes_count(db, r.id, "question"), "comments_count": comments_count(db, r.id, "question"), "createdAt": r.created_at.isoformat(), "tags": r.tags_text.split(",") if r.tags_text else [], "answered": r.answered}
     return [to_dict(r) for r in rows]
+
+@app.get("/api/v1/qna/tags")
+def list_all_tags(db: Session = Depends(get_db)):
+    all_tags = set()
+    # Add default tags
+    all_tags.add("server")
+    all_tags.add("network")
+
+    # Get tags from existing questions
+    questions = db.query(DBQuestion).all()
+    for q in questions:
+        if q.tags_text:
+            for tag in q.tags_text.split(","):
+                all_tags.add(tag.strip())
+    
+    return sorted(list(all_tags))
 
 
 @app.get("/api/v1/qna/questions/{qid}")
@@ -443,7 +467,7 @@ def get_question(qid: int, db: Session = Depends(get_db)):
         }
         for c in comments
     ]
-    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments_data, "likes": likes, "views": q.views}
+    return {"id": q.id, "title": q.title, "body": q.body, "tags": tags, "comments": comments_data, "likes": likes, "views": q.views, "category": q.category}
 
 
 @app.post("/api/v1/qna/questions/{qid}/increment_view")

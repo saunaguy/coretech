@@ -111,3 +111,49 @@ def create_comment(comment: schemas.CommentCreate, db: Session = Depends(get_db)
             "username": current_user.username
         }
     }
+
+@router.delete("/api/v1/comments/{comment_id}", status_code=204)
+def delete_comment(comment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    is_admin = getattr(current_user, "role", "user") in ("admin", "operator")
+    if comment.user_id != current_user.id and not is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized to delete this comment")
+
+    db.delete(comment)
+    db.commit()
+    return
+
+@router.put("/api/v1/comments/{comment_id}", response_model=schemas.Comment)
+def update_comment(comment_id: int, payload: schemas.CommentUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    is_admin = getattr(current_user, "role", "user") in ("admin", "operator")
+    if comment.user_id != current_user.id and not is_admin:
+        raise HTTPException(status_code=403, detail="Not authorized to update this comment")
+
+    comment.content = payload.content
+    db.commit()
+    db.refresh(comment)
+
+    # We need to return the author information as well, which is not on the comment object itself
+    author_info = db.query(User).filter(User.id == comment.user_id).first()
+
+    return {
+        "id": comment.id,
+        "content": comment.content,
+        "user_id": comment.user_id,
+        "created_at": comment.created_at,
+        "parent_id": comment.parent_id,
+        "parent_type": comment.parent_type,
+        "author": {
+            "id": author_info.id,
+            "username": author_info.username
+        }
+    }

@@ -60,6 +60,20 @@ class Question(Base):
     category: Mapped[str | None] = mapped_column(String(50), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
+    author: Mapped["User"] = relationship("User", primaryjoin="foreign(Question.author_id) == User.id", lazy="joined")
+
+    comments: Mapped[List["Comment"]] = relationship(
+        "Comment",
+        primaryjoin="and_(Comment.parent_id == foreign(Question.id), Comment.parent_type == 'question')",
+        back_populates="question", # Changed from backref to back_populates
+        lazy="joined",
+        order_by="Comment.created_at"
+    )
+
+    @property
+    def tags(self) -> List[str]:
+        return [t for t in (self.tags_text or "").split(",") if t]
+
 
 class DailyTest(Base):
     __tablename__ = "daily_tests"
@@ -101,6 +115,10 @@ class Comment(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     user: Mapped["User"] = relationship("User", backref="comments")
+    question: Mapped["Question"] = relationship(
+        primaryjoin="and_(Comment.parent_id == foreign(Question.id), Comment.parent_type == 'question')",
+        back_populates="comments"
+    ) # Added back_populates for Question
 
 class Like(Base):
     __tablename__ = "likes"

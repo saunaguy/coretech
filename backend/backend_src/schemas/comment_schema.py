@@ -1,5 +1,6 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from backend_src.db import UserSummary # Import UserSummary
 
 class CommentBase(BaseModel):
     content: str
@@ -15,6 +16,6 @@ class CommentResponse(CommentBase):
     parent_type: str
     user_id: int
     created_at: datetime
+    user: UserSummary # Add user object
 
-    class Config:
-        from_attributes = True # Pydantic v2
+    model_config = ConfigDict(from_attributes=True)

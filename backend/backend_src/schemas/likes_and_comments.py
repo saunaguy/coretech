@@ -18,6 +18,9 @@ class CommentCreate(CommentBase):
     parent_id: int
     parent_type: str
 
+class CommentUpdate(CommentBase):
+    pass
+
 class Comment(CommentBase):
     id: int
     user_id: int

@@ -84,9 +84,10 @@ function listLessonsForGroup(groupSlug: string, limit = 3): LessonLink[] {
 
 export default async function HomePage() {
   const groups = listLessonGroups()
-  const [board, qna] = await Promise.all([
+  const [board, latestQna, popularQna] = await Promise.all([
     tryFetchJson<any[]>("/api/v1/board/posts?sort=latest", []),
-    tryFetchJson<any[]>("/api/v1/qna/questions", []),
+    tryFetchJson<any[]>("/api/v1/qna/questions?sort=latest", []),
+    tryFetchJson<any[]>("/api/v1/qna/questions?sort=views", []),
   ])
   return (
     <div className="min-h-screen bg-background">
@@ -201,17 +202,41 @@ export default async function HomePage() {
                 </div>
               </CardHeader>
               <CardContent>
-                <QAList
-                  items={(qna || []).slice(0, 5).map((q: any) => ({
-                    id: String(q.id),
-                    question: q.title,
-                    author: q.author?.username || "",
-                    answered: !!q.answered,
-                    createdAt: q.createdAt || q.created_at || "",
-                    excerpt: q.body || "",
-                    category: q.category,
-                  }))}
-                />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {(popularQna || []).slice(0, 3).map((q: any) => (
+                    <Link key={q.id} href={`/qna/${q.id}`} passHref>
+                      <div className="block border border-slate-200 rounded-lg bg-card text-card-foreground hover:shadow-lg transition-shadow cursor-pointer h-full flex flex-col">
+                        <div className="p-5 flex-grow">
+                          <div className="flex justify-between items-center mb-2">
+                            <span
+                              className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                                q.answered
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }`}
+                            >
+                              {q.answered ? "답변 완료" : "답변 대기"}
+                            </span>
+                            <span className="text-xs text-muted-foreground">조회 {q.views}</span>
+                          </div>
+                          <h2 className="text-lg font-bold line-clamp-3 mb-2 min-h-[84px]">{q.title}</h2>
+                          <p className="text-sm text-muted-foreground line-clamp-2 min-h-[40px]">{q.body}</p>
+                        </div>
+                        {(q.tags && q.tags.length > 0) && (
+                          <div className="border-t p-4 mt-auto">
+                            <div className="flex flex-wrap gap-2">
+                              {(q.tags || []).slice(0, 3).map((t: any) => (
+                                <span key={t} className="text-xs px-2 py-1 rounded-full border bg-background">
+                                  #{t}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>

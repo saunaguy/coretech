@@ -1,117 +1,341 @@
-import Link from "next/link"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+"use client"
+
+import { useEffect, useState } from "react"
+import { useParams, useRouter } from "next/navigation"
+import { authenticatedFetch } from "@/lib/auth"
 import { Button } from "@/components/ui/button"
-import CommentSection from "@/components/CommentSection"
-import LikeButton from "@/components/LikeButton"
-import { cookies } from 'next/headers'
-import { jwtDecode } from 'jwt-decode'
-import ViewTracker from '@/components/ViewTracker'
-import { authenticatedFetch } from '@/lib/auth'
-import { format } from 'date-fns';
+import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link";
+import { useAuth } from "@/components/auth/AuthProvider"
+import { User, Clock, Tag, CheckCircle } from "lucide-react"
 
-export const dynamic = "force-dynamic"
-
-async function getQuestion(id: string, token: string | null) {
-  try {
-    const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://backend:8000"
-    const res = await fetch(`${base.replace(/\/+$/, '')}/api/v1/qna/questions/${id}`, { cache: "no-store" })
-    if (!res.ok) return null
-    return await res.json()
-  } catch {
-    return null;
-  }
+type QItem = {
+  id: number
+  title: string
+  body: string
+  tags: string[]
+  createdAt: string
+  answered: boolean
+  author: { id: number; username: string; }
+  views: number
+  category: string
 }
 
+type Answer = {
+  id: number
+  body: string
+  createdAt: string
+  author: string // Assuming author is a simple string
+  isAccepted?: boolean // To mark the best answer
+}
 
+export default function QuestionDetailPage() {
+  const params = useParams()
+  const router = useRouter()
+  const { user } = useAuth()
+  const id = params.id as string
 
-export default async function QnaDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params
-  // Read HttpOnly auth cookie set by backend (access_token)
-  const token = cookies().get('access_token')?.value || null
+  const [question, setQuestion] = useState<QItem | null>(null)
+  const [answers, setAnswers] = useState<Answer[]>([])
+  const [newAnswer, setNewAnswer] = useState("")
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
+  const [editingAnswerId, setEditingAnswerId] = useState<number | null>(null)
+  const [editingAnswerBody, setEditingAnswerBody] = useState("")
 
-  const question = await getQuestion(id, token)
+  useEffect(() => {
+    if (!id) return
+
+    const loadData = async () => {
+      setLoading(true)
+      try {
+        const qData = await authenticatedFetch(`/api/v1/qna/questions/${id}`)
+
+        // The API response for a question includes its comments.
+        // We map the backend's 'comment' object to the frontend's 'Answer' type.
+        const questionData = {
+            ...qData,
+        }
+        setQuestion(questionData)
+
+        const answersData = (qData.comments || []).map((c: any) => ({
+          id: c.id,
+          body: c.content, // Map content from backend to body in frontend
+          createdAt: c.created_at,
+          author: c.author?.username || "User" + Math.floor(Math.random() * 100), // Use real author if available
+          isAccepted: false, // Add logic if applicable
+        }))
+        setAnswers(answersData)
+
+      } catch (e) {
+        setError("데이터를 불러오는 데 실패했습니다.")
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [id])
+
+  const handleDelete = async () => {
+    if (!window.confirm("정말로 이 질문을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+      return
+    }
+
+    setIsDeleting(true)
+    setError(null)
+    try {
+      await authenticatedFetch(`/api/v1/qna/questions/${id}`, {
+        method: "DELETE",
+      })
+      router.push("/qnatest")
+    } catch (err) {
+      setError("질문 삭제에 실패했습니다.")
+      console.error(err)
+      setIsDeleting(false)
+    }
+  }
+
+  const handleAnswerUpdate = async (answerId: number) => {
+    if (!editingAnswerBody.trim()) return
+
+    try {
+      const updatedAnswer = await authenticatedFetch(`/api/v1/comments/${answerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: editingAnswerBody }),
+      })
+
+      setAnswers(answers.map((a) => (a.id === answerId ? { ...a, body: updatedAnswer.content } : a)))
+      setEditingAnswerId(null)
+      setEditingAnswerBody("")
+    } catch (err) {
+      console.error("답변 수정에 실패했습니다.", err)
+      alert("답변 수정에 실패했습니다.")
+    }
+  }
+
+  const handleAnswerDelete = async (answerId: number) => {
+    if (!window.confirm("정말로 이 답변을 삭제하시겠습니까?")) {
+      return
+    }
+
+    try {
+      await authenticatedFetch(`/api/v1/comments/${answerId}`, {
+        method: "DELETE",
+      })
+      setAnswers(answers.filter((a) => a.id !== answerId))
+    } catch (err) {
+      // You might want to show a toast or a more specific error message
+      console.error("답변 삭제에 실패했습니다.", err)
+      alert("답변 삭제에 실패했습니다.")
+    }
+  }
+
+  const handleAnswerSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newAnswer.trim() || !user) return
+
+    setIsSubmitting(true)
+    try {
+      const response = await authenticatedFetch(`/api/v1/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: newAnswer,
+          parent_id: parseInt(id, 10),
+          parent_type: "question",
+        }),
+      })
+
+      const newComment = {
+        id: response.id,
+        body: response.content,
+        createdAt: response.created_at,
+        author: response.author.username,
+        isAccepted: false,
+      }
+
+      setAnswers([...answers, newComment])
+      setNewAnswer("")
+    } catch (err) {
+      console.error("Failed to submit answer:", err)
+      alert("답변 등록에 실패했습니다.")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  if (loading) {
+    return <main className="max-w-4xl mx-auto px-4 py-12 text-center">로딩 중...</main>
+  }
+
+  if (error) {
+    return <main className="max-w-4xl mx-auto px-4 py-12 text-center text-red-500">{error}</main>
+  }
 
   if (!question) {
-    return (
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-muted-foreground">질문을 찾을 수 없습니다.</div>
-      </main>
-    )
+    return <main className="max-w-4xl mx-auto px-4 py-12 text-center">질문을 찾을 수 없습니다.</main>
   }
 
-  const createdAt = (question.createdAt || question.created_at || '')
-  // Determine edit permission: owner or admin
-  let canEdit = false
-  if (token) {
-    try {
-      const payload: any = jwtDecode(token)
-      const uid = Number(payload?.id)
-      const role = String(payload?.role || '')
-      const authorId = Number(question?.author?.id ?? -1)
-      canEdit = role === 'admin' || (uid > 0 && uid === authorId)
-    } catch {}
-  }
+  const isOwner = !!user && !!question && user.username === question.author.username;
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
       <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="w-full">
-              <div className="flex items-center justify-between gap-3">
-                <div className="min-w-0 flex items-center gap-2">
-                  {question.category && (
-                    <span className={`inline-flex items-center h-5 px-2 rounded-full border text-[10px] ${
-                      (question.category || '').toLowerCase() === 'server'
-                        ? 'bg-blue-100 text-blue-700 border-blue-200'
-                        : (question.category || '').toLowerCase() === 'network'
-                        ? 'bg-emerald-100 text-emerald-700 border-emerald-200'
-                        : 'bg-slate-100 text-slate-700 border-slate-200'
-                    }`}>
-                      {(question.category || '').toLowerCase() === 'server'
-                        ? 'Server'
-                        : (question.category || '').toLowerCase() === 'network'
-                        ? 'Network'
-                        : 'Other'}
-                    </span>
-                  )}
-                  <span className={`inline-flex items-center h-5 px-2 rounded-full border text-[10px] ${question.answered ? 'bg-green-100 text-green-700 border-green-200' : 'bg-amber-100 text-amber-700 border-amber-200'}`}>
-                    {question.answered ? '완료' : '대기'}
-                  </span>
-                  <span className="font-medium truncate">{question.title}</span>
-                </div>
+        <CardHeader className="border-b">
+          <CardTitle className="text-3xl font-extrabold tracking-tight mb-2">{question.title}</CardTitle>
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src={`/placeholder.svg`} alt={question.author.username} />
+                  <AvatarFallback>{question.author.username.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <span className="font-medium text-foreground">{question.author.username}</span>
               </div>
-            </CardTitle>
-            <div className="flex gap-2">
-              {canEdit && (
-                <Button asChild size="sm" variant="outline" className="whitespace-nowrap">
-                  <Link className="whitespace-nowrap" href={`/qna/${id}/edit`}>수정</Link>
-                </Button>
-              )}
-              {/* LikeButton 추가 */}
-              <LikeButton
-                parentId={question.id}
-                parentType="question"
-                initialLikes={question.likes || 0}
-                token={token} // Pass the token
-              />
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4" />
+                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
+              </div>
+              <span className="text-xs px-2 py-0.5 rounded-full border bg-secondary text-secondary-foreground capitalize">
+                {question.category}
+              </span>
             </div>
+            {isOwner && (
+              <div className="flex gap-2 flex-shrink-0">
+                <Link href={`/qna/${id}/edit`} passHref>
+                  <Button variant="outline" size="sm">수정</Button>
+                </Link>
+                <Button variant="destructive" size="sm" onClick={handleDelete} disabled={isDeleting}>
+                  {isDeleting ? "삭제 중..." : "삭제"}
+                </Button>
+              </div>
+            )}
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="text-xs text-muted-foreground mb-4 flex gap-3">
-            {createdAt && <span>{format(new Date(createdAt), 'yyyy-MM-dd HH:mm')}</span>}
-            {typeof question.views === "number" && <span>조회 {question.views}</span>}
+        <CardContent className="py-6">
+          <div className="prose dark:prose-invert max-w-none">
+            <p>{question.body}</p>
           </div>
-          <div className="whitespace-pre-wrap leading-relaxed">{question.body}</div>
-          {Array.isArray(question.tags) && question.tags.length > 0 && (
-            <div className="mt-4 text-xs text-muted-foreground">태그: {question.tags.join(", ")}</div>
-          )}
+        </CardContent>
+        {(question.tags && question.tags.length > 0) && (
+          <CardFooter className="flex flex-wrap gap-2 pt-4 border-t">
+            {question.tags.map((t) => (
+              <span key={t} className="text-xs px-2 py-1 rounded-full border bg-background">
+                #{t}
+              </span>
+            ))}
+          </CardFooter>
+        )}
+      </Card>
+
+      <Separator />
+
+      {/* Answers Section */}
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold">{answers.length}개의 답변</h2>
+        {answers.map((answer) => {
+          const isEditing = editingAnswerId === answer.id
+          const isOwner = user?.username === answer.author
+
+          return (
+            <Card key={answer.id} className={`${answer.isAccepted ? 'border-green-500' : ''}`}>
+              <CardContent className="p-6 flex gap-4">
+                <Avatar>
+                  <AvatarImage src={`https://github.com/shadcn.png`} alt={answer.author} />
+                  <AvatarFallback>{answer.author.charAt(0)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">{answer.author}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(answer.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+
+                  {isEditing ? (
+                    <div className="space-y-2">
+                      <Textarea
+                        value={editingAnswerBody}
+                        onChange={(e) => setEditingAnswerBody(e.target.value)}
+                        rows={4}
+                      />
+                      <div className="flex justify-end gap-2">
+                        <Button variant="outline" size="sm" onClick={() => setEditingAnswerId(null)}>
+                          취소
+                        </Button>
+                        <Button size="sm" onClick={() => handleAnswerUpdate(answer.id)}>
+                          저장
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <p className="text-card-foreground">{answer.body}</p>
+                      <div className="mt-4 flex justify-between items-center">
+                        {answer.isAccepted ? (
+                          <div className="flex items-center gap-2 text-green-600">
+                            <CheckCircle className="h-5 w-5" />
+                            <span className="font-semibold">채택된 답변</span>
+                          </div>
+                        ) : <div /> /* Empty div to keep alignment */}
+
+                        {isOwner && (
+                          <div className="flex gap-2 items-center">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => {
+                                setEditingAnswerId(answer.id)
+                                setEditingAnswerBody(answer.body)
+                              }}
+                            >
+                              수정
+                            </Button>
+                            <Button variant="destructive" size="sm" onClick={() => handleAnswerDelete(answer.id)}>
+                              삭제
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
+
+      {/* New Answer Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle>답변 작성하기</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleAnswerSubmit} className="space-y-4">
+            <Textarea
+              placeholder="자세하고 친절한 답변은 질문자에게 큰 도움이 됩니다."
+              rows={5}
+              value={newAnswer}
+              onChange={(e) => setNewAnswer(e.target.value)}
+              required
+            />
+            <div className="flex justify-end">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "등록 중..." : "답변 등록"}
+              </Button>
+            </div>
+          </form>
         </CardContent>
       </Card>
-      {/* CommentSection 추가 */}
-      <CommentSection parentId={question.id} parentType="question" />
-      <ViewTracker id={id} type="qna" />
     </main>
   )
 }

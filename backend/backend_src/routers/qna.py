@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from typing import List, Literal
 from ..db import SessionLocal, Question, User
 from ..auth import get_current_user
+from ..schemas.qna_schema import QuestionResponse, QuestionListResponse # Import QuestionResponse and QuestionListResponse
 
 router = APIRouter(tags=["qna"])
 
@@ -61,14 +62,14 @@ def create_question(payload: QuestionCreate, db: Session = Depends(get_db), curr
     }
 
 
-@router.get("/api/v1/qna/questions")
+@router.get("/api/v1/qna/questions", response_model=List[QuestionListResponse])
 def list_questions(
     sort: str = Query("latest", enum=["latest", "views"]),
     category: str | None = Query(None, description="server|network|others"),
     status: str | None = Query(None, description="waiting|done"),
     db: Session = Depends(get_db),
 ):
-    q = db.query(Question)
+    q = db.query(Question).options(joinedload(Question.author))
     if category:
         q = q.filter(Question.category == category)
     if status == "waiting":
@@ -80,50 +81,22 @@ def list_questions(
     else:
         q = q.order_by(Question.created_at.desc())
     rows = q.all()
-    # Author username을 붙이기 위해 한번에 조회 (간단화를 위해 per-row lookup)
-    # 규모가 커지면 JOIN으로 최적화 가능
-    user_map: dict[int, User] = {u.id: u for u in db.query(User).all()}
-    return [
-        {
-            "id": r.id,
-            "title": r.title,
-            "body": r.body,
-            "views": r.views,
-            "answered": bool(getattr(r, "answered", 0)),
-            "createdAt": r.created_at.isoformat() if r.created_at else None,
-            "created_at": r.created_at,  # legacy compatibility
-            "category": r.category,
-            "author": (
-                {"id": user_map[r.author_id].id, "username": user_map[r.author_id].username}
-                if r.author_id in user_map else None
-            ),
-        }
-        for r in rows
-    ]
+    return rows
 
 
-@router.get("/api/v1/qna/questions/{question_id}")
+@router.get("/api/v1/qna/questions/{question_id}", response_model=QuestionResponse)
 def get_question(question_id: int, db: Session = Depends(get_db)):
-    q = db.query(Question).filter(Question.id == question_id).first()
+    q = db.query(Question).options(joinedload(Question.author)).filter(Question.id == question_id).first()
     if not q:
         raise HTTPException(status_code=404, detail="Question not found")
     # 조회수 증가
     q.views = (q.views or 0) + 1
     db.commit()
-    # 작성자 정보
-    author = db.query(User).filter(User.id == q.author_id).first()
-    return {
-        "id": q.id,
-        "title": q.title,
-        "body": q.body,
-        "views": q.views,
-        "answered": bool(getattr(q, "answered", 0)),
-        "created_at": q.created_at,
-        "createdAt": q.created_at.isoformat() if q.created_at else None,
-        "tags": [t for t in (q.tags_text or "").split(",") if t],
-        "category": q.category,
-        "author": ({"id": author.id, "username": author.username} if author else None),
-    }
+    db.refresh(q)
+    # Pydantic model will handle serialization, including author
+    print(f"DEBUG: QuestionResponse schema: {QuestionResponse.model_json_schema()}")
+    print(f"DEBUG: SQLAlchemy Question object before validation: {q.__dict__}")
+    return QuestionResponse.model_validate(q)
 
 
 class QuestionStatusUpdate(BaseModel):
