@@ -91,9 +91,17 @@ export default function NewNoticePage() {
     }
   }
 
-  const insertTemplate = () => {
-    const template = `# 제목을 입력하세요\n\n> 간단한 안내 문구를 여기에 작성합니다.\n\n---\n\n## 요약\n- 핵심 내용 1\n- 핵심 내용 2\n\n## 상세 내용\n자유롭게 Markdown으로 작성하세요. **굵게**, _기울임_, \n코드 블록:\n\n\`\`\`bash\n# 예시 명령어\necho "hello"\n\`\`\`\n\n## 표 예시\n| 항목 | 내용 |\n| --- | --- |\n| 안내 | 설명을 적습니다 |\n| 일정 | 2025-01-01 |\n\n---\n\n감사합니다.`
+  const insertImportantTemplate = () => {
+    const template = `# [중요] 제목을 입력하세요\n\n> 중요 안내입니다. 꼭 확인해주세요.\n\n---\n\n## 배경\n- 왜 중요한지 간단히 설명합니다.\n\n## 영향 범위\n- 대상: 서비스/사용자/시스템\n- 영향: 어떤 영향이 있는지\n\n## 대응 방법\n1. 단계별 조치 내용\n2. 참고 링크 또는 스크린샷\n\n## 일정\n- 적용/점검 일시: YYYY-MM-DD HH:mm\n- 완료(예정) 일시: YYYY-MM-DD HH:mm\n\n## 문의\n- 담당: 팀/이름\n- 채널: 이메일/슬랙/전화\n`
     setBody((prev) => (prev?.trim() ? prev + "\n\n" + template : template))
+    setLabel("중요")
+    setPinned(true)
+  }
+
+  const insertUpdateTemplate = () => {
+    const template = `# [업데이트] vX.Y.Z 릴리스 노트\n\n> 이번 릴리스의 주요 변경 사항을 안내드립니다.\n\n---\n\n## 버전 정보\n- 버전: vX.Y.Z\n- 배포 일시: YYYY-MM-DD HH:mm\n\n## 주요 변경 사항\n- 변경 1\n- 변경 2\n\n## 버그 수정\n- 이슈 #123: 설명\n- 이슈 #456: 설명\n\n## 마이그레이션/조치 사항 (있다면)\n- 사용자가 해야 할 조치\n- 호환성 이슈/Deprecated 안내\n\n## 참고\n- 관련 문서/링크\n\n## 문의\n- 담당: 팀/이름\n- 채널: 이메일/슬랙/전화\n`
+    setBody((prev) => (prev?.trim() ? prev + "\n\n" + template : template))
+    setLabel("업데이트")
   }
 
   const insertTable = () => {
@@ -142,7 +150,8 @@ export default function NewNoticePage() {
             상단 고정
           </label>
           <div className="flex-1" />
-          <Button variant="outline" size="sm" onClick={insertTemplate}>템플릿 넣기</Button>
+          <Button variant="outline" size="sm" onClick={insertImportantTemplate}>중요 공지 템플릿</Button>
+          <Button variant="outline" size="sm" onClick={insertUpdateTemplate}>업데이트 공지 템플릿</Button>
           <Button variant="outline" size="sm" onClick={insertTable}>표 추가</Button>
           <Button variant="ghost" size="sm" onClick={() => setShowHelp((s) => !s)}>{showHelp ? '가이드 닫기' : '가이드 보기'}</Button>
         </div>

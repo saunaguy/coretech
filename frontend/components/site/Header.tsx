@@ -22,8 +22,12 @@ export default function Header() {
   const { isAuthenticated, user, logout } = useAuth()
 
   // State for hover menus
-  const [learningOpen, setLearningOpen] = useState(false)
   const [communityOpen, setCommunityOpen] = useState(false)
+
+  // State and handlers for Learning dropdown (merged from remote)
+  const [isLearningDropdownOpen, setIsLearningDropdownOpen] = useState(false);
+  const handleLearningMouseEnter = () => setIsLearningDropdownOpen(true);
+  const handleLearningMouseLeave = () => setIsLearningDropdownOpen(false);
 
   const headerClassName = 'bg-header text-header-foreground'
 
@@ -37,26 +41,32 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <nav className="hidden md:flex items-baseline space-x-4">
 
-              {/* 학습 Dropdown with Hover */}
-              <DropdownMenu open={learningOpen} onOpenChange={setLearningOpen}>
-                <div onMouseEnter={() => setLearningOpen(true)} onMouseLeave={() => setLearningOpen(false)}>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="hover:text-primary transition-colors border-none outline-none ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0"
-                    >
-                      학습
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent sideOffset={4}>
-                    <DropdownMenuItem asChild>
-                      <Link href="/lesson">Linux 기초</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/practice">실습</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </div>
+              {/* 학습 Dropdown */}
+              <DropdownMenu open={isLearningDropdownOpen} onOpenChange={setIsLearningDropdownOpen}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="hover:text-primary transition-colors"
+                    onMouseEnter={handleLearningMouseEnter}
+                    onMouseLeave={handleLearningMouseLeave}
+                  >
+                    학습
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  onMouseEnter={handleLearningMouseEnter}
+                  onMouseLeave={handleLearningMouseLeave}
+                >
+                  <DropdownMenuItem asChild>
+                    <Link href="/lesson">Linux 기초</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/practice">실습</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/daily">데일리</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
               </DropdownMenu>
 
               {/* 커뮤니티 Dropdown with Hover */}
