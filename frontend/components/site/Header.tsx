@@ -88,7 +88,7 @@ export default function Header() {
                     <Link href="/lesson">Linux 기초</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/labs">실습</Link>
+                    <Link href="/practice">실습</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
