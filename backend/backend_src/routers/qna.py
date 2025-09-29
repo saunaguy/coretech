@@ -1,3 +1,5 @@
+from fastapi import APIRouter, Depends, HTTPException, status, Query
+from pydantic import BaseModel
 from sqlalchemy.orm import Session, joinedload, subqueryload
 from typing import List, Literal
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -88,6 +90,41 @@ def list_questions(
 @router.get("/api/v1/qna/questions/{question_id}", response_model=QuestionResponse)
 def get_question(question_id: int, db: Session = Depends(get_db)):
     q = db.query(Question).options(joinedload(Question.author), subqueryload(Question.comments).joinedload(Comment.user)).filter(Question.id == question_id).first()
+    if not q:
+        raise HTTPException(status_code=404, detail="Question not found")
+
+    # Manually construct the response to handle potential data inconsistencies
+    comments_data = []
+    for c in q.comments:
+        author_data = {"id": -1, "username": "Unknown"}
+        if c.user:
+            author_data = {"id": c.user.id, "username": c.user.username}
+        
+        comments_data.append({
+            "id": c.id,
+            "content": c.content,
+            "parent_id": c.parent_id,
+            "parent_type": c.parent_type,
+            "user_id": c.user_id,
+            "created_at": c.created_at,
+            "is_accepted": c.is_accepted,
+            "author": author_data
+        })
+
+    response_data = {
+        "id": q.id,
+        "title": q.title,
+        "body": q.body,
+        "views": q.views,
+        "answered": q.answered,
+        "created_at": q.created_at,
+        "category": q.category,
+        "tags": [t for t in (q.tags_text or "").split(",") if t],
+        "author": {"id": q.author.id, "username": q.author.username} if q.author else {"id": -1, "username": "Unknown"},
+        "comments": comments_data
+    }
+    
+    return response_data
 
 
 class QuestionStatusUpdate(BaseModel):

@@ -66,9 +66,10 @@ class Question(Base):
     comments: Mapped[List["Comment"]] = relationship(
         "Comment",
         primaryjoin="and_(Comment.parent_id == foreign(Question.id), Comment.parent_type == 'question')",
-        back_populates="question", # Changed from backref to back_populates
+        back_populates="question",
         lazy="joined",
-        order_by="Comment.created_at"
+        order_by="Comment.created_at",
+        uselist=True  # Explicitly force list-based relationship
     )
 
     @property
@@ -137,7 +138,7 @@ class Comment(Base):
     question: Mapped["Question"] = relationship(
         primaryjoin="and_(Comment.parent_id == foreign(Question.id), Comment.parent_type == 'question')",
         back_populates="comments"
-    ) # Added back_populates for Question
+    )
 
 class Like(Base):
     __tablename__ = "likes"

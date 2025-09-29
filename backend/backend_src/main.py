@@ -239,6 +239,7 @@ from .routers import board as board_router
 from .routers import qna as qna_router
 from .routers import admin as admin_router
 from .routers import notice as notice_router
+from .routers import profile as profile_router
 
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(likes_and_comments.router)
@@ -246,6 +247,7 @@ app.include_router(board_router.router)
 app.include_router(qna_router.router)
 app.include_router(admin_router.router, prefix="/api/v1/admin")
 app.include_router(notice_router.router)
+app.include_router(profile_router.router)
 
 @app.get("/api/v1/hello")
 def hello_world():

@@ -104,10 +104,9 @@ export default function Header() {
                 </>
               ) : (
                 <>
-                  {user?.role === 'admin' && (
-                    <Link href="/admin" className="hover:text-primary transition-colors font-semibold text-yellow-500">관리자</Link>
-                  )}
-                  <span className="text-sm opacity-80">{user?.username || user?.email}</span>
+                  <Link href="/profile" className="text-sm opacity-80 hover:underline">
+                    {user?.username || user?.email}
+                  </Link>
                   <Button
                     variant="ghost"
                     size="sm"

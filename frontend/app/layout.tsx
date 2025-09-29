@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/site/ThemeProvider"
 import { AuthProvider } from "@/components/auth/AuthProvider"
 import { MobileSidebarProvider } from "@/lib/MobileSidebarContext"
 import MobileSidebar from "@/components/site/MobileSidebar" // New import
+import AdminFab from "@/components/site/AdminFab"
 import IdleLogout from "@/components/auth/IdleLogout"
 
 export const metadata: Metadata = {
@@ -47,6 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <IdleLogout />
               {children}
               <MobileSidebar /> {/* Render MobileSidebar here */}
+              <AdminFab />
             </MobileSidebarProvider>
           </AuthProvider>
         </ThemeProvider>
