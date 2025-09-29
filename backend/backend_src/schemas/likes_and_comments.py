@@ -25,7 +25,10 @@ class Comment(CommentBase):
     id: int
     user_id: int
     created_at: datetime
-    author: UserBase # Add author field
+    author: UserBase
+    is_accepted: bool
+    parent_id: int
+    parent_type: str
 
     class Config:
         orm_mode = True

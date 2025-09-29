@@ -84,17 +84,11 @@ def create_comment(comment: schemas.CommentCreate, db: Session = Depends(get_db)
         raise HTTPException(status_code=401, detail="Not authenticated")
 
     try:
-        new_comment = Comment(**comment.dict(), user_id=current_user.id)
+        new_comment = Comment(**comment.dict(), user_id=current_user.id, is_accepted=False)
         db.add(new_comment)
         db.commit()
         db.refresh(new_comment)
 
-        # Auto-mark question as answered when admin/operator replies
-        if comment.parent_type == "question" and getattr(current_user, "role", "user") in ("admin", "operator"):
-            q = db.query(Question).filter(Question.id == comment.parent_id).first()
-            if q and (q.answered or 0) == 0:
-                q.answered = 1
-                db.commit()
     except Exception as e:
         db.rollback() # Rollback in case of error
         raise HTTPException(status_code=500, detail=f"Failed to create comment: {e}")
@@ -106,6 +100,7 @@ def create_comment(comment: schemas.CommentCreate, db: Session = Depends(get_db)
         "created_at": new_comment.created_at,
         "parent_id": new_comment.parent_id,
         "parent_type": new_comment.parent_type,
+        "is_accepted": new_comment.is_accepted,
         "author": {
             "id": current_user.id,
             "username": current_user.username
@@ -157,3 +152,35 @@ def update_comment(comment_id: int, payload: schemas.CommentUpdate, db: Session 
             "username": author_info.username
         }
     }
+
+@router.post("/api/v1/comments/{comment_id}/accept", status_code=200)
+def accept_comment(comment_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    comment = db.query(Comment).filter(Comment.id == comment_id).first()
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    if comment.parent_type != 'question':
+        raise HTTPException(status_code=400, detail="Can only accept answers for questions")
+
+    question = db.query(Question).filter(Question.id == comment.parent_id).first()
+    if not question:
+        raise HTTPException(status_code=404, detail="Parent question not found")
+
+    if question.author_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Only the question author can accept an answer")
+
+    # Check if another answer is already accepted
+    existing_accepted = db.query(Comment).filter(
+        Comment.parent_id == question.id,
+        Comment.parent_type == 'question',
+        Comment.is_accepted == True
+    ).first()
+
+    if existing_accepted and existing_accepted.id != comment.id:
+        raise HTTPException(status_code=400, detail="Another answer has already been accepted for this question.")
+
+    comment.is_accepted = True
+    question.answered = 1
+    db.commit()
+
+    return {"message": "Answer accepted successfully"}

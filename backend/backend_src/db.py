@@ -31,6 +31,7 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     posts: Mapped[List["Post"]] = relationship(back_populates="author")
+    comments: Mapped[List["Comment"]] = relationship(back_populates="user")
 
 
 class Post(Base):
@@ -112,9 +113,10 @@ class Comment(Base):
     parent_type: Mapped[str] = mapped_column(String(50), index=True) # "post" 또는 "question"
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
     content: Mapped[str] = mapped_column(Text)
+    is_accepted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    user: Mapped["User"] = relationship("User", backref="comments")
+    user: Mapped["User"] = relationship("User", back_populates="comments")
     question: Mapped["Question"] = relationship(
         primaryjoin="and_(Comment.parent_id == foreign(Question.id), Comment.parent_type == 'question')",
         back_populates="comments"
@@ -202,6 +204,9 @@ def init_db() -> None:
                 conn.exec_driver_sql(
                     "ALTER TABLE questions ADD COLUMN IF NOT EXISTS category VARCHAR(50)"
                 )
+                conn.exec_driver_sql(
+                    "ALTER TABLE comments ADD COLUMN IF NOT EXISTS is_accepted BOOLEAN DEFAULT FALSE"
+                )
         elif engine.dialect.name == "sqlite":
             with engine.begin() as conn:
                 cols = conn.exec_driver_sql("PRAGMA table_info('daily_tests')").all()
@@ -245,6 +250,10 @@ def init_db() -> None:
                     "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, parent_id INTEGER, "
                     "parent_type TEXT, user_id INTEGER, content TEXT, created_at TEXT)"
                 )
+                cols = conn.exec_driver_sql("PRAGMA table_info('comments')").all()
+                colnames = {row[1] for row in cols}
+                if "is_accepted" not in colnames:
+                    conn.exec_driver_sql("ALTER TABLE comments ADD COLUMN is_accepted INTEGER DEFAULT 0 NOT NULL")
                 # Add likes table if absent (SQLite)
                 conn.exec_driver_sql(
                     "CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY, parent_id INTEGER, "

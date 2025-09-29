@@ -16,6 +16,7 @@ class CommentResponse(CommentBase):
     parent_type: str
     user_id: int
     created_at: datetime
+    is_accepted: bool
     user: UserSummary # Add user object
 
     model_config = ConfigDict(from_attributes=True)
