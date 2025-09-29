@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import Link from "next/link";
 
@@ -7,11 +7,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowUpRight, Star } from "lucide-react";
 
-type UserState = { solved?: Array<string | number>; favorites?: Array<string | number> };
+type UserState = {
+  solved?: Array<string | number>;
+  favorites?: Array<string | number>;
+};
 type RawTestItem = {
   id: string;
   title?: string;
@@ -47,7 +56,10 @@ const CATEGORY_SUMMARY: Record<CategoryKey, string> = {
   server: "서비스 운영, 자동화, 보안 관점의 심화 문제들입니다.",
 };
 
-const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(/\/+$/, "");
+const API_BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(
+  /\/+$/,
+  "",
+);
 const api = (path: string) => `${API_BASE}${path}`;
 
 function extractOrder(title?: string, fallback = 0) {
@@ -61,7 +73,10 @@ function extractOrder(title?: string, fallback = 0) {
 function buildDisplayTitle(category: string, order: number, title?: string) {
   const idx = String(order).padStart(2, "0");
   const cleaned = title?.replace(/\?+/g, "").trim() ?? "";
-  const prefix = CATEGORY_TITLE_PREFIX[category as CategoryKey] ?? CATEGORY_LABEL[category as CategoryKey] ?? category;
+  const prefix =
+    CATEGORY_TITLE_PREFIX[category as CategoryKey] ??
+    CATEGORY_LABEL[category as CategoryKey] ??
+    category;
   if (!cleaned) {
     return `${prefix} 세트 ${idx}`;
   }
@@ -83,7 +98,9 @@ function TestItemCard({
   favorite: boolean;
   onToggleFavorite: (id: string, next: boolean) => void;
 }) {
-  const createdLabel = item.createdAt ? format(new Date(item.createdAt), "yyyy-MM-dd HH:mm") : null;
+  const createdLabel = item.createdAt
+    ? format(new Date(item.createdAt), "yyyy-MM-dd HH:mm")
+    : null;
   const indexLabel = String(item.order).padStart(2, "0");
 
   return (
@@ -91,7 +108,9 @@ function TestItemCard({
       href={`/daily/${item.id}`}
       className={cn(
         "group block rounded-xl border border-border/70 bg-background/70 p-4 shadow-sm transition",
-        item.solved ? "bg-muted text-muted-foreground hover:border-border" : "hover:-translate-y-0.5 hover:border-primary/60"
+        item.solved
+          ? "bg-muted text-muted-foreground hover:border-border"
+          : "hover:-translate-y-0.5 hover:border-primary/60",
       )}
     >
       <div className="flex items-start justify-between gap-3">
@@ -100,16 +119,36 @@ function TestItemCard({
             <span
               className={cn(
                 "inline-flex h-8 w-8 items-center justify-center rounded-full border text-xs font-semibold",
-                item.solved ? "border-border text-muted-foreground" : "border-primary/40 text-primary"
+                item.solved
+                  ? "border-border text-muted-foreground"
+                  : "border-primary/40 text-primary",
               )}
             >
               {indexLabel}
             </span>
             {createdLabel && <span>{createdLabel}</span>}
-            {item.difficulty && <Badge variant="outline" className="text-[10px] font-medium">{item.difficulty}</Badge>}
-            {item.solved && <Badge variant="secondary" className="text-[10px] font-medium bg-muted text-muted-foreground">풀이 완료</Badge>}
+            {item.difficulty && (
+              <Badge variant="outline" className="text-[10px] font-medium">
+                {item.difficulty}
+              </Badge>
+            )}
+            {item.solved && (
+              <Badge
+                variant="secondary"
+                className="text-[10px] font-medium bg-muted text-muted-foreground"
+              >
+                풀이 완료
+              </Badge>
+            )}
           </div>
-          <h3 className={cn("text-base font-semibold text-foreground", item.solved && "line-through")}>{item.displayTitle}</h3>
+          <h3
+            className={cn(
+              "text-base font-semibold text-foreground",
+              item.solved && "line-through",
+            )}
+          >
+            {item.displayTitle}
+          </h3>
         </div>
         <button
           type="button"
@@ -120,7 +159,9 @@ function TestItemCard({
           aria-label="즐겨찾기 토글"
           className={cn(
             "rounded p-1 transition",
-            favorite ? "text-yellow-500" : "text-muted-foreground hover:bg-muted/50"
+            favorite
+              ? "text-yellow-500"
+              : "text-muted-foreground hover:bg-muted/50",
           )}
         >
           <Star className={cn("h-5 w-5", favorite && "fill-yellow-500")}></Star>
@@ -134,16 +175,25 @@ function TestItemCard({
 export default function DailySetsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const selectedCategory = (searchParams.get("category") || "").toLowerCase() as CategoryKey | "";
+  const selectedCategory = (
+    searchParams.get("category") || ""
+  ).toLowerCase() as CategoryKey | "";
 
-  const [itemsByCat, setItemsByCat] = useState<Record<string, RawTestItem[]>>({});
-  const [userState, setUserState] = useState<UserState>({ solved: [], favorites: [] });
+  const [itemsByCat, setItemsByCat] = useState<Record<string, RawTestItem[]>>(
+    {},
+  );
+  const [userState, setUserState] = useState<UserState>({
+    solved: [],
+    favorites: [],
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await fetch(api("/api/v1/daily/user-state"), { credentials: "include" });
+        const res = await fetch(api("/api/v1/daily/user-state"), {
+          credentials: "include",
+        });
         if (res.ok) {
           const data = (await res.json()) as UserState;
           setUserState({
@@ -159,7 +209,10 @@ export default function DailySetsPage() {
       await Promise.all(
         CATEGORY_KEYS.map(async (cat) => {
           try {
-            const res = await fetch(api(`/api/v1/daily/tests?category=${encodeURIComponent(cat)}`), { cache: "no-store" });
+            const res = await fetch(
+              api(`/api/v1/daily/tests?category=${encodeURIComponent(cat)}`),
+              { cache: "no-store" },
+            );
             if (res.ok) {
               const arr = (await res.json()) as RawTestItem[];
               results[cat] = (arr || []).map((item) => ({
@@ -175,7 +228,7 @@ export default function DailySetsPage() {
           } catch {
             results[cat] = [];
           }
-        })
+        }),
       );
       setItemsByCat(results);
       setLoading(false);
@@ -184,7 +237,10 @@ export default function DailySetsPage() {
     load();
   }, []);
 
-  const solvedSet = useMemo(() => new Set((userState.solved || []).map((id) => String(id))), [userState.solved]);
+  const solvedSet = useMemo(
+    () => new Set((userState.solved || []).map((id) => String(id))),
+    [userState.solved],
+  );
 
   const normalizedByCat = useMemo(() => {
     const mapped: Record<string, RankedTestItem[]> = {};
@@ -193,7 +249,9 @@ export default function DailySetsPage() {
       const ranked = rawItems
         .map((item, index) => {
           const order = extractOrder(item.title, index + 1);
-          const categoryKey = (item.category || cat).toLowerCase() as CategoryKey;
+          const categoryKey = (
+            item.category || cat
+          ).toLowerCase() as CategoryKey;
           return {
             ...item,
             category: categoryKey,
@@ -216,7 +274,11 @@ export default function DailySetsPage() {
     return mapped;
   }, [itemsByCat, solvedSet]);
 
-  const favoritesSet = useMemo(() => new Set((userState.favorites || []).map((id) => String(id))), [userState.favorites]);
+  const favoritesSet = useMemo(
+    () => new Set((userState.favorites || []).map((id) => String(id))),
+    [userState.favorites],
+  );
+  const favoritesOnly = searchParams.get("favorites") === "1";
 
   const handleToggleFavorite = async (id: string, next: boolean) => {
     const target = String(id);
@@ -241,61 +303,155 @@ export default function DailySetsPage() {
     }
   };
 
-  const activeCategories: CategoryKey[] = selectedCategory && CATEGORY_KEYS.includes(selectedCategory as CategoryKey)
-    ? [selectedCategory as CategoryKey]
-    : CATEGORY_KEYS;
+  const activeCategories: CategoryKey[] =
+    selectedCategory && CATEGORY_KEYS.includes(selectedCategory as CategoryKey)
+      ? [selectedCategory as CategoryKey]
+      : CATEGORY_KEYS;
   const visibleGroups = activeCategories
-    .map((cat) => ({
-      category: cat,
-      items: normalizedByCat[cat] || [],
-    }))
+    .map((cat) => {
+      const original = normalizedByCat[cat] || [];
+      const filtered = favoritesOnly
+        ? original.filter((item) => favoritesSet.has(item.id))
+        : original;
+      return {
+        category: cat,
+        items: filtered,
+      };
+    })
     .filter((group) => group.items.length > 0);
 
   return (
     <main className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 pb-16 pt-10 sm:px-6 lg:px-8">
       <section className="relative overflow-hidden rounded-3xl border bg-slate-950 text-white shadow-xl">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-slate-900/60 to-slate-900" aria-hidden />
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-primary/20 via-slate-900/60 to-slate-900"
+          aria-hidden
+        />
         <div className="relative flex flex-col gap-8 p-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-2xl">
-              <p className="text-sm font-semibold tracking-widest text-primary/70">Daily quiz archive</p>
-              <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">카테고리별 문제 전체 보기</h1>
+              <p className="text-sm font-semibold tracking-widest text-primary/70">
+                Daily quiz archive
+              </p>
+              <h1 className="mt-2 text-4xl font-bold tracking-tight sm:text-5xl">
+                카테고리별 문제 전체 보기
+              </h1>
               <p className="mt-4 text-base text-white/80">
-                카테고리를 바꿔가며 전체 세트를 확인하고, 오늘 풀이한 항목은 회색으로 표시됩니다. 즐겨찾기를 사용하면 자주 보는 문제만 모아둘 수 있어요.
+                카테고리를 바꿔가며 전체 세트를 확인하고, 오늘 풀이한 항목은
+                회색으로 표시됩니다. 즐겨찾기를 사용하면 자주 보는 문제만 모아둘
+                수 있어요.
               </p>
             </div>
-            <Button variant="secondary" onClick={() => router.push("/daily")}>목록으로 돌아가기</Button>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+              <Button
+                variant="secondary"
+                className="w-full sm:w-auto"
+                onClick={() => router.push("/daily")}
+              >
+                데일리로 돌아가기
+              </Button>
+              <Button
+                variant={favoritesOnly ? "secondary" : "outline"}
+                className={cn(
+                  "w-full sm:w-auto",
+                  favoritesOnly
+                    ? "bg-white text-slate-950 shadow-sm hover:bg-white/90"
+                    : "border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white",
+                )}
+                onClick={() =>
+                  router.push(
+                    favoritesOnly ? "/daily/sets" : "/daily/sets?favorites=1",
+                  )
+                }
+              >
+                {favoritesOnly ? "전체 세트 보기" : "즐겨찾기 모아보기"}
+              </Button>
+              {favoritesOnly && !selectedCategory && (
+                <p className="text-sm text-white/80">
+                  즐겨찾기한 세트만 모아 보고 있습니다.
+                </p>
+              )}
+              {favoritesOnly && selectedCategory && (
+                <p className="text-sm text-white/80">
+                  즐겨찾기에서 선택한 카테고리만 보고 있습니다.
+                </p>
+              )}
+            </div>
           </div>
           {selectedCategory && (
             <div className="flex items-center gap-2 text-sm text-white/80">
-              <Button variant="ghost" size="sm" className="text-white" onClick={() => router.push("/daily/sets")}>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-white"
+                onClick={() => router.push("/daily/sets")}
+              >
                 <ArrowLeft className="mr-2 h-4 w-4" /> 전체 카테고리 보기
               </Button>
-              <span>현재 선택: {CATEGORY_LABEL[selectedCategory as CategoryKey] ?? selectedCategory}</span>
+              <span>
+                현재 선택:{" "}
+                {CATEGORY_LABEL[selectedCategory as CategoryKey] ??
+                  selectedCategory}
+              </span>
             </div>
           )}
         </div>
       </section>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground">문제 세트를 불러오는 중입니다...</p>
+        <p className="text-sm text-muted-foreground">
+          데이터를 불러오는 중입니다...
+        </p>
       ) : visibleGroups.length === 0 ? (
-        <section className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-3xl border bg-muted/40 px-8 py-16 text-center">
-          <p className="text-2xl font-semibold text-foreground">등록된 문제가 아직 없습니다.</p>
-          <p className="mt-3 text-sm text-muted-foreground">문제가 준비되면 이곳에 자동으로 표시됩니다.</p>
-        </section>
+        favoritesOnly ? (
+          <section className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-3xl border bg-muted/40 px-8 py-16 text-center">
+            <p className="text-2xl font-semibold text-foreground">
+              즐겨찾기한 세트가 아직 없습니다.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              관심 있는 세트를 즐겨찾기에 추가하고 다시 확인해 보세요.
+            </p>
+            <div className="mt-6">
+              <Button
+                variant="secondary"
+                onClick={() => router.push("/daily/sets")}
+              >
+                전체 세트 보기
+              </Button>
+            </div>
+          </section>
+        ) : (
+          <section className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-3xl border bg-muted/40 px-8 py-16 text-center">
+            <p className="text-2xl font-semibold text-foreground">
+              등록된 문제가 아직 없습니다.
+            </p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              API에서 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+            </p>
+          </section>
+        )
       ) : (
         <section className="space-y-8">
           {visibleGroups.map((group) => {
             const items = group.items;
             return (
-              <Card key={group.category} className="overflow-hidden border-border/80 shadow-lg">
+              <Card
+                key={group.category}
+                className="overflow-hidden border-border/80 shadow-lg"
+              >
                 <CardHeader className="flex flex-col gap-4 border-b border-border/60 bg-muted/40 md:flex-row md:items-center md:justify-between">
                   <div className="flex flex-col gap-1">
-                    <CardTitle className="text-xl">{CATEGORY_LABEL[group.category] ?? group.category}</CardTitle>
-                    <CardDescription>{CATEGORY_SUMMARY[group.category]}</CardDescription>
+                    <CardTitle className="text-xl">
+                      {CATEGORY_LABEL[group.category] ?? group.category}
+                    </CardTitle>
+                    <CardDescription>
+                      {CATEGORY_SUMMARY[group.category]}
+                    </CardDescription>
                   </div>
-                  <Badge variant="outline" className="w-fit border-border/60 text-xs tracking-wide">
+                  <Badge
+                    variant="outline"
+                    className="w-fit border-border/60 text-xs tracking-wide"
+                  >
                     총 {items.length}문제
                   </Badge>
                 </CardHeader>
