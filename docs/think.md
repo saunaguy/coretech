@@ -1,259 +1,101 @@
-데일리테스트 코너를 만들고있는데, 사용자가 로그인해서, 문제를 풀었으면 저 하얀색이아니라 회색으로 변경되면서 노출되는건 후순위로 되게끔 하려고생각중이고, 그사용자가 즐겨찾기같은거로 자신이 이 문제 맘에드는거 모아두게 하려고하는데 어떻게 구현해야할까?
-ChatGPT의 말:
-15s 동안 생각함
+## Daily Tests Seeding — Examples and Structure
 
-좋아—요 기능은 DB 스키마랑 두세 개의 간단한 API만 있으면 깔끔하게 끝나.
-핵심은 “유저별 상태(풀었는가/즐겨찾기인가)를 별도 테이블로 분리” 하는 거야.
+- 목적: 데일리 테스트(linux/server/network/database)를 파일로 관리하고 API로 일괄 반영.
+- 엔드포인트: `POST /api/v1/daily/tests` (단일), `GET /api/v1/daily/tests` (목록), `POST /api/v1/daily/tests/{id}/submit` (채점)
+- 스키마(단일 테스트):
+  - `title: string`
+  - `category: "linux" | "server" | "network" | "database"`
+  - `questions: [{ id?: string, question: string, options: string[4], answer: 0..3 }]`
 
-1) DB 스키마 (PostgreSQL)
--- 퀴즈(문항) 기본
-CREATE TABLE quizzes (
-  id BIGSERIAL PRIMARY KEY,
-  title TEXT NOT NULL,
-  category TEXT NOT NULL,     -- Linux / Network / DB / Server
-  level TEXT NOT NULL,        -- 초급/중급/고급
-  created_at TIMESTAMPTZ DEFAULT now()
-);
+### 디렉터리 구조 옵션
 
--- 데일리 노출 스케줄(있으면 날짜별로 묶기 쉬움)
-CREATE TABLE daily_quiz_schedule (
-  id BIGSERIAL PRIMARY KEY,
-  quiz_id BIGINT NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
-  available_on DATE NOT NULL
-);
-CREATE INDEX ON daily_quiz_schedule(available_on, quiz_id);
+- 옵션 A(간단/기본): 평면 구조 — 파일명에 카테고리 포함
+  - `app/data/daily/linux-001.json`
+  - `app/data/daily/server-001.json`
+  - `app/data/daily/network-001.json`
+  - `app/data/daily/database-001.json`
 
--- 유저
-CREATE TABLE users (
-  id BIGSERIAL PRIMARY KEY,
-  email TEXT UNIQUE NOT NULL,
-  password_hash TEXT NOT NULL
-);
+- 옵션 B(카테고리 폴더): 하위 폴더 사용 — 시드 스크립트가 재귀로 수집(rglob)
+  - `app/data/daily/linux/001.json`
+  - `app/data/daily/server/001.json`
+  - `app/data/daily/network/001.json`
+  - `app/data/daily/database/001.json`
+  - 또는 `app/data/daily/server/quiz.json`처럼 한 파일에 여러 테스트(JSON 배열) 저장 가능
 
--- 유저별 푼 상태/즐겨찾기(한 테이블에 합쳐 관리, upsert로 갱신)
-CREATE TABLE user_quiz_status (
-  user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  quiz_id BIGINT NOT NULL REFERENCES quizzes(id) ON DELETE CASCADE,
-  solved_at TIMESTAMPTZ,        -- 푼 시각(값이 있으면 '푼 것')
-  times_taken INT DEFAULT 0,    -- 시도 횟수(원하면)
-  pinned BOOLEAN DEFAULT FALSE, -- 즐겨찾기(=북마크)
-  PRIMARY KEY (user_id, quiz_id)
-);
-CREATE INDEX ON user_quiz_status(user_id, pinned);
-CREATE INDEX ON user_quiz_status(user_id, solved_at);
+시드 실행: `python scripts/seed_daily_from_files.py --base http://localhost:8000`
 
+### 단일 테스트 JSON 템플릿
 
-장점: 퀴즈 마스터 데이터와 유저별 상태가 분리되어서, 캐시/통계/정렬이 쉬움.
-
-2) API 구성 (FastAPI 예시)
-(1) 데일리 목록 가져오기 + 유저 상태 붙여서 리턴
-
-GET /api/v1/daily?date=YYYY-MM-DD
-
-토큰에서 user_id 추출(보안상 Body로 받지 말 것)
-
-정렬 규칙: pinned 먼저 → 안 푼 것 → 푼 것 회색(맨 뒤)
-
-# FastAPI + SQLAlchemy (요지)
-@router.get("/daily")
-def get_daily(date: date, user=Depends(auth_user), db: Session = Depends(get_db)):
-    q = """
-    SELECT q.id, q.title, q.category, q.level,
-           uqs.pinned IS TRUE AS pinned,
-           uqs.solved_at IS NOT NULL AS solved
-    FROM daily_quiz_schedule dqs
-    JOIN quizzes q ON q.id = dqs.quiz_id
-    LEFT JOIN user_quiz_status uqs
-      ON uqs.quiz_id = q.id AND uqs.user_id = :uid
-    WHERE dqs.available_on = :d
-    ORDER BY
-      CASE WHEN COALESCE(uqs.pinned, false) THEN 0 ELSE 1 END,  -- 즐겨찾기 맨 위
-      CASE WHEN COALESCE(uqs.solved_at IS NOT NULL, false) THEN 2 ELSE 1 END, -- 미해결 먼저
-      q.created_at ASC;
-    """
-    rows = db.execute(text(q), {"uid": user.id, "d": date}).mappings().all()
-    return [dict(r) for r in rows]
-
-(2) 푼 상태 토글/갱신
-
-POST /api/v1/quiz/:id/solve (solve=true/false)
-
-@router.post("/quiz/{quiz_id}/solve")
-def set_solved(quiz_id: int, body: dict, user=Depends(auth_user), db: Session = Depends(get_db)):
-    solve = bool(body.get("solve", True))
-    if solve:
-        db.execute(text("""
-          INSERT INTO user_quiz_status(user_id, quiz_id, solved_at, times_taken)
-          VALUES(:uid, :qid, now(), 1)
-          ON CONFLICT (user_id, quiz_id)
-          DO UPDATE SET solved_at = now(), times_taken = user_quiz_status.times_taken + 1
-        """), {"uid": user.id, "qid": quiz_id})
-    else:
-        db.execute(text("""
-          INSERT INTO user_quiz_status(user_id, quiz_id, solved_at)
-          VALUES(:uid, :qid, NULL)
-          ON CONFLICT (user_id, quiz_id)
-          DO UPDATE SET solved_at = NULL
-        """), {"uid": user.id, "qid": quiz_id})
-    db.commit()
-    return {"ok": True}
-
-(3) 즐겨찾기(핀) 토글
-
-POST /api/v1/quiz/:id/pin (pinned=true/false)
-
-@router.post("/quiz/{quiz_id}/pin")
-def set_pin(quiz_id: int, body: dict, user=Depends(auth_user), db: Session = Depends(get_db)):
-    pinned = bool(body.get("pinned", True))
-    db.execute(text("""
-      INSERT INTO user_quiz_status(user_id, quiz_id, pinned)
-      VALUES(:uid, :qid, :p)
-      ON CONFLICT (user_id, quiz_id)
-      DO UPDATE SET pinned = :p
-    """), {"uid": user.id, "qid": quiz_id, "p": pinned})
-    db.commit()
-    return {"ok": True}
-
-
-필요하면 GET /api/v1/favorites 도 같은 방식으로 쉽게 만들 수 있어.
-
-3) 프런트(Next.js App Router) 렌더 & 토글
-
-아래는 목록 카드에서 풀었음 = 회색 처리, 핀 버튼, 낙관적 업데이트까지 포함한 최소 예시.
-
-// app/daily/page.tsx (Client Component)
-"use client";
-import { useEffect, useState } from "react";
-
-type QuizItem = {
-  id: number;
-  title: string;
-  category: string;
-  level: string;
-  pinned: boolean;
-  solved: boolean;
-};
-
-export default function DailyPage() {
-  const [items, setItems] = useState<QuizItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const dateStr = new Date().toISOString().slice(0,10); // YYYY-MM-DD
-
-  useEffect(() => {
-    (async () => {
-      const r = await fetch(`/api/v1/daily?date=${dateStr}`, { credentials: "include" });
-      const data = await r.json();
-      setItems(data);
-      setLoading(false);
-    })();
-  }, [dateStr]);
-
-  const toggleSolve = async (id: number, next: boolean) => {
-    // optimistic UI
-    setItems(prev => prev.map(x => x.id === id ? { ...x, solved: next } : x));
-    const r = await fetch(`/api/v1/quiz/${id}/solve`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ solve: next })
-    });
-    if (!r.ok) {
-      // rollback on failure
-      setItems(prev => prev.map(x => x.id === id ? { ...x, solved: !next } : x));
-    }
-  };
-
-  const togglePin = async (id: number, next: boolean) => {
-    setItems(prev => prev.map(x => x.id === id ? { ...x, pinned: next } : x));
-    const r = await fetch(`/api/v1/quiz/${id}/pin`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ pinned: next })
-    });
-    if (!r.ok) {
-      setItems(prev => prev.map(x => x.id === id ? { ...x, pinned: !next } : x));
-    }
-  };
-
-  if (loading) return <div className="p-6">로딩…</div>;
-
-  return (
-    <main className="max-w-5xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">데일리 테스트</h1>
-
-      <div className="grid md:grid-cols-2 gap-6">
-        {items.map(q => (
-          <div
-            key={q.id}
-            className={`rounded-2xl border p-4 flex items-center justify-between shadow-sm
-                        ${q.solved ? "bg-neutral-100 text-neutral-500" : "bg-white"}`}
-          >
-            <div>
-              <div className="font-semibold">{q.title}</div>
-              <div className="text-sm opacity-70">{q.category} · {q.level}</div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              {/* solved toggle */}
-              <button
-                onClick={() => toggleSolve(q.id, !q.solved)}
-                className="px-3 py-1 rounded-full border text-sm"
-                title={q.solved ? "미해결로 표시" : "풀이 완료로 표시"}
-              >
-                {q.solved ? "완료됨" : "풀기"}
-              </button>
-
-              {/* pin toggle (★/☆) */}
-              <button
-                onClick={() => togglePin(q.id, !q.pinned)}
-                className="px-2 py-1 rounded-full border text-sm"
-                title="즐겨찾기 토글"
-              >
-                {q.pinned ? "★" : "☆"}
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </main>
-  );
+```json
+{
+  "title": "제목",
+  "category": "linux",
+  "questions": [
+    { "id": "q1", "question": "질문 1", "options": ["보기1", "보기2", "보기3", "보기4"], "answer": 0 },
+    { "id": "q2", "question": "질문 2", "options": ["보기1", "보기2", "보기3", "보기4"], "answer": 2 }
+  ]
 }
+```
 
+### 예시 — linux
 
-q.solved가 true면 회색(bg-neutral-100, text-neutral-500) 으로 바뀜.
+```json
+{
+  "title": "리눅스 기초 1",
+  "category": "linux",
+  "questions": [
+    { "id": "q1", "question": "디렉터리의 상세 목록을 표시하는 명령은?", "options": ["ls -a", "ls -l", "ls -h", "ls -R"], "answer": 1 },
+    { "id": "q2", "question": "chmod 644 권한 설정의 의미로 올바른 것은?", "options": ["소유자 읽기/쓰기, 그룹 읽기, 기타 읽기", "소유자 읽기/쓰기/실행, 그룹 읽기, 기타 읽기", "소유자 읽기, 그룹 읽기/쓰기, 기타 읽기", "소유자 읽기/쓰기, 그룹 읽기/쓰기, 기타 읽기"], "answer": 0 },
+    { "id": "q3", "question": "현재 작업 디렉터리를 출력하는 명령은?", "options": ["pwd", "whoami", "cd ~", "echo $PWD"], "answer": 0 }
+  ]
+}
+```
 
-별(★/☆) 버튼으로 즐겨찾기 토글.
+### 예시 — server
 
-서버 응답 실패 시 낙관적 업데이트 롤백까지 포함.
+```json
+{
+  "title": "서버 운영 기초 1",
+  "category": "server",
+  "questions": [
+    { "id": "q1", "question": "Nginx 서비스를 시작하는 명령은? (systemd)", "options": ["systemctl start nginx", "service nginx enable", "nginx -s start", "systemctl run nginx"], "answer": 0 },
+    { "id": "q2", "question": "리눅스에서 포트 80을 리스닝 중인 프로세스를 확인하는 방법은?", "options": ["ss -ltnp | grep :80", "top | grep :80", "du -sh /var/www/html", "df -h | grep 80"], "answer": 0 },
+    { "id": "q3", "question": "환경변수를 영구 반영하려면 일반적으로 어느 파일을 수정하나요? (bash)", "options": ["~/.bashrc 또는 ~/.bash_profile", "/etc/hosts", "/etc/fstab", "/etc/resolv.conf"], "answer": 0 }
+  ]
+}
+```
 
-4) 정렬(우선순위) 규칙 요약
+### 예시 — network
 
-SQL ORDER BY에서 CASE 사용:
+```json
+{
+  "title": "네트워크 기초 1",
+  "category": "network",
+  "questions": [
+    { "id": "q1", "question": "ping은 어떤 프로토콜을 사용하나요?", "options": ["ICMP", "TCP", "UDP", "ARP"], "answer": 0 },
+    { "id": "q2", "question": "TCP 3-way 핸드셰이크의 올바른 순서는?", "options": ["SYN → SYN-ACK → ACK", "ACK → SYN → SYN-ACK", "SYN → ACK → SYN-ACK", "SYN-ACK → SYN → ACK"], "answer": 0 },
+    { "id": "q3", "question": "서브넷 마스크 255.255.255.0의 CIDR 표기는?", "options": ["/24", "/16", "/25", "/8"], "answer": 0 }
+  ]
+}
+```
 
-pinned = true 먼저
+### 예시 — database
 
-solved = false (안 푼 것)
+```json
+{
+  "title": "데이터베이스 기초 1",
+  "category": "database",
+  "questions": [
+    { "id": "q1", "question": "employees 테이블의 전체 행 수를 구하는 SQL은?", "options": ["SELECT COUNT(*) FROM employees;", "SELECT SUM(*) FROM employees;", "SELECT * FROM employees LIMIT 1;", "COUNT employees;"], "answer": 0 },
+    { "id": "q2", "question": "ACID 중 Isolation의 의미로 가장 알맞은 것은?", "options": ["트랜잭션 간 간섭 없이 독립적으로 실행되어야 함", "시스템 장애에도 트랜잭션 결과가 유지됨", "트랜잭션 전후 데이터 일관성 보장", "모든 트랜잭션은 영구 저장소에 기록됨"], "answer": 0 },
+    { "id": "q3", "question": "인덱스의 일반적인 효과는?", "options": ["조회 성능 향상(삽입/수정은 느려질 수 있음)", "모든 쿼리 성능 향상 보장", "디스크 사용량 감소", "잠금 경합 증가 방지"], "answer": 0 }
+  ]
+}
+```
 
-그 외 생성일/제목 등
+### 대량 작성/투입 팁(Gemini 활용)
 
-ORDER BY
-  CASE WHEN COALESCE(uqs.pinned, false) THEN 0 ELSE 1 END,
-  CASE WHEN COALESCE(uqs.solved_at IS NOT NULL, false) THEN 2 ELSE 1 END,
-  q.created_at ASC
+- Gemini에 “순수 JSON만, 코드블록/설명 금지, 위 스키마 준수”를 명시.
+- 여러 테스트를 한 파일에 담을 경우: JSON 배열로 생성 → `app/data/daily/<category>/quiz.json`에 저장 → 시드 스크립트가 개별 테스트로 분해하여 등록.
+- 등록: `python scripts/seed_daily_from_files.py --base http://localhost:8000`
 
-5) 인증 & 기타 체크리스트
-
-인증: Next.js는 쿠키 세션(or JWT in cookie)로 유지, FastAPI에서 Depends(auth_user)로 user_id 추출.
-
-권한검사: user_id는 항상 토큰에서 결정(Body로 받지 않기).
-
-성능: 날짜별 목록은 캐시가능(예: 5분). user_quiz_status는 사용자별 인덱스 이미 잡음.
-
-타임존: “오늘 데일리” 계산은 서버 기준 Asia/Seoul로 맞추기.
-
-E2E 테스트(선택): Playwright로
-
-로그인 → 데일리 목록 → “풀기” 클릭 시 카드가 회색으로 → 새로고침해도 유지
-
-“☆” 클릭 시 즐겨찾기 섹션 상단 배치 확인

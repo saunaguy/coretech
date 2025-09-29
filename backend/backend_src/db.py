@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 from typing import List
 
-from sqlalchemy import Boolean, DateTime, Integer, String, Text, create_engine, ForeignKey
+from sqlalchemy import Boolean, DateTime, Integer, String, Text, create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, relationship # relationship 추가
 from pydantic import BaseModel, ConfigDict
 
@@ -83,6 +83,23 @@ class DailyTest(Base):
     questions_json: Mapped[str] = mapped_column(Text)  # JSON string of questions
     category: Mapped[str | None] = mapped_column(String(50), nullable=True, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class DailyUserSolved(Base):
+    __tablename__ = "daily_user_solved"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, index=True)
+    # Store test id as string to support mock or DB-backed ids
+    test_id: Mapped[str] = mapped_column(String(50), index=True)
+    solved_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    __table_args__ = (UniqueConstraint("user_id", "test_id", name="uq_user_test_solved"),)
+
+class DailyUserFavorite(Base):
+    __tablename__ = "daily_user_favorite"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, index=True)
+    test_id: Mapped[str] = mapped_column(String(50), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    __table_args__ = (UniqueConstraint("user_id", "test_id", name="uq_user_test_favorite"),)
 
 
 class Notice(Base):

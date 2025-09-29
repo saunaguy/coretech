@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session, joinedload, subqueryload
 from typing import List, Literal
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel
 from ..db import SessionLocal, Question, User, Comment
 from ..auth import get_current_user
 from ..schemas.qna_schema import QuestionResponse, QuestionListResponse # Import QuestionResponse and QuestionListResponse

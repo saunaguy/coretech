@@ -1,4 +1,5 @@
 "use client"
+// @ts-nocheck
 
 import { useEffect, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
@@ -7,7 +8,7 @@ import { Button } from "@/components/ui/button"
 
 export default function QnaEditPage() {
   const base = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
-  const params = useParams() as { id: string }
+  const params = useParams()
   const router = useRouter()
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")

@@ -15,6 +15,8 @@ from .db import (
     Post as DBPost,
     Question as DBQuestion,
     DailyTest as DBDailyTest,
+    DailyUserSolved as DBDailyUserSolved,
+    DailyUserFavorite as DBDailyUserFavorite,
     Notice as DBNotice,
     ProgressUser as DBProgressUser,
     engine as DBEngine,
@@ -22,7 +24,7 @@ from .db import (
     Like as DBLike,
     User,
 )
-from .auth import get_current_user
+from .auth import get_current_user, get_current_user_optional, require_admin
 
 # Load environment from .env in local/dev scenarios
 try:
@@ -97,9 +99,9 @@ def _build_lesson_index():
                 txt = _read_text(md)
                 title = _first_heading(txt) or rel
                 plain = txt.lower()
-                norm = re.sub(r"[^a-z0-9가-힣]+", "", plain)
+                norm = re.sub(r"[^a-z0-9가-??+", "", plain)
                 title_plain = title.lower()
-                title_norm = re.sub(r"[^a-z0-9가-힣]+", "", title_plain)
+                title_norm = re.sub(r"[^a-z0-9가-??+", "", title_plain)
                 try:
                     idx_num = md.stem  # filename without .md
                 except Exception:
@@ -128,11 +130,11 @@ def lesson_search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1
             _build_lesson_index()
         assert _LESSON_SEARCH_CACHE is not None
         needle = q.lower().strip()
-        norm_needle = re.sub(r"[^a-z0-9가-힣]+", "", needle)
+        norm_needle = re.sub(r"[^a-z0-9가-??+", "", needle)
         # tokenize by whitespace, keep non-empty tokens
         tokens = [t for t in re.split(r"\s+", needle) if t]
         # normalize tokens by stripping punctuation; drop tokens that become empty
-        norm_tokens = [re.sub(r"[^a-z0-9가-힣]+", "", t) for t in tokens]
+        norm_tokens = [re.sub(r"[^a-z0-9가-??+", "", t) for t in tokens]
         norm_tokens = [t for t in norm_tokens if t]
 
         results: List[Dict[str, str]] = []
@@ -307,9 +309,9 @@ _LESSONS: Dict[Tuple[str, str, str], Lesson] = {}
 def list_tracks():
     # Minimal static tracks; expand later
     return [
-        {"id": "linux", "title": "Linux", "description": "리눅스 학습 트랙"},
-        {"id": "network", "title": "Network", "description": "네트워크 기초"},
-        {"id": "docker", "title": "Docker", "description": "도커/컨테이너"},
+        {"id": "linux", "title": "Linux", "description": "리눅???습 ?랙"},
+        {"id": "network", "title": "Network", "description": "?트?크 기초"},
+        {"id": "docker", "title": "Docker", "description": "?커/컨테?너"},
     ]
 
 
@@ -348,8 +350,8 @@ def list_lessons(track: str = Query(...), module: str = Query(...)):
 @app.get("/api/v1/quiz/sample")
 def quiz_sample():
     return [
-        {"id": "q1", "question": "ls 옵션 중 숨김파일?", "options": ["-l", "-a", "-t", "-h"], "answer": 1},
-        {"id": "q2", "question": "현재 디렉터리 변경 명령?", "options": ["pwd", "mv", "cd", "cp"], "answer": 2},
+        {"id": "q1", "question": "ls ?션 ????일?", "options": ["-l", "-a", "-t", "-h"], "answer": 1},
+        {"id": "q2", "question": "?재 ?렉?리 변?명령?", "options": ["pwd", "mv", "cd", "cp"], "answer": 2},
     ]
 
 
@@ -590,7 +592,7 @@ def get_post(pid: int, db: Session = Depends(get_db)):
         "id": p.id,
         "title": p.title,
         "body": p.body,
-        "views": p.views, # 업데이트된 조회수 반환
+        "views": p.views, # ?데?트??조회??반환
         "likes": likes,
         "createdAt": p.created_at.isoformat(),
         "author": author_name,
@@ -647,12 +649,23 @@ def daily_detail(tid: int, db: Session = Depends(get_db)):
     import json
 
     questions = json.loads(row.questions_json)
-    # do not expose answers in detail
     redacted = [
-        {"id": q["id"], "question": q["question"], "options": q["options"]}
+        {
+            "id": q.get("id"),
+            "question": q.get("question"),
+            "options": q.get("options"),
+            "answer": q.get("answer"),
+            "explanation": q.get("explanation"),
+        }
         for q in questions
     ]
-    return {"id": row.id, "title": row.title, "questions": redacted}
+    return {
+        "id": row.id,
+        "title": row.title,
+        "category": row.category,
+        "createdAt": row.created_at.isoformat() if row.created_at else None,
+        "questions": redacted,
+    }
 
 
 class DailySubmit(BaseModel):
@@ -660,7 +673,7 @@ class DailySubmit(BaseModel):
 
 
 @app.post("/api/v1/daily/tests/{tid}/submit")
-def daily_submit(tid: int, payload: DailySubmit, db: Session = Depends(get_db)):
+def daily_submit(tid: int, payload: DailySubmit, db: Session = Depends(get_db), current_user: User | None = Depends(get_current_user_optional)):
     row = db.query(DBDailyTest).get(tid)
     if not row:
         raise HTTPException(status_code=404, detail="Daily test not found")
@@ -671,6 +684,20 @@ def daily_submit(tid: int, payload: DailySubmit, db: Session = Depends(get_db)):
     correct = sum(
         1 for qid, ans in payload.answers.items() if qid in questions and questions[qid]["answer"] == ans
     )
+    # Record as solved for authenticated user
+    try:
+        if current_user is not None:
+            sid = str(tid)
+            exists = (
+                db.query(DBDailyUserSolved)
+                .filter(DBDailyUserSolved.user_id == int(current_user.id), DBDailyUserSolved.test_id == sid)
+                .first()
+            )
+            if not exists:
+                db.add(DBDailyUserSolved(user_id=int(current_user.id), test_id=sid))
+                db.commit()
+    except Exception:
+        db.rollback()
     return {"total": total, "correct": correct}
 
 
@@ -862,3 +889,113 @@ def daily_progress(by: str = "category", user_id: int = 0, db: Session = Depends
     for key in ["linux", "server", "network"]:
         result.setdefault(key, 0)
     return result
+
+# ---------------------------
+# Daily: per-user solved & favorites
+# ---------------------------
+
+class FavoriteToggle(BaseModel):
+    favorite: bool
+
+
+@app.get("/api/v1/daily/user-state")
+def daily_user_state(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    solved = (
+        db.query(DBDailyUserSolved.test_id)
+        .filter(DBDailyUserSolved.user_id == int(current_user.id))
+        .all()
+    )
+    favorites = (
+        db.query(DBDailyUserFavorite.test_id)
+        .filter(DBDailyUserFavorite.user_id == int(current_user.id))
+        .all()
+    )
+    return {
+        "solved": [t[0] for t in solved],
+        "favorites": [t[0] for t in favorites],
+    }
+
+
+@app.post("/api/v1/daily/tests/{tid}/favorite")
+def daily_favorite_toggle(tid: str, payload: FavoriteToggle, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    uid = int(current_user.id)
+    existing = (
+        db.query(DBDailyUserFavorite)
+        .filter(DBDailyUserFavorite.user_id == uid, DBDailyUserFavorite.test_id == tid)
+        .first()
+    )
+    try:
+        if payload.favorite:
+            if not existing:
+                db.add(DBDailyUserFavorite(user_id=uid, test_id=tid))
+                db.commit()
+        else:
+            if existing:
+                db.delete(existing)
+                db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to update favorite")
+    return {"test_id": tid, "favorite": payload.favorite}
+
+
+@app.post("/api/v1/daily/tests/{tid}/solved")
+def daily_mark_solved(tid: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    uid = int(current_user.id)
+    exists = (
+        db.query(DBDailyUserSolved)
+        .filter(DBDailyUserSolved.user_id == uid, DBDailyUserSolved.test_id == tid)
+        .first()
+    )
+    try:
+        if not exists:
+            db.add(DBDailyUserSolved(user_id=uid, test_id=tid))
+            db.commit()
+    except Exception:
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Failed to mark solved")
+    return {"test_id": tid, "solved": True}
+
+
+# ---------------------------
+# Daily: import seed data from JSON files (admin)
+# ---------------------------
+class ImportDailyPayload(BaseModel):
+    path: Optional[str] = None  # Optional override path
+
+
+@app.post("/api/v1/daily/import", dependencies=[Depends(require_admin)])
+def daily_import(payload: ImportDailyPayload | None = None, db: Session = Depends(get_db)):
+    root = Path(payload.path) if (payload and payload.path) else (Path(__file__).resolve().parent / "data" / "daily")
+    if not root.exists() or not root.is_dir():
+        raise HTTPException(status_code=400, detail=f"Import path not found: {root}")
+    import json
+    created = 0
+    skipped = 0
+    for jf in sorted(root.glob("*.json")):
+        try:
+            obj = json.loads(jf.read_text(encoding="utf-8"))
+            title = obj.get("title")
+            category = (obj.get("category") or "").lower() or None
+            questions = obj.get("questions") or []
+            if not title or not questions:
+                skipped += 1
+                continue
+            exists = db.query(DBDailyTest).filter(DBDailyTest.title == title).first()
+            if exists:
+                skipped += 1
+                continue
+            # ensure ids
+            for idx, q in enumerate(questions, start=1):
+                if not q.get("id"):
+                    q["id"] = f"q{idx}"
+            row = DBDailyTest(title=title, questions_json=json.dumps(questions), category=category)
+            db.add(row)
+            db.commit()
+            created += 1
+        except Exception:
+            db.rollback()
+            skipped += 1
+            continue
+    return {"created": created, "skipped": skipped}
+

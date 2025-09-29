@@ -87,6 +87,23 @@ async def get_current_user(token: str = Depends(get_token_from_request), db: Ses
     return user
 
 
+async def get_current_user_optional(token: str | None = Depends(oauth2_optional), db: Session = Depends(get_db)) -> User | None:
+    """Best-effort current user. Returns None if no/invalid token."""
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("id")
+        if not user_id:
+            return None
+        user = db.query(User).filter(User.id == int(user_id)).first()
+        if not user or not user.is_active:
+            return None
+        return user
+    except JWTError:
+        return None
+
+
 async def require_admin(current_user: User = Depends(get_current_user)) -> User:
     if current_user.role != "admin":
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Admin privileges required")

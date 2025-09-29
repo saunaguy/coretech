@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               const toTop = () => { if (location.hash) return; window.scrollTo(0, 0); document.documentElement.scrollTop = 0; document.body.scrollTop = 0; };
               if (document.readyState === 'complete' || document.readyState === 'interactive') { toTop(); }
               else { window.addEventListener('DOMContentLoaded', toTop, { once: true }); }
-              window.addEventListener('pageshow', (e) => { if ((e as any).persisted) toTop(); });
+              window.addEventListener('pageshow', function(e){ try { if (e && e.persisted) toTop(); } catch {} });
             } catch {}
           `}
         </Script>

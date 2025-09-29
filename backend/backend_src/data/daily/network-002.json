@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "네트워크 심화 세트 01",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "ping은 어떤 프로토콜을 사용하나요?",
+        "options": [
+          "ICMP",
+          "TCP",
+          "UDP",
+          "ARP"
+        ],
+        "answer": 0,
+        "explanation": "??? \"ICMP\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "TCP 3-way 핸드셰이크의 올바른 순서는?",
+        "options": [
+          "SYN → SYN-ACK → ACK",
+          "ACK → SYN → SYN-ACK",
+          "SYN → ACK → SYN-ACK",
+          "SYN-ACK → SYN → ACK"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SYN → SYN-ACK → ACK\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 02",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "서브넷 마스크 255.255.255.0의 CIDR 표기는?",
+        "options": [
+          "/24",
+          "/16",
+          "/25",
+          "/8"
+        ],
+        "answer": 0,
+        "explanation": "??? \"/24\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "OSI 7계층 중 라우터가 동작하는 계층은?",
+        "options": [
+          "네트워크 계층 (3계층)",
+          "데이터 링크 계층 (2계층)",
+          "물리 계층 (1계층)",
+          "전송 계층 (4계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크 계층 (3계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 03",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "스위치가 동작하는 OSI 7계층은?",
+        "options": [
+          "데이터 링크 계층 (2계층)",
+          "네트워크 계층 (3계층)",
+          "물리 계층 (1계층)",
+          "전송 계층 (4계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터 링크 계층 (2계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "IP 주소를 MAC 주소로 변환하는 프로토콜은?",
+        "options": [
+          "ARP",
+          "RARP",
+          "DHCP",
+          "DNS"
+        ],
+        "answer": 0,
+        "explanation": "??? \"ARP\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 04",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "도메인 이름을 IP 주소로 변환하는 시스템은?",
+        "options": [
+          "DNS",
+          "DHCP",
+          "NAT",
+          "VPN"
+        ],
+        "answer": 0,
+        "explanation": "??? \"DNS\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "HTTP의 기본 포트 번호는?",
+        "options": [
+          "80",
+          "443",
+          "21",
+          "22"
+        ],
+        "answer": 0,
+        "explanation": "??? \"80\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 05",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTPS의 기본 포트 번호는?",
+        "options": [
+          "443",
+          "80",
+          "8080",
+          "23"
+        ],
+        "answer": 0,
+        "explanation": "??? \"443\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "FTP의 기본 포트 번호로 사용되지 않는 것은?",
+        "options": [
+          "22",
+          "20",
+          "21",
+          "수동 모드의 동적 포트"
+        ],
+        "answer": 0,
+        "explanation": "??? \"22\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 06",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "SSH의 기본 포트 번호는?",
+        "options": [
+          "22",
+          "23",
+          "25",
+          "110"
+        ],
+        "answer": 0,
+        "explanation": "??? \"22\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "UDP 프로토콜의 특징이 아닌 것은?",
+        "options": [
+          "신뢰성 있는 연결을 보장한다.",
+          "비연결성이다.",
+          "데이터그램 기반이다.",
+          "TCP보다 빠르다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"신뢰성 있는 연결을 보장한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 07",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "사설 IP 주소 대역이 아닌 것은?",
+        "options": [
+          "1.1.1.1",
+          "10.0.0.1",
+          "192.168.0.1",
+          "172.16.0.1"
+        ],
+        "answer": 0,
+        "explanation": "??? \"1.1.1.1\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "NAT(Network Address Translation)의 주된 역할은?",
+        "options": [
+          "사설 IP를 공인 IP로 변환하여 인터넷 접속을 가능하게 한다.",
+          "네트워크 속도를 높인다.",
+          "바이러스를 차단한다.",
+          "물리적 주소를 논리적 주소로 변환한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"사설 IP를 공인 IP로 변환하여 인터넷 접속을 가능하게 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 08",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "DHCP(Dynamic Host Configuration Protocol)의 역할은?",
+        "options": [
+          "네트워크에 접속하는 컴퓨터에 IP 주소를 자동으로 할당한다.",
+          "도메인 이름을 해석한다.",
+          "파일을 전송한다.",
+          "원격으로 컴퓨터에 접속한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크에 접속하는 컴퓨터에 IP 주소를 자동으로 할당한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "물리적 네트워크를 논리적으로 분리하는 기술은?",
+        "options": [
+          "VLAN",
+          "VPN",
+          "NAT",
+          "DNS"
+        ],
+        "answer": 0,
+        "explanation": "??? \"VLAN\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 09",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "공용 네트워크를 통해 사설 네트워크에 안전하게 접속하기 위한 기술은?",
+        "options": [
+          "VPN",
+          "VLAN",
+          "Firewall",
+          "Proxy"
+        ],
+        "answer": 0,
+        "explanation": "??? \"VPN\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "HTTP 상태 코드 중 'Not Found'를 의미하는 것은?",
+        "options": [
+          "404",
+          "200",
+          "500",
+          "301"
+        ],
+        "answer": 0,
+        "explanation": "??? \"404\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 10",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTP 상태 코드 중 'Internal Server Error'를 의미하는 것은?",
+        "options": [
+          "500",
+          "404",
+          "403",
+          "201"
+        ],
+        "answer": 0,
+        "explanation": "??? \"500\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "TCP의 혼잡 제어(Congestion Control)와 관련 없는 것은?",
+        "options": [
+          "Error Detection",
+          "Slow Start",
+          "Congestion Avoidance",
+          "Fast Retransmit"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Error Detection\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 11",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IPv4 주소의 총 길이는 몇 비트인가?",
+        "options": [
+          "32비트",
+          "64비트",
+          "128비트",
+          "16비트"
+        ],
+        "answer": 0,
+        "explanation": "??? \"32비트\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "IPv6 주소의 총 길이는 몇 비트인가?",
+        "options": [
+          "128비트",
+          "32비트",
+          "64비트",
+          "256비트"
+        ],
+        "answer": 0,
+        "explanation": "??? \"128비트\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 12",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "MAC 주소의 총 길이는 몇 비트인가?",
+        "options": [
+          "48비트",
+          "32비트",
+          "64비트",
+          "128비트"
+        ],
+        "answer": 0,
+        "explanation": "??? \"48비트\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "라우팅 프로토콜 중 거리 벡터(Distance Vector) 알고리즘을 사용하는 것은?",
+        "options": [
+          "RIP",
+          "OSPF",
+          "BGP",
+          "IS-IS"
+        ],
+        "answer": 0,
+        "explanation": "??? \"RIP\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 13",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "라우팅 프로토콜 중 링크 상태(Link State) 알고리즘을 사용하는 것은?",
+        "options": [
+          "OSPF",
+          "RIP",
+          "IGRP",
+          "EIGRP"
+        ],
+        "answer": 0,
+        "explanation": "??? \"OSPF\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "인터넷의 자율 시스템(AS) 간의 라우팅에 사용되는 프로토콜은?",
+        "options": [
+          "BGP",
+          "OSPF",
+          "RIP",
+          "EIGRP"
+        ],
+        "answer": 0,
+        "explanation": "??? \"BGP\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 14",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "OSI 7계층 중 데이터의 암호화, 압축, 변환을 담당하는 계층은?",
+        "options": [
+          "표현 계층 (6계층)",
+          "응용 계층 (7계층)",
+          "세션 계층 (5계층)",
+          "전송 계층 (4계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"표현 계층 (6계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "OSI 7계층 중 통신 세션의 설정, 관리, 종료를 담당하는 계층은?",
+        "options": [
+          "세션 계층 (5계층)",
+          "표현 계층 (6계층)",
+          "전송 계층 (4계층)",
+          "네트워크 계층 (3계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"세션 계층 (5계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 15",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "TCP/IP 4계층 모델에 해당하지 않는 것은?",
+        "options": [
+          "세션 계층",
+          "응용 계층",
+          "전송 계층",
+          "인터넷 계층"
+        ],
+        "answer": 0,
+        "explanation": "??? \"세션 계층\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "네트워크 공격 중 서비스 거부(DoS) 공격에 해당하지 않는 것은?",
+        "options": [
+          "Phishing",
+          "SYN Flooding",
+          "Ping of Death",
+          "Smurf Attack"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Phishing\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 16",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "네트워크 트래픽을 분석하기 위한 도구(패킷 스니퍼)는?",
+        "options": [
+          "Wireshark",
+          "Nmap",
+          "Ping",
+          "Netstat"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Wireshark\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "네트워크 포트 스캐닝에 주로 사용되는 도구는?",
+        "options": [
+          "Nmap",
+          "Wireshark",
+          "Traceroute",
+          "ARP"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Nmap\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 17",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "목적지까지의 네트워크 경로를 추적하는 명령어는?",
+        "options": [
+          "traceroute (tracert)",
+          "ping",
+          "netstat",
+          "ifconfig"
+        ],
+        "answer": 0,
+        "explanation": "??? \"traceroute (tracert)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "로드 밸런서가 동작하는 계층으로 가장 적절하지 않은 것은?",
+        "options": [
+          "물리 계층 (1계층)",
+          "데이터 링크 계층 (2계층)",
+          "네트워크 계층 (3계층)",
+          "전송 계층 (4계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"물리 계층 (1계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 18",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "L4 스위치가 주로 사용하는 정보는?",
+        "options": [
+          "TCP/UDP 포트 번호",
+          "MAC 주소",
+          "HTTP 헤더",
+          "IP 주소"
+        ],
+        "answer": 0,
+        "explanation": "??? \"TCP/UDP 포트 번호\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "L7 스위치가 L4 스위치와 다른 점은?",
+        "options": [
+          "애플리케이션 계층의 내용(URL, 쿠키 등)을 분석하여 부하를 분산할 수 있다.",
+          "IP 주소를 기반으로 부하를 분산한다.",
+          "MAC 주소를 기반으로 부하를 분산한다.",
+          "물리적인 케이블 연결만 담당한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"애플리케이션 계층의 내용(URL, 쿠키 등)을 분석하여 부하를 분산할 수 있다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 19",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTP 요청 메서드 중, 서버의 데이터를 생성하는 데 주로 사용되는 것은?",
+        "options": [
+          "POST",
+          "GET",
+          "DELETE",
+          "PUT"
+        ],
+        "answer": 0,
+        "explanation": "??? \"POST\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "HTTP 요청 메서드 중, 서버의 데이터를 수정(전체 교체)하는 데 주로 사용되는 것은?",
+        "options": [
+          "PUT",
+          "GET",
+          "POST",
+          "PATCH"
+        ],
+        "answer": 0,
+        "explanation": "??? \"PUT\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 20",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTP 요청 메서드 중, 서버의 데이터를 부분적으로 수정하는 데 사용되는 것은?",
+        "options": [
+          "PATCH",
+          "PUT",
+          "POST",
+          "UPDATE"
+        ],
+        "answer": 0,
+        "explanation": "??? \"PATCH\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "HTTP 요청 메서드 중, 서버의 데이터를 삭제하는 데 사용되는 것은?",
+        "options": [
+          "DELETE",
+          "REMOVE",
+          "DROP",
+          "CLEAR"
+        ],
+        "answer": 0,
+        "explanation": "??? \"DELETE\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 21",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTP는 상태를 유지하지 않는(stateless) 프로토콜이다. 이 문제를 해결하기 위해 사용하는 기술이 아닌 것은?",
+        "options": [
+          "IP 주소 추적",
+          "쿠키(Cookie)",
+          "세션(Session)",
+          "JWT(JSON Web Token)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"IP 주소 추적\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "CDN(Content Delivery Network)을 사용하는 주된 목적은?",
+        "options": [
+          "사용자와 가까운 서버에서 콘텐츠를 전송하여 응답 속도를 높인다.",
+          "서버의 보안을 강화한다.",
+          "데이터베이스 부하를 줄인다.",
+          "동적 콘텐츠를 생성한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"사용자와 가까운 서버에서 콘텐츠를 전송하여 응답 속도를 높인다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 22",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "AJAX(Asynchronous JavaScript and XML)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "페이지 전체를 새로고침하지 않고, 비동기적으로 서버와 데이터를 교환한다.",
+          "자바스크립트의 라이브러리 이름이다.",
+          "XML 데이터만 전송할 수 있다.",
+          "항상 동기적으로 동작한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"페이지 전체를 새로고침하지 않고, 비동기적으로 서버와 데이터를 교환한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "WebSocket에 대한 설명으로 올바른 것은?",
+        "options": [
+          "하나의 TCP 연결을 통해 서버와 클라이언트 간의 양방향 통신을 가능하게 한다.",
+          "HTTP와 완전히 동일하다.",
+          "UDP 기반으로 동작한다.",
+          "단방향 통신만 지원한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나의 TCP 연결을 통해 서버와 클라이언트 간의 양방향 통신을 가능하게 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 23",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "방화벽(Firewall)의 주된 역할은?",
+        "options": [
+          "미리 정해진 규칙에 따라 네트워크 트래픽을 차단하거나 허용한다.",
+          "바이러스를 치료한다.",
+          "디스크를 암호화한다.",
+          "CPU 사용량을 조절한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"미리 정해진 규칙에 따라 네트워크 트래픽을 차단하거나 허용한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "프록시 서버(Proxy Server)의 역할이 아닌 것은?",
+        "options": [
+          "IP 주소를 동적으로 할당한다.",
+          "내부 네트워크와 인터넷 사이에서 중계자 역할을 한다.",
+          "캐싱을 통해 응답 속도를 높일 수 있다.",
+          "IP 주소를 우회하는 데 사용될 수 있다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"IP 주소를 동적으로 할당한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 24",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "10.0.0.0/8 대역의 서브넷 마스크는 무엇인가?",
+        "options": [
+          "255.0.0.0",
+          "255.255.0.0",
+          "255.255.255.0",
+          "255.255.255.255"
+        ],
+        "answer": 0,
+        "explanation": "??? \"255.0.0.0\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "192.168.0.0/16 대역의 서브넷 마스크는 무엇인가?",
+        "options": [
+          "255.255.0.0",
+          "255.0.0.0",
+          "255.255.255.0",
+          "255.255.128.0"
+        ],
+        "answer": 0,
+        "explanation": "??? \"255.255.0.0\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 25",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IP 주소 클래스 중 A 클래스의 첫 번째 옥텟(octet) 범위는?",
+        "options": [
+          "1-126",
+          "128-191",
+          "192-223",
+          "224-239"
+        ],
+        "answer": 0,
+        "explanation": "??? \"1-126\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "IP 주소 클래스 중 C 클래스의 기본 서브넷 마스크는?",
+        "options": [
+          "255.255.255.0",
+          "255.0.0.0",
+          "255.255.0.0",
+          "255.255.255.128"
+        ],
+        "answer": 0,
+        "explanation": "??? \"255.255.255.0\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 26",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "루프백(Loopback) 주소로 사용되는 IP 주소는?",
+        "options": [
+          "127.0.0.1",
+          "0.0.0.0",
+          "255.255.255.255",
+          "192.168.1.1"
+        ],
+        "answer": 0,
+        "explanation": "??? \"127.0.0.1\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "브로드캐스트(Broadcast) 주소에 대한 설명으로 올바른 것은?",
+        "options": [
+          "네트워크의 모든 호스트에게 데이터를 전송하기 위한 주소이다.",
+          "특정 그룹의 호스트에게만 데이터를 전송한다.",
+          "자기 자신에게 데이터를 전송한다.",
+          "게이트웨이 주소를 의미한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크의 모든 호스트에게 데이터를 전송하기 위한 주소이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 27",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "유니캐스트(Unicast) 통신 방식은?",
+        "options": [
+          "1:1 통신",
+          "1:N 통신",
+          "1:All 통신",
+          "N:M 통신"
+        ],
+        "answer": 0,
+        "explanation": "??? \"1:1 통신\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "멀티캐스트(Multicast) 통신 방식은?",
+        "options": [
+          "1:N 통신 (특정 그룹에게만)",
+          "1:1 통신",
+          "1:All 통신",
+          "N:M 통신"
+        ],
+        "answer": 0,
+        "explanation": "??? \"1:N 통신 (특정 그룹에게만)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 28",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "CSMA/CD 방식과 관련된 네트워크는?",
+        "options": [
+          "이더넷 (Ethernet)",
+          "토큰링 (Token Ring)",
+          "Wi-Fi",
+          "ATM"
+        ],
+        "answer": 0,
+        "explanation": "??? \"이더넷 (Ethernet)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "CSMA/CA 방식과 관련된 네트워크는?",
+        "options": [
+          "Wi-Fi (무선랜)",
+          "이더넷 (Ethernet)",
+          "FDDI",
+          "X.25"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Wi-Fi (무선랜)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 29",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "TCP의 흐름 제어(Flow Control) 방식은?",
+        "options": [
+          "슬라이딩 윈도우 (Sliding Window)",
+          "느린 시작 (Slow Start)",
+          "혼잡 회피 (Congestion Avoidance)",
+          "빠른 재전송 (Fast Retransmit)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"슬라이딩 윈도우 (Sliding Window)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "TCP 연결 종료 과정(4-way handshake)의 첫 번째 단계는?",
+        "options": [
+          "클라이언트가 서버에게 FIN 패킷을 보낸다.",
+          "서버가 클라이언트에게 FIN 패킷을 보낸다.",
+          "클라이언트가 서버에게 ACK 패킷을 보낸다.",
+          "서버가 클라이언트에게 SYN 패킷을 보낸다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"클라이언트가 서버에게 FIN 패킷을 보낸다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 30",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "MTU(Maximum Transmission Unit)가 의미하는 것은?",
+        "options": [
+          "네트워크에서 한 번에 전송할 수 있는 최대 데이터 크기",
+          "최대 전송 속도",
+          "최대 사용자 수",
+          "최대 전송 거리"
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크에서 한 번에 전송할 수 있는 최대 데이터 크기\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터가 MTU보다 클 경우 발생하는 현상은?",
+        "options": [
+          "단편화 (Fragmentation)",
+          "혼잡 (Congestion)",
+          "지연 (Latency)",
+          "손실 (Loss)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"단편화 (Fragmentation)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 31",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "HTTP/1.1의 Keep-Alive 기능은 무엇을 위한 것인가?",
+        "options": [
+          "하나의 TCP 연결을 재사용하여 여러 요청과 응답을 처리하기 위해",
+          "서버가 살아있는지 확인하기 위해",
+          "보안을 강화하기 위해",
+          "데이터를 압축하기 위해"
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나의 TCP 연결을 재사용하여 여러 요청과 응답을 처리하기 위해\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "HTTP/2의 가장 큰 특징 중 하나인 멀티플렉싱(Multiplexing)이란?",
+        "options": [
+          "하나의 TCP 연결에서 여러 개의 요청과 응답을 동시에 병렬로 처리하는 것",
+          "여러 개의 TCP 연결을 만드는 것",
+          "헤더를 압축하는 것",
+          "서버가 클라이언트의 요청 없이 리소스를 보내주는 것"
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나의 TCP 연결에서 여러 개의 요청과 응답을 동시에 병렬로 처리하는 것\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 32",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "DNS 레코드 유형 중, 특정 도메인의 별칭(alias)을 지정하는 것은?",
+        "options": [
+          "CNAME",
+          "A",
+          "MX",
+          "TXT"
+        ],
+        "answer": 0,
+        "explanation": "??? \"CNAME\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "DNS 레코드 유형 중, IPv6 주소를 지정하는 것은?",
+        "options": [
+          "AAAA",
+          "A",
+          "CNAME",
+          "NS"
+        ],
+        "answer": 0,
+        "explanation": "??? \"AAAA\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 33",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "SMTP(Simple Mail Transfer Protocol)의 기본 포트 번호는?",
+        "options": [
+          "25",
+          "110",
+          "143",
+          "587"
+        ],
+        "answer": 0,
+        "explanation": "??? \"25\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "POP3(Post Office Protocol 3)의 기본 포트 번호는?",
+        "options": [
+          "110",
+          "143",
+          "25",
+          "995"
+        ],
+        "answer": 0,
+        "explanation": "??? \"110\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 34",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IMAP(Internet Message Access Protocol)의 기본 포트 번호는?",
+        "options": [
+          "143",
+          "110",
+          "25",
+          "993"
+        ],
+        "answer": 0,
+        "explanation": "??? \"143\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "Telnet에 비해 SSH가 가지는 가장 큰 장점은?",
+        "options": [
+          "모든 통신 내용이 암호화된다.",
+          "속도가 더 빠르다.",
+          "더 많은 운영체제를 지원한다.",
+          "사용법이 더 간단하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"모든 통신 내용이 암호화된다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 35",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "네트워크 토폴로지(Topology) 중, 모든 노드가 중앙 허브에 연결되는 방식은?",
+        "options": [
+          "스타형 (Star Topology)",
+          "버스형 (Bus Topology)",
+          "링형 (Ring Topology)",
+          "메시형 (Mesh Topology)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"스타형 (Star Topology)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "네트워크 토폴로지 중, 모든 노드가 양 옆의 두 노드와 연결되어 원형을 이루는 방식은?",
+        "options": [
+          "링형 (Ring Topology)",
+          "스타형 (Star Topology)",
+          "버스형 (Bus Topology)",
+          "트리형 (Tree Topology)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"링형 (Ring Topology)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 36",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "네트워크 토폴로지 중, 하나의 공통된 케이블(버스)에 모든 노드가 연결되는 방식은?",
+        "options": [
+          "버스형 (Bus Topology)",
+          "스타형 (Star Topology)",
+          "링형 (Ring Topology)",
+          "메시형 (Mesh Topology)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"버스형 (Bus Topology)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "네트워크 토폴로지 중, 모든 노드가 다른 모든 노드와 개별적으로 연결되는 방식은?",
+        "options": [
+          "메시형 (Mesh Topology)",
+          "스타형 (Star Topology)",
+          "버스형 (Bus Topology)",
+          "링형 (Ring Topology)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"메시형 (Mesh Topology)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 37",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "UTP(Unshielded Twisted Pair) 케이블의 카테고리(Category)가 의미하는 것은?",
+        "options": [
+          "지원하는 대역폭과 전송 속도",
+          "케이블의 길이",
+          "케이블의 색상",
+          "케이블의 가격"
+        ],
+        "answer": 0,
+        "explanation": "??? \"지원하는 대역폭과 전송 속도\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "광케이블(Fiber Optic Cable)이 UTP 케이블에 비해 가지는 장점이 아닌 것은?",
+        "options": [
+          "설치 및 유지보수 비용이 저렴하다.",
+          "더 넓은 대역폭을 제공한다.",
+          "전자기 간섭(EMI)에 강하다.",
+          "더 먼 거리까지 데이터 전송이 가능하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"설치 및 유지보수 비용이 저렴하다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 38",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "PoE(Power over Ethernet) 기술이란?",
+        "options": [
+          "이더넷 케이블을 통해 데이터와 전력을 동시에 공급하는 기술",
+          "이더넷 속도를 높이는 기술",
+          "이더넷 보안을 강화하는 기술",
+          "이더넷 케이블을 절약하는 기술"
+        ],
+        "answer": 0,
+        "explanation": "??? \"이더넷 케이블을 통해 데이터와 전력을 동시에 공급하는 기술\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "게이트웨이(Gateway)에 대한 설명으로 가장 올바른 것은?",
+        "options": [
+          "서로 다른 프로토콜을 사용하는 네트워크를 연결하는 장치이다.",
+          "동일한 프로토콜을 사용하는 네트워크를 연결한다.",
+          "물리적인 신호를 증폭시킨다.",
+          "MAC 주소를 학습하여 포워딩한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"서로 다른 프로토콜을 사용하는 네트워크를 연결하는 장치이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 39",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "리피터(Repeater)가 동작하는 OSI 7계층은?",
+        "options": [
+          "물리 계층 (1계층)",
+          "데이터 링크 계층 (2계층)",
+          "네트워크 계층 (3계층)",
+          "전송 계층 (4계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"물리 계층 (1계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "브리지(Bridge)가 동작하는 OSI 7계층은?",
+        "options": [
+          "데이터 링크 계층 (2계층)",
+          "물리 계층 (1계층)",
+          "네트워크 계층 (3계층)",
+          "응용 계층 (7계층)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터 링크 계층 (2계층)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 40",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "허브(Hub)와 스위치(Switch)의 가장 큰 차이점은?",
+        "options": [
+          "스위치는 목적지 MAC 주소로만 데이터를 전송하지만, 허브는 모든 포트로 데이터를 전송한다.",
+          "허브는 스위치보다 빠르다.",
+          "스위치는 물리 계층에서 동작한다.",
+          "허브는 충돌 도메인을 나누지 못한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"스위치는 목적지 MAC 주소로만 데이터를 전송하지만, 허브는 모든 포트로 데이터를 전송한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "충돌 도메인(Collision Domain)을 분리하는 장비는?",
+        "options": [
+          "스위치, 라우터",
+          "허브, 리피터",
+          "케이블, 커넥터",
+          "NIC, 트랜시버"
+        ],
+        "answer": 0,
+        "explanation": "??? \"스위치, 라우터\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 41",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "브로드캐스트 도메인(Broadcast Domain)을 분리하는 장비는?",
+        "options": [
+          "라우터",
+          "스위치",
+          "허브",
+          "리피터"
+        ],
+        "answer": 0,
+        "explanation": "??? \"라우터\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "Well-known 포트의 범위는?",
+        "options": [
+          "0-1023",
+          "1024-49151",
+          "49152-65535",
+          "1-255"
+        ],
+        "answer": 0,
+        "explanation": "??? \"0-1023\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 42",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "등록된 포트(Registered Ports)의 범위는?",
+        "options": [
+          "1024-49151",
+          "0-1023",
+          "49152-65535",
+          "10000-20000"
+        ],
+        "answer": 0,
+        "explanation": "??? \"1024-49151\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "동적 포트(Dynamic Ports)의 범위는?",
+        "options": [
+          "49152-65535",
+          "0-1023",
+          "1024-49151",
+          "30000-40000"
+        ],
+        "answer": 0,
+        "explanation": "??? \"49152-65535\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 43",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "TCP 헤더에 포함되지 않는 정보는?",
+        "options": [
+          "출발지 MAC 주소",
+          "출발지/목적지 포트 번호",
+          "순서 번호 (Sequence Number)",
+          "윈도우 크기 (Window Size)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"출발지 MAC 주소\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "IP 헤더에 포함되지 않는 정보는?",
+        "options": [
+          "출발지/목적지 포트 번호",
+          "출발지/목적지 IP 주소",
+          "TTL (Time to Live)",
+          "프로토콜 종류"
+        ],
+        "answer": 0,
+        "explanation": "??? \"출발지/목적지 포트 번호\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 44",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "TTL(Time to Live)의 역할은?",
+        "options": [
+          "패킷이 네트워크 상에서 무한히 순환하는 것을 방지한다.",
+          "패킷의 생존 시간을 늘린다.",
+          "패킷의 전송 속도를 조절한다.",
+          "패킷의 우선순위를 정한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"패킷이 네트워크 상에서 무한히 순환하는 것을 방지한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "ICMP 메시지가 아닌 것은?",
+        "options": [
+          "Data Transfer",
+          "Echo Request/Reply",
+          "Destination Unreachable",
+          "Time Exceeded"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Data Transfer\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 45",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IGMP(Internet Group Management Protocol)의 역할은?",
+        "options": [
+          "호스트가 멀티캐스트 그룹에 가입하거나 탈퇴할 때 사용된다.",
+          "인터넷 그룹을 관리한다.",
+          "게이트웨이 간의 통신을 담당한다.",
+          "IP 주소를 관리한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"호스트가 멀티캐스트 그룹에 가입하거나 탈퇴할 때 사용된다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "Anycast 주소에 대한 설명으로 올바른 것은?",
+        "options": [
+          "하나의 주소가 여러 호스트에 할당되며, 패킷은 가장 가까운 호스트로 전송된다.",
+          "네트워크의 모든 호스트에게 전송된다.",
+          "특정 그룹의 호스트에게만 전송된다.",
+          "하나의 호스트만 가지는 고유한 주소이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나의 주소가 여러 호스트에 할당되며, 패킷은 가장 가까운 호스트로 전송된다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 46",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IPv6에서 브로드캐스트가 사라지고 대신 사용되는 것이 아닌 것은?",
+        "options": [
+          "유니캐스트",
+          "멀티캐스트",
+          "애니캐스트",
+          "그룹캐스트"
+        ],
+        "answer": 0,
+        "explanation": "??? \"유니캐스트\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "IPv6 주소 `fe80::1`은 어떤 종류의 주소인가?",
+        "options": [
+          "링크-로컬 주소 (Link-local address)",
+          "글로벌 유니캐스트 주소",
+          "멀티캐스트 주소",
+          "루프백 주소"
+        ],
+        "answer": 0,
+        "explanation": "??? \"링크-로컬 주소 (Link-local address)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 47",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "IPv6에서 NAT가 필요 없어진 주된 이유는?",
+        "options": [
+          "주소 공간이 매우 커서 모든 장치에 공인 IP를 할당할 수 있기 때문에",
+          "보안 기능이 내장되어 있기 때문에",
+          "속도가 매우 빠르기 때문에",
+          "헤더 구조가 단순하기 때문에"
+        ],
+        "answer": 0,
+        "explanation": "??? \"주소 공간이 매우 커서 모든 장치에 공인 IP를 할당할 수 있기 때문에\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "6to4 터널링 기술은 무엇을 위한 것인가?",
+        "options": [
+          "IPv4 네트워크를 통해 IPv6 패킷을 전송하기 위해",
+          "IPv6 네트워크를 통해 IPv4 패킷을 전송하기 위해",
+          "두 개의 사설망을 연결하기 위해",
+          "보안 채널을 형성하기 위해"
+        ],
+        "answer": 0,
+        "explanation": "??? \"IPv4 네트워크를 통해 IPv6 패킷을 전송하기 위해\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 48",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "SSL/TLS 핸드셰이크 과정에서 가장 먼저 일어나는 일은?",
+        "options": [
+          "ClientHello 메시지 전송",
+          "ServerHello 메시지 전송",
+          "인증서 교환",
+          "키 교환"
+        ],
+        "answer": 0,
+        "explanation": "??? \"ClientHello 메시지 전송\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "대칭키 암호화 방식과 비대칭키 암호화 방식의 차이점은?",
+        "options": [
+          "대칭키는 암호화와 복호화에 동일한 키를 사용하고, 비대칭키는 서로 다른 키(공개키/개인키)를 사용한다.",
+          "비대칭키가 대칭키보다 암호화 속도가 빠르다.",
+          "대칭키는 키 관리가 용이하다.",
+          "비대칭키는 전자서명에 사용할 수 없다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"대칭키는 암호화와 복호화에 동일한 키를 사용하고, 비대칭키는 서로 다른 키(공개키/개인키)를 사용한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 49",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "공개키 기반 구조(PKI)의 핵심 구성요소가 아닌 것은?",
+        "options": [
+          "방화벽 (Firewall)",
+          "인증 기관 (CA)",
+          "저장소 (Repository)",
+          "공개키 인증서"
+        ],
+        "answer": 0,
+        "explanation": "??? \"방화벽 (Firewall)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "해시 함수(Hash Function)의 특징이 아닌 것은?",
+        "options": [
+          "입력값으로부터 원본 출력값을 쉽게 계산할 수 있다 (역상 저항성 없음).",
+          "입력값이 조금만 달라도 출력값이 크게 달라진다.",
+          "서로 다른 입력값에 대해 동일한 출력값이 나올 확률이 매우 낮다 (충돌 저항성).",
+          "출력값의 길이는 항상 고정된다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"입력값으로부터 원본 출력값을 쉽게 계산할 수 있다 (역상 저항성 없음).\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "네트워크 심화 세트 50",
+    "category": "network",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "디지털 서명(Digital Signature)이 보장하는 것이 아닌 것은?",
+        "options": [
+          "기밀성 (Confidentiality)",
+          "무결성 (Integrity)",
+          "인증 (Authentication)",
+          "부인 방지 (Non-repudiation)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"기밀성 (Confidentiality)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "XSS(Cross-Site Scripting) 공격은 주로 무엇을 탈취하기 위한 공격인가?",
+        "options": [
+          "사용자의 세션 쿠키",
+          "서버의 루트 권한",
+          "데이터베이스의 정보",
+          "네트워크 패킷"
+        ],
+        "answer": 0,
+        "explanation": "??? \"사용자의 세션 쿠키\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  }
+]

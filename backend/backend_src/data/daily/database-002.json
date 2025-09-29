@@ -1,0 +1,1502 @@
+[
+  {
+    "title": "데이터베이스 심화 세트 01",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "employees 테이블의 전체 행 수를 구하는 SQL은?",
+        "options": [
+          "SELECT COUNT(*) FROM employees;",
+          "SELECT SUM(*) FROM employees;",
+          "SELECT * FROM employees LIMIT 1;",
+          "COUNT employees;"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT COUNT(*) FROM employees;\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "ACID 중 Isolation의 의미로 가장 알맞은 것은?",
+        "options": [
+          "트랜잭션 간 간섭 없이 독립적으로 실행되어야 함",
+          "시스템 장애에도 트랜잭션 결과가 유지됨",
+          "트랜잭션 전후 데이터 일관성 보장",
+          "모든 트랜잭션은 영구 저장소에 기록됨"
+        ],
+        "answer": 0,
+        "explanation": "??? \"트랜잭션 간 간섭 없이 독립적으로 실행되어야 함\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 02",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "인덱스의 일반적인 효과는?",
+        "options": [
+          "조회(SELECT) 성능 향상, 삽입/수정/삭제(INSERT/UPDATE/DELETE) 성능 저하 가능성",
+          "모든 쿼리 성능 향상 보장",
+          "디스크 사용량 감소",
+          "잠금(Lock) 경합 증가 방지"
+        ],
+        "answer": 0,
+        "explanation": "??? \"조회(SELECT) 성능 향상, 삽입/수정/삭제(INSERT/UPDATE/DELETE) 성능 저하 가능성\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`users` 테이블에서 `age`가 30 이상인 사용자의 `name`과 `email`을 조회하는 SQL은?",
+        "options": [
+          "SELECT name, email FROM users WHERE age >= 30;",
+          "SELECT * FROM users WHERE age > 30;",
+          "GET name, email FROM users WHERE age >= 30;",
+          "SELECT name, email ON users WHERE age >= 30;"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT name, email FROM users WHERE age >= 30;\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 03",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "JOIN에 대한 설명으로 올바르지 않은 것은?",
+        "options": [
+          "LEFT JOIN은 오른쪽 테이블의 모든 행을 포함한다.",
+          "INNER JOIN은 두 테이블에 공통적으로 존재하는 데이터만 반환한다.",
+          "OUTER JOIN은 일치하는 데이터가 없어도 한쪽 테이블의 모든 행을 반환한다.",
+          "CROSS JOIN은 두 테이블의 모든 가능한 조합을 반환한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"LEFT JOIN은 오른쪽 테이블의 모든 행을 포함한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터베이스 정규화(Normalization)의 주된 목적은 무엇인가?",
+        "options": [
+          "데이터 중복을 최소화하고 데이터 무결성을 향상시키기 위해",
+          "쿼리 속도를 무조건 빠르게 하기 위해",
+          "데이터베이스 저장 공간을 늘리기 위해",
+          "데이터를 비정형 형태로 저장하기 위해"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터 중복을 최소화하고 데이터 무결성을 향상시키기 위해\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 04",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "NoSQL 데이터베이스의 특징으로 거리가 먼 것은?",
+        "options": [
+          "엄격한 스키마를 요구한다.",
+          "수평적 확장이 용이하다.",
+          "다양한 데이터 모델을 지원한다 (Key-Value, Document 등).",
+          "대용량 데이터를 처리하는 데 효과적이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"엄격한 스키마를 요구한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "SQL에서 `GROUP BY` 절과 함께 사용되어 그룹화된 결과에 조건을 적용하는 절은?",
+        "options": [
+          "HAVING",
+          "WHERE",
+          "FILTER",
+          "CONDITION"
+        ],
+        "answer": 0,
+        "explanation": "??? \"HAVING\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 05",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`users` 테이블에 새로운 사용자를 추가하는 SQL 구문은?",
+        "options": [
+          "INSERT INTO users (name, age) VALUES ('Alice', 25);",
+          "ADD TO users (name, age) VALUES ('Alice', 25);",
+          "CREATE USER 'Alice' IN users;",
+          "UPDATE users SET name='Alice', age=25;"
+        ],
+        "answer": 0,
+        "explanation": "??? \"INSERT INTO users (name, age) VALUES ('Alice', 25);\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "기본 키(Primary Key)에 대한 설명으로 가장 올바른 것은?",
+        "options": [
+          "테이블의 각 행을 고유하게 식별하며, NULL 값을 가질 수 없다.",
+          "다른 테이블의 행을 참조하는 데 사용된다.",
+          "하나의 테이블에 여러 개 존재할 수 있다.",
+          "NULL 값을 허용하지만 중복될 수는 없다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 각 행을 고유하게 식별하며, NULL 값을 가질 수 없다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 06",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`DELETE`와 `TRUNCATE`의 차이점으로 올바른 것은?",
+        "options": [
+          "DELETE는 WHERE 절로 특정 행만 삭제 가능하지만, TRUNCATE는 테이블 전체를 빠르게 삭제한다.",
+          "TRUNCATE는 롤백(Rollback)이 가능하지만, DELETE는 불가능하다.",
+          "DELETE는 DDL이고, TRUNCATE는 DML이다.",
+          "TRUNCATE가 DELETE보다 속도가 항상 느리다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"DELETE는 WHERE 절로 특정 행만 삭제 가능하지만, TRUNCATE는 테이블 전체를 빠르게 삭제한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "Redis와 같은 In-memory 데이터베이스를 사용하는 주된 이유는?",
+        "options": [
+          "매우 빠른 읽기/쓰기 속도가 필요할 때",
+          "영구적인 데이터 저장이 필수적일 때",
+          "복잡한 관계형 데이터를 처리할 때",
+          "트랜잭션의 ACID를 엄격하게 보장해야 할 때"
+        ],
+        "answer": 0,
+        "explanation": "??? \"매우 빠른 읽기/쓰기 속도가 필요할 때\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 07",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "SQL Injection 공격을 방어하기 위한 가장 효과적인 방법은?",
+        "options": [
+          "Prepared Statement (매개변수화된 쿼리) 사용",
+          "모든 사용자 입력을 대문자로 변환",
+          "데이터베이스 오류 메시지를 사용자에게 그대로 노출",
+          "비밀번호를 평문으로 저장"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Prepared Statement (매개변수화된 쿼리) 사용\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`orders` 테이블에서 `customer_id` 별로 주문 수를 계산하는 쿼리는?",
+        "options": [
+          "SELECT customer_id, COUNT(*) FROM orders GROUP BY customer_id;",
+          "SELECT customer_id, SUM(orders) FROM orders;",
+          "SELECT customer_id, COUNT(order_id) FROM orders;",
+          "SELECT customer_id, ALL(*) FROM orders GROUP BY customer_id;"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT customer_id, COUNT(*) FROM orders GROUP BY customer_id;\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 08",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 뷰(View)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "하나 이상의 테이블에서 유도된 가상 테이블이다.",
+          "데이터를 물리적으로 저장하는 객체이다.",
+          "항상 원본 테이블의 모든 열을 포함해야 한다.",
+          "뷰를 통해서는 데이터를 수정할 수 없다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나 이상의 테이블에서 유도된 가상 테이블이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`users` 테이블의 `email` 열에 중복된 값이 없도록 하는 제약조건은?",
+        "options": [
+          "UNIQUE",
+          "PRIMARY KEY",
+          "NOT NULL",
+          "CHECK"
+        ],
+        "answer": 0,
+        "explanation": "??? \"UNIQUE\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 09",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 샤딩(Sharding)이란 무엇인가?",
+        "options": [
+          "대용량 테이블을 여러 개의 작은 테이블로 수평 분할하는 것",
+          "자주 사용하는 데이터를 메모리에 캐싱하는 것",
+          "여러 대의 서버가 동일한 데이터를 복제하여 고가용성을 확보하는 것",
+          "SQL 쿼리를 최적화하여 성능을 높이는 것"
+        ],
+        "answer": 0,
+        "explanation": "??? \"대용량 테이블을 여러 개의 작은 테이블로 수평 분할하는 것\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "트랜잭션 격리 수준(Isolation Level) 중 가장 높은 수준은?",
+        "options": [
+          "Serializable",
+          "Read Committed",
+          "Read Uncommitted",
+          "Repeatable Read"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Serializable\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 10",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`COMMIT` 명령어의 역할은 무엇인가?",
+        "options": [
+          "현재 트랜잭션의 모든 변경 사항을 영구적으로 저장한다.",
+          "트랜잭션의 변경 사항을 모두 취소한다.",
+          "새로운 트랜잭션을 시작한다.",
+          "트랜잭션을 일시 중지한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"현재 트랜잭션의 모든 변경 사항을 영구적으로 저장한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`ROLLBACK` 명령어의 역할은 무엇인가?",
+        "options": [
+          "현재 트랜잭션의 모든 변경 사항을 취소하고 이전 상태로 되돌린다.",
+          "트랜잭션의 변경 사항을 영구 저장한다.",
+          "특정 지점으로 되돌아간다.",
+          "데이터베이스를 백업한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"현재 트랜잭션의 모든 변경 사항을 취소하고 이전 상태로 되돌린다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 11",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "DML(Data Manipulation Language)에 속하지 않는 명령어는?",
+        "options": [
+          "CREATE",
+          "SELECT",
+          "INSERT",
+          "UPDATE"
+        ],
+        "answer": 0,
+        "explanation": "??? \"CREATE\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "DDL(Data Definition Language)에 속하지 않는 명령어는?",
+        "options": [
+          "SELECT",
+          "CREATE",
+          "ALTER",
+          "DROP"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 12",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "DCL(Data Control Language)에 속하는 명령어는?",
+        "options": [
+          "GRANT",
+          "UPDATE",
+          "DELETE",
+          "TRUNCATE"
+        ],
+        "answer": 0,
+        "explanation": "??? \"GRANT\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`products` 테이블에서 `price`가 100과 200 사이인 제품을 찾는 SQL은?",
+        "options": [
+          "SELECT * FROM products WHERE price BETWEEN 100 AND 200;",
+          "SELECT * FROM products WHERE price >= 100 OR price <= 200;",
+          "SELECT * FROM products WHERE price IN (100, 200);",
+          "SELECT * FROM products WHERE price > 100 AND price < 200;"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT * FROM products WHERE price BETWEEN 100 AND 200;\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 13",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`name`이 'A'로 시작하는 모든 사용자를 찾는 SQL 와일드카드 사용법은?",
+        "options": [
+          "SELECT * FROM users WHERE name LIKE 'A%';",
+          "SELECT * FROM users WHERE name LIKE '%A';",
+          "SELECT * FROM users WHERE name LIKE '_A%';",
+          "SELECT * FROM users WHERE name = 'A*';"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SELECT * FROM users WHERE name LIKE 'A%';\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "외래 키(Foreign Key)의 역할은 무엇인가?",
+        "options": [
+          "한 테이블의 열이 다른 테이블의 기본 키를 참조하여 데이터 무결성을 보장한다.",
+          "테이블의 행을 고유하게 식별한다.",
+          "NULL 값을 허용하지 않는다.",
+          "데이터를 정렬하는 기준이 된다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"한 테이블의 열이 다른 테이블의 기본 키를 참조하여 데이터 무결성을 보장한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 14",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`UNION`과 `UNION ALL`의 차이점은?",
+        "options": [
+          "`UNION`은 중복된 행을 제거하지만, `UNION ALL`은 모두 포함한다.",
+          "`UNION ALL`이 `UNION`보다 느리다.",
+          "`UNION`은 정렬을 하지 않지만, `UNION ALL`은 정렬한다.",
+          "두 명령어는 기능적으로 동일하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"`UNION`은 중복된 행을 제거하지만, `UNION ALL`은 모두 포함한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터베이스 클러스터링(Clustering)의 주된 목적이 아닌 것은?",
+        "options": [
+          "데이터베이스 스키마 설계",
+          "고가용성(High Availability)",
+          "부하 분산(Load Balancing)",
+          "성능 향상"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터베이스 스키마 설계\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 15",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 복제(Replication)에서 Master-Slave 구조의 설명으로 올바른 것은?",
+        "options": [
+          "Master에서 발생한 변경 사항이 Slave로 복사된다.",
+          "Slave에서 Master로 데이터가 복사된다.",
+          "Master와 Slave가 동등한 권한을 가진다.",
+          "Master는 읽기 전용이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"Master에서 발생한 변경 사항이 Slave로 복사된다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`NULL` 값에 대한 설명으로 올바르지 않은 것은?",
+        "options": [
+          "`NULL`은 0이나 공백 문자열과 동일하다.",
+          "알 수 없거나 존재하지 않는 값을 의미한다.",
+          "`IS NULL` 또는 `IS NOT NULL`로만 비교할 수 있다.",
+          "`COUNT(*)`에서는 계산되지만 `COUNT(column)`에서는 제외된다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"`NULL`은 0이나 공백 문자열과 동일하다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 16",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`CASE` 문의 역할은 무엇인가?",
+        "options": [
+          "조건에 따라 다른 값을 반환하는 SQL의 조건부 표현식이다.",
+          "대소문자를 구분한다.",
+          "테이블의 이름을 변경한다.",
+          "데이터베이스를 선택한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"조건에 따라 다른 값을 반환하는 SQL의 조건부 표현식이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "집계 함수(Aggregate Function)가 아닌 것은?",
+        "options": [
+          "CONCAT",
+          "COUNT",
+          "SUM",
+          "AVG"
+        ],
+        "answer": 0,
+        "explanation": "??? \"CONCAT\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 17",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`ALTER TABLE` 명령어로 할 수 없는 작업은?",
+        "options": [
+          "테이블의 데이터를 조회한다.",
+          "새로운 열을 추가한다.",
+          "기존 열의 데이터 타입을 변경한다.",
+          "제약조건을 추가하거나 삭제한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 데이터를 조회한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`DROP TABLE`과 `TRUNCATE TABLE`의 공통점은?",
+        "options": [
+          "테이블의 모든 데이터가 삭제된다.",
+          "테이블 구조까지 삭제된다.",
+          "롤백이 가능하다.",
+          "DML에 속한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 모든 데이터가 삭제된다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 18",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터 사전(Data Dictionary)에 저장되는 정보가 아닌 것은?",
+        "options": [
+          "테이블의 실제 데이터 값",
+          "테이블 구조 정보",
+          "사용자 정보",
+          "제약조건 정보"
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 실제 데이터 값\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`EXPLAIN` 명령어의 용도는?",
+        "options": [
+          "SQL 쿼리의 실행 계획을 보여주어 성능 분석을 돕는다.",
+          "SQL 문법을 설명해준다.",
+          "데이터베이스 구조를 설명한다.",
+          "테이블의 내용을 설명한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"SQL 쿼리의 실행 계획을 보여주어 성능 분석을 돕는다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 19",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "클러스터형 인덱스(Clustered Index)의 특징은?",
+        "options": [
+          "테이블 당 하나만 존재할 수 있으며, 데이터 행을 물리적으로 정렬한다.",
+          "테이블 당 여러 개를 만들 수 있다.",
+          "데이터와 별도의 공간에 인덱스를 저장한다.",
+          "항상 비클러스터형 인덱스보다 빠르다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블 당 하나만 존재할 수 있으며, 데이터 행을 물리적으로 정렬한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "비클러스터형 인덱스(Non-clustered Index)의 특징은?",
+        "options": [
+          "데이터의 위치를 가리키는 포인터를 저장하며, 테이블 당 여러 개를 생성할 수 있다.",
+          "데이터를 물리적으로 정렬한다.",
+          "테이블 당 하나만 존재할 수 있다.",
+          "항상 클러스터형 인덱스보다 느리다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터의 위치를 가리키는 포인터를 저장하며, 테이블 당 여러 개를 생성할 수 있다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 20",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "인덱스 스캔(Index Scan)과 인덱스 탐색(Index Seek)의 차이는?",
+        "options": [
+          "탐색(Seek)은 특정 지점을 바로 찾는 것이고, 스캔(Scan)은 인덱스의 전체 또는 일부를 훑는 것이다.",
+          "스캔이 항상 탐색보다 빠르다.",
+          "탐색은 비클러스터형 인덱스에서만 가능하다.",
+          "두 용어는 동일한 의미이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"탐색(Seek)은 특정 지점을 바로 찾는 것이고, 스캔(Scan)은 인덱스의 전체 또는 일부를 훑는 것이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`HAVING` 절은 어떤 절 뒤에 와야 하는가?",
+        "options": [
+          "GROUP BY",
+          "WHERE",
+          "FROM",
+          "SELECT"
+        ],
+        "answer": 0,
+        "explanation": "??? \"GROUP BY\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 21",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`WHERE` 절과 `HAVING` 절의 차이점은?",
+        "options": [
+          "`WHERE`는 그룹화 전의 개별 행에 조건을 적용하고, `HAVING`은 그룹화 후의 집계 결과에 조건을 적용한다.",
+          "`HAVING`이 `WHERE`보다 먼저 실행된다.",
+          "`WHERE` 절에서는 집계 함수를 사용할 수 있다.",
+          "두 절은 기능적으로 동일하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"`WHERE`는 그룹화 전의 개별 행에 조건을 적용하고, `HAVING`은 그룹화 후의 집계 결과에 조건을 적용한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "스토어드 프로시저(Stored Procedure)의 장점이 아닌 것은?",
+        "options": [
+          "데이터베이스 서버의 메모리를 더 많이 차지한다.",
+          "여러 SQL 문을 하나의 단위로 묶어 재사용할 수 있다.",
+          "네트워크 트래픽을 줄일 수 있다.",
+          "보안을 강화할 수 있다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터베이스 서버의 메모리를 더 많이 차지한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 22",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "트리거(Trigger)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "테이블에 특정 이벤트(INSERT, UPDATE, DELETE)가 발생했을 때 자동으로 실행되는 프로시저이다.",
+          "사용자가 직접 호출해야 실행된다.",
+          "주로 데이터 조회를 위해 사용된다.",
+          "테이블 당 하나만 생성할 수 있다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블에 특정 이벤트(INSERT, UPDATE, DELETE)가 발생했을 때 자동으로 실행되는 프로시저이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "교착 상태(Deadlock)란 무엇인가?",
+        "options": [
+          "두 개 이상의 트랜잭션이 서로 상대방의 잠금(Lock)이 해제되기를 기다리며 무한 대기하는 상태",
+          "데이터베이스 서버가 다운된 상태",
+          "쿼리 실행이 매우 느려지는 상태",
+          "인덱스가 손상된 상태"
+        ],
+        "answer": 0,
+        "explanation": "??? \"두 개 이상의 트랜잭션이 서로 상대방의 잠금(Lock)이 해제되기를 기다리며 무한 대기하는 상태\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 23",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "잠금(Lock)의 대상이 되는 단위를 의미하는 '잠금 단위(Lock Granularity)'에 대한 설명으로 올바른 것은?",
+        "options": [
+          "잠금 단위가 작을수록(예: 행 단위 잠금) 동시성은 높아지지만 오버헤드는 커진다.",
+          "잠금 단위가 클수록(예: 테이블 단위 잠금) 동시성이 높아진다.",
+          "잠금 단위는 데이터베이스 성능과 관련이 없다.",
+          "모든 DBMS는 동일한 잠금 단위를 사용한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"잠금 단위가 작을수록(예: 행 단위 잠금) 동시성은 높아지지만 오버헤드는 커진다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`SELECT ... FOR UPDATE` 구문의 역할은?",
+        "options": [
+          "조회하는 행에 배타적 잠금(Exclusive Lock)을 걸어 다른 트랜잭션의 수정을 방지한다.",
+          "조회 결과를 업데이트한다.",
+          "뷰를 업데이트한다.",
+          "조회 성능을 향상시킨다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"조회하는 행에 배타적 잠금(Exclusive Lock)을 걸어 다른 트랜잭션의 수정을 방지한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 24",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 모델 중, 데이터가 트리 구조로 연결된 모델은?",
+        "options": [
+          "계층형 모델 (Hierarchical Model)",
+          "관계형 모델 (Relational Model)",
+          "네트워크 모델 (Network Model)",
+          "객체지향 모델 (Object-Oriented Model)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"계층형 모델 (Hierarchical Model)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터베이스 모델 중, 데이터가 그래프(오너-멤버) 구조로 연결된 모델은?",
+        "options": [
+          "네트워크 모델 (Network Model)",
+          "계층형 모델 (Hierarchical Model)",
+          "관계형 모델 (Relational Model)",
+          "NoSQL 모델"
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크 모델 (Network Model)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 25",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "관계형 데이터베이스(RDBMS)의 핵심 구성 요소는?",
+        "options": [
+          "테이블 (Table)",
+          "문서 (Document)",
+          "그래프 (Graph)",
+          "키-값 쌍 (Key-Value Pair)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블 (Table)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "제1정규형(1NF)의 조건은?",
+        "options": [
+          "테이블의 모든 열은 원자적인 값(Atomic Value)을 가져야 한다.",
+          "부분 함수 종속을 제거해야 한다.",
+          "이행 함수 종속을 제거해야 한다.",
+          "모든 결정자가 후보 키여야 한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 모든 열은 원자적인 값(Atomic Value)을 가져야 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 26",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "제2정규형(2NF)의 조건은?",
+        "options": [
+          "제1정규형을 만족하고, 기본 키에 완전 함수 종속이어야 한다 (부분 함수 종속 제거).",
+          "제3정규형을 만족해야 한다.",
+          "이행 함수 종속을 제거해야 한다.",
+          "다치 종속을 제거해야 한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"제1정규형을 만족하고, 기본 키에 완전 함수 종속이어야 한다 (부분 함수 종속 제거).\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "제3정규형(3NF)의 조건은?",
+        "options": [
+          "제2정규형을 만족하고, 이행 함수 종속을 제거해야 한다.",
+          "제1정규형만 만족하면 된다.",
+          "부분 함수 종속을 제거해야 한다.",
+          "결정자이면서 후보 키가 아닌 것을 제거해야 한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"제2정규형을 만족하고, 이행 함수 종속을 제거해야 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 27",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "BCNF(Boyce-Codd Normal Form)의 조건은?",
+        "options": [
+          "모든 결정자가 후보 키여야 한다.",
+          "제2정규형을 만족해야 한다.",
+          "다치 종속을 제거해야 한다.",
+          "조인 종속을 이용한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"모든 결정자가 후보 키여야 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "역정규화(Denormalization)를 수행하는 주된 이유는?",
+        "options": [
+          "조인(Join)을 줄여 조회 성능을 향상시키기 위해",
+          "데이터 무결성을 강화하기 위해",
+          "데이터 중복을 완전히 제거하기 위해",
+          "저장 공간을 절약하기 위해"
+        ],
+        "answer": 0,
+        "explanation": "??? \"조인(Join)을 줄여 조회 성능을 향상시키기 위해\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 28",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`SUBSTR` 또는 `SUBSTRING` 함수의 역할은?",
+        "options": [
+          "문자열의 일부를 추출한다.",
+          "문자열을 합친다.",
+          "문자열의 길이를 반환한다.",
+          "문자열을 특정 문자로 바꾼다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"문자열의 일부를 추출한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`CAST` 또는 `CONVERT` 함수의 역할은?",
+        "options": [
+          "데이터의 타입을 변환한다.",
+          "문자열을 숫자로만 바꾼다.",
+          "NULL 값을 다른 값으로 변환한다.",
+          "대소문자를 변환한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터의 타입을 변환한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 29",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`COALESCE` 또는 `NVL` 함수의 역할은?",
+        "options": [
+          "인자들 중 첫 번째로 나오는 NULL이 아닌 값을 반환한다.",
+          "NULL 값만 반환한다.",
+          "모든 값을 합산한다.",
+          "두 값이 같으면 NULL을 반환한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"인자들 중 첫 번째로 나오는 NULL이 아닌 값을 반환한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "윈도우 함수(Window Function)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "행의 집합(윈도우)에 대해 계산하며, 집계 함수처럼 행을 하나로 그룹화하지 않는다.",
+          "GUI 윈도우를 생성한다.",
+          "`GROUP BY`와 항상 함께 사용해야 한다.",
+          "결과 행의 수를 줄이는 역할을 한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"행의 집합(윈도우)에 대해 계산하며, 집계 함수처럼 행을 하나로 그룹화하지 않는다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 30",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`RANK()`와 `DENSE_RANK()`의 차이점은?",
+        "options": [
+          "`RANK()`는 동점자 다음에 순위를 건너뛰지만, `DENSE_RANK()`는 순위를 건너뛰지 않는다.",
+          "`DENSE_RANK()`가 항상 더 빠르다.",
+          "`RANK()`는 정렬을 요구하지 않는다.",
+          "두 함수는 완전히 동일하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"`RANK()`는 동점자 다음에 순위를 건너뛰지만, `DENSE_RANK()`는 순위를 건너뛰지 않는다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "공통 테이블 표현식(CTE, Common Table Expression)을 정의하는 키워드는?",
+        "options": [
+          "WITH",
+          "CTE",
+          "AS",
+          "DEFINE"
+        ],
+        "answer": 0,
+        "explanation": "??? \"WITH\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 31",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "물리적 데이터 모델링 단계에서 하는 일이 아닌 것은?",
+        "options": [
+          "개념적 스키마 설계",
+          "인덱스, 제약조건 등 정의",
+          "데이터 타입, 길이 정의",
+          "반정규화 고려"
+        ],
+        "answer": 0,
+        "explanation": "??? \"개념적 스키마 설계\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "개념적 데이터 모델링 단계에서 주로 사용하는 모델은?",
+        "options": [
+          "개체-관계 모델 (ERD)",
+          "UML 클래스 다이어그램",
+          "시퀀스 다이어그램",
+          "물리적 테이블 명세서"
+        ],
+        "answer": 0,
+        "explanation": "??? \"개체-관계 모델 (ERD)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 32",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "옵티마이저(Optimizer)의 역할은 무엇인가?",
+        "options": [
+          "가장 효율적인 SQL 쿼리 실행 계획을 수립한다.",
+          "SQL 문법 오류를 수정한다.",
+          "데이터베이스를 백업한다.",
+          "사용자 권한을 관리한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"가장 효율적인 SQL 쿼리 실행 계획을 수립한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "옵티마이저의 종류 중, 미리 정해진 규칙에 따라 실행 계획을 세우는 것은?",
+        "options": [
+          "규칙 기반 옵티마이저 (RBO)",
+          "비용 기반 옵티마이저 (CBO)",
+          "통계 기반 옵티마이저",
+          "수동 옵티마이저"
+        ],
+        "answer": 0,
+        "explanation": "??? \"규칙 기반 옵티마이저 (RBO)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 33",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "비용 기반 옵티마이저(CBO)가 실행 계획을 세울 때 사용하는 정보가 아닌 것은?",
+        "options": [
+          "SQL 작성자의 직급",
+          "테이블 및 인덱스의 통계 정보",
+          "시스템 통계 정보(CPU, I/O 등)",
+          "쿼리의 구조"
+        ],
+        "answer": 0,
+        "explanation": "??? \"SQL 작성자의 직급\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터베이스 카탈로그(Catalog) 또는 시스템 카탈로그란?",
+        "options": [
+          "데이터베이스 자체의 구조와 정보를 담고 있는 메타데이터의 집합",
+          "판매용 제품 목록",
+          "데이터베이스 사용자 목록",
+          "백업 파일 목록"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터베이스 자체의 구조와 정보를 담고 있는 메타데이터의 집합\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 34",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`CHECK` 제약조건의 역할은?",
+        "options": [
+          "열에 입력될 수 있는 값의 조건을 지정한다.",
+          "NULL 값을 허용하지 않는다.",
+          "다른 테이블과의 관계를 확인한다.",
+          "기본값을 설정한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"열에 입력될 수 있는 값의 조건을 지정한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`DEFAULT` 제약조건의 역할은?",
+        "options": [
+          "값을 명시적으로 지정하지 않았을 때 사용될 기본값을 설정한다.",
+          "항상 동일한 값만 입력되도록 한다.",
+          "NULL 값을 허용하지 않는다.",
+          "열의 값을 확인한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"값을 명시적으로 지정하지 않았을 때 사용될 기본값을 설정한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 35",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`information_schema`의 역할은 무엇인가?",
+        "options": [
+          "모든 데이터베이스의 메타데이터에 대한 ANSI 표준 뷰를 제공한다.",
+          "사용자 정보를 저장한다.",
+          "데이터베이스 성능 정보를 제공한다.",
+          "보안 설정을 관리한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"모든 데이터베이스의 메타데이터에 대한 ANSI 표준 뷰를 제공한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "OLTP(Online Transaction Processing) 시스템의 특징은?",
+        "options": [
+          "다수의 동시 사용자가 짧고 간단한 트랜잭션을 처리하는 데 중점을 둔다.",
+          "대규모 데이터를 분석하고 리포팅하는 데 사용된다.",
+          "읽기 작업이 대부분이다.",
+          "데이터 정규화를 거의 하지 않는다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"다수의 동시 사용자가 짧고 간단한 트랜잭션을 처리하는 데 중점을 둔다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 36",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "OLAP(Online Analytical Processing) 시스템의 특징은?",
+        "options": [
+          "대규모의 과거 데이터를 다차원적으로 분석하여 의사결정을 지원한다.",
+          "실시간으로 데이터를 입력, 수정, 삭제하는 데 중점을 둔다.",
+          "정규화 수준이 매우 높다.",
+          "빠른 응답 시간이 가장 중요하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"대규모의 과거 데이터를 다차원적으로 분석하여 의사결정을 지원한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터 웨어하우스(Data Warehouse)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "의사결정을 지원하기 위해 여러 소스에서 데이터를 수집, 통합, 저장하는 주제 중심적인 데이터베이스이다.",
+          "운영 시스템의 데이터를 실시간으로 저장한다.",
+          "데이터의 수정과 삭제가 빈번하게 일어난다.",
+          "작은 규모의 데이터베이스를 의미한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"의사결정을 지원하기 위해 여러 소스에서 데이터를 수집, 통합, 저장하는 주제 중심적인 데이터베이스이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 37",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "ETL 과정에 해당하지 않는 것은?",
+        "options": [
+          "Visualization (시각화)",
+          "Extraction (추출)",
+          "Transformation (변환)",
+          "Load (적재)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Visualization (시각화)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터 마트(Data Mart)란 무엇인가?",
+        "options": [
+          "데이터 웨어하우스의 특정 주제나 부서 중심의 부분 집합",
+          "데이터를 판매하는 온라인 상점",
+          "데이터베이스의 백업본",
+          "작은 규모의 데이터 웨어하우스"
+        ],
+        "answer": 0,
+        "explanation": "??? \"데이터 웨어하우스의 특정 주제나 부서 중심의 부분 집합\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 38",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "NoSQL 데이터베이스 중, Document 모델에 해당하는 것은?",
+        "options": [
+          "MongoDB",
+          "Redis",
+          "Cassandra",
+          "Neo4j"
+        ],
+        "answer": 0,
+        "explanation": "??? \"MongoDB\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "NoSQL 데이터베이스 중, Key-Value 모델에 해당하는 것은?",
+        "options": [
+          "Redis",
+          "MongoDB",
+          "HBase",
+          "Couchbase"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Redis\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 39",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "NoSQL 데이터베이스 중, Column-Family 모델에 해당하는 것은?",
+        "options": [
+          "Cassandra",
+          "Redis",
+          "MongoDB",
+          "Neo4j"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Cassandra\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "NoSQL 데이터베이스 중, Graph 모델에 해당하는 것은?",
+        "options": [
+          "Neo4j",
+          "Redis",
+          "MongoDB",
+          "Cassandra"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Neo4j\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 40",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "CAP 이론의 세 가지 요소가 아닌 것은?",
+        "options": [
+          "Durability (지속성)",
+          "Consistency (일관성)",
+          "Availability (가용성)",
+          "Partition Tolerance (분할 용인성)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"Durability (지속성)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "분산 시스템에서 CAP 이론이 의미하는 바는?",
+        "options": [
+          "네트워크 분할(P)이 발생했을 때, 일관성(C)과 가용성(A) 중 하나를 선택해야 한다.",
+          "세 가지 요소를 모두 완벽하게 만족시킬 수 있다.",
+          "일관성이 가장 중요한 요소이다.",
+          "가용성이 가장 중요한 요소이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"네트워크 분할(P)이 발생했을 때, 일관성(C)과 가용성(A) 중 하나를 선택해야 한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 41",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`CREATE INDEX` 문의 역할은?",
+        "options": [
+          "테이블의 열에 대한 인덱스를 생성한다.",
+          "새로운 테이블을 생성한다.",
+          "데이터베이스를 생성한다.",
+          "인덱스를 삭제한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"테이블의 열에 대한 인덱스를 생성한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "인덱스의 B-Tree 구조에서 리프 노드(Leaf Node)에 저장되는 것은?",
+        "options": [
+          "인덱스 키 값과 실제 데이터의 위치 포인터",
+          "루트 노드의 주소",
+          "브랜치 노드의 목록",
+          "테이블의 전체 데이터"
+        ],
+        "answer": 0,
+        "explanation": "??? \"인덱스 키 값과 실제 데이터의 위치 포인터\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 42",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "인덱스의 선택도(Selectivity)가 좋다는 것은 무슨 의미인가?",
+        "options": [
+          "인덱스 키 값 하나당 매칭되는 데이터 행의 수가 적다는 의미이다.",
+          "인덱스 키 값의 종류가 적다는 의미이다.",
+          "모든 열에 인덱스가 생성되었다는 의미이다.",
+          "인덱스의 크기가 작다는 의미이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"인덱스 키 값 하나당 매칭되는 데이터 행의 수가 적다는 의미이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "복합 인덱스(Composite Index)를 사용할 때 가장 중요한 것은?",
+        "options": [
+          "쿼리의 WHERE 절에서 인덱스의 첫 번째 열부터 사용하는 것이 효율적이다.",
+          "인덱스 열의 순서는 중요하지 않다.",
+          "모든 열을 항상 함께 사용해야 한다.",
+          "복합 인덱스는 3개 이상의 열로만 구성해야 한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"쿼리의 WHERE 절에서 인덱스의 첫 번째 열부터 사용하는 것이 효율적이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 43",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "커버링 인덱스(Covering Index)란 무엇인가?",
+        "options": [
+          "쿼리에 필요한 모든 데이터를 인덱스만으로 제공할 수 있어, 테이블에 접근할 필요가 없는 인덱스",
+          "테이블의 모든 열을 포함하는 인덱스",
+          "암호화된 인덱스",
+          "임시로 생성되는 인덱스"
+        ],
+        "answer": 0,
+        "explanation": "??? \"쿼리에 필요한 모든 데이터를 인덱스만으로 제공할 수 있어, 테이블에 접근할 필요가 없는 인덱스\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "MVCC(Multi-Version Concurrency Control)의 주된 목적은?",
+        "options": [
+          "읽기 작업과 쓰기 작업이 서로 방해하지 않고 동시에 처리되도록 하여 동시성을 높인다.",
+          "데이터를 여러 버전으로 백업한다.",
+          "하나의 데이터에 대해 하나의 버전만 유지한다.",
+          "트랜잭션을 순차적으로만 실행시킨다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"읽기 작업과 쓰기 작업이 서로 방해하지 않고 동시에 처리되도록 하여 동시성을 높인다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 44",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 커서(Cursor)에 대한 설명으로 올바른 것은?",
+        "options": [
+          "쿼리 결과 집합의 각 행을 한 번에 하나씩 처리할 수 있게 해주는 객체이다.",
+          "마우스 포인터를 의미한다.",
+          "데이터베이스 연결을 관리한다.",
+          "항상 읽기 전용이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"쿼리 결과 집합의 각 행을 한 번에 하나씩 처리할 수 있게 해주는 객체이다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`GRANT`와 `REVOKE` 명령어의 용도는?",
+        "options": [
+          "사용자에게 권한을 부여하거나 회수한다.",
+          "테이블을 생성하거나 삭제한다.",
+          "데이터를 입력하거나 삭제한다.",
+          "트랜잭션을 시작하거나 종료한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"사용자에게 권한을 부여하거나 회수한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 45",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "SQL에서 `AS` 키워드의 용도는?",
+        "options": [
+          "열이나 테이블에 별칭(alias)을 부여한다.",
+          "데이터 타입을 변환한다.",
+          "두 값을 비교한다.",
+          "새로운 테이블을 생성한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"열이나 테이블에 별칭(alias)을 부여한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`DISTINCT` 키워드의 역할은?",
+        "options": [
+          "`SELECT` 결과에서 중복된 행을 제거한다.",
+          "두 테이블을 구별한다.",
+          "데이터를 정렬한다.",
+          "특정 행만 선택한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"`SELECT` 결과에서 중복된 행을 제거한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 46",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`ORDER BY` 절에서 `DESC`는 무엇을 의미하는가?",
+        "options": [
+          "내림차순 정렬",
+          "오름차순 정렬",
+          "설명(Description)",
+          "기본값"
+        ],
+        "answer": 0,
+        "explanation": "??? \"내림차순 정렬\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "`LIMIT` 또는 `TOP` 절의 역할은?",
+        "options": [
+          "조회 결과의 행 수를 제한한다.",
+          "최대값을 찾는다.",
+          "조회 속도를 제한한다.",
+          "사용자 수를 제한한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"조회 결과의 행 수를 제한한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 47",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "자기 조인(Self Join)이란 무엇인가?",
+        "options": [
+          "하나의 테이블을 자기 자신과 조인하는 것",
+          "조인 조건을 생략하는 것",
+          "세 개 이상의 테이블을 조인하는 것",
+          "외부 조인의 한 종류"
+        ],
+        "answer": 0,
+        "explanation": "??? \"하나의 테이블을 자기 자신과 조인하는 것\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "자연 조인(Natural Join)의 특징은?",
+        "options": [
+          "두 테이블에서 이름과 데이터 타입이 같은 모든 열을 기준으로 자동으로 조인한다.",
+          "항상 INNER JOIN으로 동작한다.",
+          "조인 조건을 직접 명시해야 한다.",
+          "가장 빠른 조인 방식이다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"두 테이블에서 이름과 데이터 타입이 같은 모든 열을 기준으로 자동으로 조인한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 48",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "`EXISTS` 연산자에 대한 설명으로 올바른 것은?",
+        "options": [
+          "서브쿼리의 결과가 하나 이상의 행을 반환하면 TRUE를 반환한다.",
+          "서브쿼리의 결과가 존재하지 않으면 TRUE를 반환한다.",
+          "서브쿼리의 결과 값과 비교한다.",
+          "`IN` 연산자와 동일하다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"서브쿼리의 결과가 하나 이상의 행을 반환하면 TRUE를 반환한다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "데이터베이스 백업 방식 중, 마지막 전체 백업 이후 변경된 모든 데이터를 백업하는 방식은?",
+        "options": [
+          "차등 백업 (Differential Backup)",
+          "전체 백업 (Full Backup)",
+          "증분 백업 (Incremental Backup)",
+          "스냅샷 백업 (Snapshot Backup)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"차등 백업 (Differential Backup)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 49",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "데이터베이스 백업 방식 중, 마지막 백업(전체 또는 증분) 이후 변경된 데이터만 백업하는 방식은?",
+        "options": [
+          "증분 백업 (Incremental Backup)",
+          "전체 백업 (Full Backup)",
+          "차등 백업 (Differential Backup)",
+          "미러링 (Mirroring)"
+        ],
+        "answer": 0,
+        "explanation": "??? \"증분 백업 (Incremental Backup)\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "Point-in-Time Recovery (PITR)를 위해 필요한 것은?",
+        "options": [
+          "전체 백업본과 그 이후의 모든 트랜잭션 로그",
+          "가장 최근의 증분 백업본",
+          "데이터베이스 스키마",
+          "사용자 목록"
+        ],
+        "answer": 0,
+        "explanation": "??? \"전체 백업본과 그 이후의 모든 트랜잭션 로그\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  },
+  {
+    "title": "데이터베이스 심화 세트 50",
+    "category": "database",
+    "questions": [
+      {
+        "id": "q1",
+        "question": "ORM(Object-Relational Mapping)의 역할은 무엇인가?",
+        "options": [
+          "객체 지향 프로그래밍 언어의 객체와 관계형 데이터베이스의 데이터를 자동으로 매핑(연결)해준다.",
+          "SQL 쿼리를 최적화한다.",
+          "데이터베이스를 모니터링한다.",
+          "객체를 관계형으로 변환한다."
+        ],
+        "answer": 0,
+        "explanation": "??? \"객체 지향 프로그래밍 언어의 객체와 관계형 데이터베이스의 데이터를 자동으로 매핑(연결)해준다.\"???. ???? ??? ??? ?? ???? ???? ??????."
+      },
+      {
+        "id": "q2",
+        "question": "N+1 문제가 발생하는 주된 원인은?",
+        "options": [
+          "ORM에서 연관 관계의 데이터를 조회할 때, 목록을 가져오는 쿼리 1번과 각 항목의 연관 데이터를 가져오는 쿼리 N번이 발생하는 현상",
+          "데이터베이스 연결이 N+1개 생성되는 문제",
+          "인덱스가 N+1개 생성되는 문제",
+          "트랜잭션이 N+1번 실행되는 문제"
+        ],
+        "answer": 0,
+        "explanation": "??? \"ORM에서 연관 관계의 데이터를 조회할 때, 목록을 가져오는 쿼리 1번과 각 항목의 연관 데이터를 가져오는 쿼리 N번이 발생하는 현상\"???. ???? ??? ??? ?? ???? ???? ??????."
+      }
+    ]
+  }
+]
