@@ -83,7 +83,8 @@ export default function QnaPage() {
         (it) =>
           it.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           it.body?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          it.author.toLowerCase().includes(searchTerm.toLowerCase())
+          it.author.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          it.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
       )
     }
 
@@ -113,7 +114,7 @@ export default function QnaPage() {
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
               <div className="relative w-full md:max-w-xs">
                 <Input
-                  placeholder="검색 (제목, 내용, 작성자...)"
+                  placeholder="검색 (제목, 내용, 작성자, 태그...)"
                   className="pl-10 border-slate-300"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}

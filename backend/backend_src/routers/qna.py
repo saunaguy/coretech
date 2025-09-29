@@ -1,12 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Query
-from pydantic import BaseModel
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, subqueryload
 from typing import List, Literal
-from ..db import SessionLocal, Question, User
+from ..db import SessionLocal, Question, User, Comment
 from ..auth import get_current_user
 from ..schemas.qna_schema import QuestionResponse, QuestionListResponse # Import QuestionResponse and QuestionListResponse
 
 router = APIRouter(tags=["qna"])
+
 
 def get_db():
     db = SessionLocal()
@@ -86,17 +85,7 @@ def list_questions(
 
 @router.get("/api/v1/qna/questions/{question_id}", response_model=QuestionResponse)
 def get_question(question_id: int, db: Session = Depends(get_db)):
-    q = db.query(Question).options(joinedload(Question.author)).filter(Question.id == question_id).first()
-    if not q:
-        raise HTTPException(status_code=404, detail="Question not found")
-    # 조회수 증가
-    q.views = (q.views or 0) + 1
-    db.commit()
-    db.refresh(q)
-    # Pydantic model will handle serialization, including author
-    print(f"DEBUG: QuestionResponse schema: {QuestionResponse.model_json_schema()}")
-    print(f"DEBUG: SQLAlchemy Question object before validation: {q.__dict__}")
-    return QuestionResponse.model_validate(q)
+    q = db.query(Question).options(joinedload(Question.author), subqueryload(Question.comments).joinedload(Comment.user)).filter(Question.id == question_id).first()
 
 
 class QuestionStatusUpdate(BaseModel):

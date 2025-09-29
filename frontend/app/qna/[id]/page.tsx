@@ -28,8 +28,8 @@ type Answer = {
   id: number
   body: string
   createdAt: string
-  author: string // Assuming author is a simple string
-  isAccepted?: boolean // To mark the best answer
+  author: { id: number; username: string; }
+  isAccepted: boolean
 }
 
 export default function QuestionDetailPage() {
@@ -48,40 +48,67 @@ export default function QuestionDetailPage() {
   const [editingAnswerId, setEditingAnswerId] = useState<number | null>(null)
   const [editingAnswerBody, setEditingAnswerBody] = useState("")
 
-  useEffect(() => {
-    if (!id) return
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const qData = await authenticatedFetch(`/api/v1/qna/questions/${id}`);
+      const questionData = {
+        ...qData,
+        createdAt: qData.created_at,
+      };
+      setQuestion(questionData);
 
-    const loadData = async () => {
-      setLoading(true)
-      try {
-        const qData = await authenticatedFetch(`/api/v1/qna/questions/${id}`)
-
-        // The API response for a question includes its comments.
-        // We map the backend's 'comment' object to the frontend's 'Answer' type.
-        const questionData = {
-            ...qData,
-        }
-        setQuestion(questionData)
-
-        const answersData = (qData.comments || []).map((c: any) => ({
-          id: c.id,
-          body: c.content, // Map content from backend to body in frontend
-          createdAt: c.created_at,
-          author: c.author?.username || "User" + Math.floor(Math.random() * 100), // Use real author if available
-          isAccepted: false, // Add logic if applicable
-        }))
-        setAnswers(answersData)
-
-      } catch (e) {
-        setError("데이터를 불러오는 데 실패했습니다.")
-        console.error(e)
-      } finally {
-        setLoading(false)
-      }
+      const answersData = (qData.comments || []).map((c: any) => ({
+        id: c.id,
+        body: c.content,
+        createdAt: c.created_at,
+        author: c.author || { id: -1, username: "Unknown" },
+        isAccepted: !!c.is_accepted,
+      }));
+      setAnswers(answersData);
+    } catch (e) {
+      setError("데이터를 불러오는 데 실패했습니다.");
+      console.error(e);
+    } finally {
+      setLoading(false);
     }
+  };
 
-    loadData()
-  }, [id])
+  useEffect(() => {
+    if (!id) return;
+
+    const incrementViewCount = async () => {
+      try {
+        let viewedPosts = JSON.parse(localStorage.getItem('viewedQnaPosts') || '[]');
+        if (!viewedPosts.includes(id)) {
+          await authenticatedFetch(`/api/v1/qna/questions/${id}/increment_view`, { // Corrected endpoint
+            method: 'POST',
+          });
+          viewedPosts.push(id);
+          localStorage.setItem('viewedQnaPosts', JSON.stringify(viewedPosts));
+        }
+      } catch (error) {
+        console.error('Failed to increment view count:', error);
+      }
+    };
+
+    incrementViewCount();
+    loadData();
+  }, [id]);
+
+  const handleAcceptAnswer = async (answerId: number) => {
+    try {
+      await authenticatedFetch(`/api/v1/comments/${answerId}/accept`, { method: 'POST' });
+      // Optimistic update
+      setAnswers(answers.map(a => ({ ...a, isAccepted: a.id === answerId })))
+      if (question) {
+        setQuestion({ ...question, answered: true });
+      }
+    } catch (err) {
+      console.error("Failed to accept answer:", err);
+      alert("답변을 채택하는 데 실패했습니다.");
+    }
+  }
 
   const handleDelete = async () => {
     if (!window.confirm("정말로 이 질문을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
@@ -158,7 +185,7 @@ export default function QuestionDetailPage() {
         id: response.id,
         body: response.content,
         createdAt: response.created_at,
-        author: response.author.username,
+        author: response.author, // Assign the whole author object
         isAccepted: false,
       }
 
@@ -184,7 +211,7 @@ export default function QuestionDetailPage() {
     return <main className="max-w-4xl mx-auto px-4 py-12 text-center">질문을 찾을 수 없습니다.</main>
   }
 
-  const isOwner = !!user && !!question && user.username === question.author.username;
+  const isOwner = !!user && !!question && user.username?.trim().toLowerCase() === question.author?.username?.trim().toLowerCase();
 
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
@@ -202,7 +229,7 @@ export default function QuestionDetailPage() {
               </div>
               <div className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4" />
-                <span>{new Date(question.createdAt).toLocaleDateString()}</span>
+                <span>{new Date(question.createdAt).toLocaleString()}</span>
               </div>
               <span className="text-xs px-2 py-0.5 rounded-full border bg-secondary text-secondary-foreground capitalize">
                 {question.category}
@@ -242,19 +269,20 @@ export default function QuestionDetailPage() {
       <div className="space-y-6">
         <h2 className="text-2xl font-bold">{answers.length}개의 답변</h2>
         {answers.map((answer) => {
-          const isEditing = editingAnswerId === answer.id
-          const isOwner = user?.username === answer.author
+          const isEditing = editingAnswerId === answer.id;
+          const isAnswerOwner = user?.username?.trim().toLowerCase() === answer.author?.username?.trim().toLowerCase();
+          const hasAcceptedAnswer = answers.some(a => a.isAccepted);
 
           return (
-            <Card key={answer.id} className={`${answer.isAccepted ? 'border-green-500' : ''}`}>
+            <Card key={answer.id} className={`${answer.isAccepted ? 'border-2 border-green-500' : ''}`}>
               <CardContent className="p-6 flex gap-4">
                 <Avatar>
-                  <AvatarImage src={`https://github.com/shadcn.png`} alt={answer.author} />
-                  <AvatarFallback>{answer.author.charAt(0)}</AvatarFallback>
+                  <AvatarImage src={`https://github.com/shadcn.png`} alt={answer.author.username} />
+                  <AvatarFallback>{answer.author.username.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1 space-y-3">
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold">{answer.author}</span>
+                    <span className="font-semibold">{answer.author.username}</span>
                     <span className="text-xs text-muted-foreground">
                       {new Date(answer.createdAt).toLocaleString()}
                     </span>
@@ -287,23 +315,37 @@ export default function QuestionDetailPage() {
                           </div>
                         ) : <div /> /* Empty div to keep alignment */}
 
-                        {isOwner && (
-                          <div className="flex gap-2 items-center">
+                        <div className="flex gap-2 items-center">
+                          {isOwner && !hasAcceptedAnswer && (
                             <Button
-                              variant="outline"
+                              variant="default"
                               size="sm"
-                              onClick={() => {
-                                setEditingAnswerId(answer.id)
-                                setEditingAnswerBody(answer.body)
-                              }}
+                              className="bg-green-600 hover:bg-green-700"
+                              onClick={() => handleAcceptAnswer(answer.id)}
+                              disabled={hasAcceptedAnswer}
                             >
-                              수정
+                              <CheckCircle className="h-4 w-4 mr-2" />
+                              채택하기
                             </Button>
-                            <Button variant="destructive" size="sm" onClick={() => handleAnswerDelete(answer.id)}>
-                              삭제
-                            </Button>
-                          </div>
-                        )}
+                          )}
+                          {isAnswerOwner && (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setEditingAnswerId(answer.id)
+                                  setEditingAnswerBody(answer.body)
+                                }}
+                              >
+                                수정
+                              </Button>
+                              <Button variant="destructive" size="sm" onClick={() => handleAnswerDelete(answer.id)}>
+                                삭제
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
