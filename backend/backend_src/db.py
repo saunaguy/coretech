@@ -4,6 +4,20 @@ import os
 from datetime import datetime
 from typing import List
 
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv  # type: ignore
+except Exception:
+    load_dotenv = None
+
+if load_dotenv:
+    project_root = Path(__file__).resolve().parents[2]
+    dotenv_file = project_root / '.env'
+    loaded = load_dotenv(dotenv_path=dotenv_file, override=False)
+    if not loaded:
+        load_dotenv(override=False)
+
 from sqlalchemy import Boolean, DateTime, Integer, String, Text, create_engine, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, relationship # relationship 추가
 from pydantic import BaseModel, ConfigDict
