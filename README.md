@@ -1,17 +1,56 @@
 # CoreTech (A2A 협업 프로젝트)
 
-교육·학습용 웹 프로젝트를 GPT와 Gemini가 함께 제안/수정하고, 사람이 리뷰·결정하는 형태로 진행합니다. 대화·의사결정은 JSONL 로그로 남기고, 코드는 `src/`에 반영합니다. 🚀
 
-## 📌 프로젝트 목적
-- AI 도구(Codex/GPT, Gemini)를 활용하여 교육 및 학습에 도움이 되는 웹/백엔드 예제를 구축
-- 협업을 통해 다양한 접근 방식과 학습 경험 공유
-- 실습 및 교육 자료를 한 곳에 정리하여 재사용 가능하도록 구성
+## 🚀 한눈에 보는 특징
+- 📝 **데일리 퀴즈**: 카테고리별 50문제, 풀이/즐겨찾기 추적
+- 📚 **강의 자료**: Markdown 기반 커리큘럼
+- 💬 **커뮤니티**: 게시판, Q&A, 댓글, 좋아요
+- 🔐 **인증 & 권한**: JWT 기반 로그인, 관리자 전용 엔드포인트
+- 🐳 **풀스택 개발 환경**: FastAPI + Next.js, Docker Compose 지원
 
-## ⚙️ 기술 스택(점진 도입)
-- Frontend: Next.js (ai-prompt-lab, Tailwind v4 + shadcn/ui 스타일)
-- Backend: FastAPI (Python)
-- 데이터: SQLite → 향후 Postgres 확장
-- 협업 툴: GitHub
+
+✨ 주요 기능
+
+개인화된 홈 – 공지사항, 빠른 퀴즈 진행률, 게시판/질문&답변 하이라이트를 한눈에.
+
+데일리 퀴즈 – Linux / Server Ops / Network / Database 각 50문제 제공, 풀이 여부와 즐겨찾기 추적.
+
+커뮤니티 도구 – 게시판, Q&A, 태그, 댓글, 좋아요, 조회수 확인.
+
+구조화된 강의 – Markdown 기반 커리큘럼을 백엔드에서 제공하고 프론트에서 렌더링.
+
+인증 + 권한 – JWT 인증, 서버 컴포넌트 쿠키 지원, 관리자 전용 API 포함.
+
+📂 저장소 구조
+backend/
+  backend_src/         # FastAPI 앱 (main.py, 인증, 라우터, 모델 등)
+  content/             # Markdown 강의 자료
+config/                # pytest.ini 및 설정 파일
+docs/                  # 요구사항, 명세, 로드맵, 진행 로그
+frontend/              # Next.js 15 앱
+  components/          # UI 컴포넌트 및 위젯
+  app/                 # App Router 페이지 및 API 라우트
+scripts/               # 데이터 시딩 및 유틸리티 스크립트
+assets/, misc/, src/   # 기타 자료 및 레거시 코드
+
+🛠️ 기술 스택
+
+프론트엔드: Next.js 15, React 18, Tailwind, shadcn/ui, Playwright
+
+백엔드: FastAPI, SQLAlchemy, Pydantic, JWT 인증, SQLite/Postgres
+
+도구: npm, pip, Docker Compose, pytest, Ruff/Black, eslint
+
+🚀 필수 준비물
+
+Node.js ≥ 20
+
+Python ≥ 3.11
+
+npm & pip
+
+(선택) Docker Desktop
+
 
 ## 📂 Repository 구조
 - `ai-prompt-lab/` : Next.js 프론트엔드(디자인/컴포넌트/페이지)
@@ -22,27 +61,124 @@
 - `scripts/` : 로그 append/집계 유틸리티
 - `.github/` : 이슈/PR 템플릿 및 CI
 
-## 🤝 협업 워크플로우
-- 브랜치: `main` 보호, 작업은 `feat/*` → PR → 리뷰 → 머지
-- 커밋: Conventional Commits + 접두사 `[GPT]`, `[Gemini]`, `[Human]`
-  - 예: `feat(frontend): [GPT] 라우터 기본 구성`
-- PR 체크리스트: 설명/이슈/테스트/브레이킹 변경/스크린샷/CI 그린
 
-## 📝 의사결정/대화 로깅
-- 파일: `logs/YYYY-MM-DD/<agent>.jsonl` 또는 `logs/YYYY-MM-DD/room-<room>/<agent>.jsonl`
-- 최소 스키마: `id, ts, agent, role, content` (+ `tags, topic, meta` 옵션)
-- 예시:
-  `{ "id":"550e8...","ts":1735130000,"agent":"gpt","role":"assistant","content":"초기 구조 OK","tags":["init"] }`
-- 사용법:
-  - `python scripts/append_log.py --agent gpt --role assistant --content "초기 구조 OK" --tags init decision`
-  - 대화방(선택): `--room design` → `logs/YYYY-MM-DD/room-design/gpt.jsonl`
-  - 집계 보기: `python scripts/aggregate_logs.py --date 2025-08-25`
+## 📑 프론트엔드 라우트
+경로	설명
+/	대시보드 (공지, 진행도, Q&A 티저 등)
+/daily	카테고리별 퀴즈 목록
+/daily/[id]	퀴즈 상세 및 풀이
+/daily/sets	전체 퀴즈 카탈로그 (즐겨찾기/필터 지원)
+/board	게시판 글 목록 및 상세
+/qna	Q&A 피드 및 태깅
+/lessons, /lessons/[group]	강의 디렉토리 및 렌더링
+/admin/*	관리자 콘솔 (권한 필요)
+/login, /register, /profile	인증/회원 관련 페이지
 
-## 🚀 Quick Start
-1) 첫 로그 남기기
-   - `python scripts/append_log.py --agent human --role info --content "Project initialized" --tags init`
-2) 코드 작업은 `src/`에, 테스트는 `tests/`에
-3) 자주 `git pull --rebase`로 동기화(로그 충돌 최소화)
+## 📡 API 참고
+메소드 & 경로	설명
+GET /health	서버 연결 체크
+POST /api/v1/auth/register	회원가입
+POST /api/v1/auth/login	로그인 (JWT + 쿠키 발급)
+POST /api/v1/auth/logout	로그아웃 (쿠키 제거)
+GET /api/v1/daily/tests	퀴즈 목록 조회 (카테고리 필터 지원)
+GET /api/v1/daily/tests/{id}	퀴즈 상세 조회
+POST /api/v1/daily/tests/{id}/submit	답안 제출 및 정답 체크
+GET /api/v1/daily/user-state	푼 문제 / 즐겨찾기 ID 조회
+GET /api/v1/daily/progress?by=category	카테고리별 진행률
+GET /api/v1/notice	공지사항 목록
+GET /api/v1/board/posts	게시글 목록
+GET /api/v1/qna/questions	Q&A 피드
+
+
+<details>
+<summary>📡 Full API Catalog (펼치기/접기)</summary>
+
+### 🔑 Authentication
+- `POST /api/v1/auth/register`
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout`
+- `POST /api/v1/auth/verify-token`
+- `POST /api/v1/auth/refresh`
+
+---
+
+### 📢 Notices
+- `GET /api/v1/notice`
+- `POST /api/v1/notice` *(admin)*
+- `GET /api/v1/notice/{id}`
+- `PUT /api/v1/notice/{id}` *(admin)*
+- `DELETE /api/v1/notice/{id}` *(admin)*
+
+---
+
+### 📝 Board
+- `GET /api/v1/board/posts`
+- `GET /api/v1/board/posts/{id}`
+- `POST /api/v1/board/posts`
+- `PUT /api/v1/board/posts/{id}`
+- `DELETE /api/v1/board/posts/{id}`
+- `POST /api/v1/board/posts/{id}/view`
+- `POST /api/v1/board/posts/{id}/like`
+
+---
+
+### ❓ Q&A
+- `GET /api/v1/qna/questions`
+- `GET /api/v1/qna/questions/{id}`
+- `POST /api/v1/qna/questions`
+- `PUT /api/v1/qna/questions/{id}`
+- `DELETE /api/v1/qna/questions/{id}`
+- `POST /api/v1/qna/questions/{id}/answers`
+- `POST /api/v1/qna/questions/{id}/view`
+
+---
+
+### 💬 Comments
+- `GET /api/v1/comments`
+- `POST /api/v1/comments`
+- `DELETE /api/v1/comments/{id}`
+
+---
+
+### 👍 Likes
+- `POST /api/v1/likes`
+- `DELETE /api/v1/likes/{id}`
+
+---
+
+### 🎯 Daily Quizzes
+- `GET /api/v1/daily/tests`
+- `GET /api/v1/daily/tests/{id}`
+- `POST /api/v1/daily/tests`
+- `PUT /api/v1/daily/tests/{id}`
+- `DELETE /api/v1/daily/tests/{id}`
+- `POST /api/v1/daily/tests/{id}/submit`
+- `POST /api/v1/daily/tests/{id}/solved`
+- `POST /api/v1/daily/tests/{id}/favorite`
+- `GET /api/v1/daily/user-state`
+- `GET /api/v1/daily/progress`
+- `POST /api/v1/daily/import`
+
+---
+
+### 📚 Lessons & Search
+- `GET /api/v1/lesson-search`
+- `GET /content/*` *(static lesson files)*
+
+---
+
+### 👤 Profile & Admin
+- `GET /api/v1/profile`
+- `GET /api/v1/admin/users`
+- `POST /api/v1/admin/users/{id}/activate`
+- `POST /api/v1/admin/users/{id}/deactivate`
+
+---
+
+<p><em>※ 세부 파라미터 및 스키마는 <code>backend/backend_src/main.py</code> 참조</em></p>
+
+</details>
+
 
 ## 🧪 Stack Commands (예시)
 - Frontend(Next.js): `npm run dev` · `npm run build` · `npm start`
