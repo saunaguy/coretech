@@ -443,6 +443,8 @@ export default async function DailyPage() {
 
   const fallback = fallbackTestsByCategory();
 
+  const DISPLAY_LIMIT = 50;
+
   const grouped = categories
 
     .map((category, index) => {
@@ -451,12 +453,16 @@ export default async function DailyPage() {
 
       const ranked = rankItems(source, solvedSet, favoritesSet);
 
+      const unsolved = ranked.filter((item) => !item.solved);
+
       return {
         category,
 
         meta: CATEGORY_META[category],
 
-        items: ranked,
+        items: unsolved,
+
+        totalCount: unsolved.length,
       };
     })
 
@@ -568,11 +574,11 @@ export default async function DailyPage() {
       {grouped.length === 0 ? (
         <section className="mx-auto flex max-w-3xl flex-col items-center justify-center rounded-3xl border bg-muted/40 px-8 py-16 text-center">
           <p className="text-2xl font-semibold text-foreground">
-            등록된 문제가 아직 없습니다.
+            All caught up - no unsolved quizzes remain on the main list.
           </p>
 
           <p className="mt-3 text-sm text-muted-foreground">
-            API에서 문제를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.
+            Visit Daily Sets to review completed questions or mark new favorites for practice.
           </p>
         </section>
       ) : (
@@ -580,9 +586,9 @@ export default async function DailyPage() {
           {grouped.map((group) => {
             const Icon = group.meta.icon;
 
-            const visibleItems = group.items.slice(0, 4);
+            const visibleItems = group.items.slice(0, DISPLAY_LIMIT);
 
-            const showMore = group.items.length > 4;
+            const showMore = group.items.length > DISPLAY_LIMIT;
 
             return (
               <Card
@@ -609,7 +615,7 @@ export default async function DailyPage() {
                       variant="outline"
                       className="w-fit border-border/60 text-xs tracking-wide"
                     >
-                      총 {group.items.length}문제
+                      Remaining {group.totalCount}
                     </Badge>
 
                     {showMore && (

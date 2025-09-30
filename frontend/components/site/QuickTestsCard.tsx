@@ -1,21 +1,29 @@
-import Link from "next/link"
+﻿import Link from "next/link"
+import { cookies } from "next/headers"
 
-async function fetchJson<T>(path: string, revalidate = 30): Promise<T> {
+type FetchInit = RequestInit & { next?: { revalidate?: number } }
+
+type TestItem = { id: number | string; title: string; category?: string }
+type UserState = { solved: Array<number | string>; favorites: Array<number | string> }
+
+async function fetchJson<T>(path: string, init?: FetchInit, revalidate = 30): Promise<T> {
   const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
-  const res = await fetch(`${base}${path}`, { next: { revalidate } })
+  const mergedInit: FetchInit = { ...(init || {}) }
+  if (mergedInit.cache !== "no-store") {
+    mergedInit.next = { ...(mergedInit.next || {}), revalidate }
+  }
+  const res = await fetch(`${base}${path}`, mergedInit)
   if (!res.ok) throw new Error(`Failed to fetch ${path}`)
   return (await res.json()) as T
 }
 
-async function tryFetchJson<T>(path: string, fallback: T): Promise<T> {
+async function tryFetchJson<T>(path: string, fallback: T, init?: FetchInit): Promise<T> {
   try {
-    return await fetchJson<T>(path)
+    return await fetchJson<T>(path, init)
   } catch {
     return fallback
   }
 }
-
-type TestItem = { id: number | string; title: string; category?: string }
 
 function ProgressBar({ percent }: { percent: number }) {
   const pct = Math.max(0, Math.min(100, percent))
@@ -27,51 +35,82 @@ function ProgressBar({ percent }: { percent: number }) {
 }
 
 export default async function QuickTestsCard() {
-  const [linux, server, network] = await Promise.all([
-    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=linux", []),
-    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=server", []),
-    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=network", []),
-  ])
-  const progress = await tryFetchJson<Record<string, number | { percent: number }>>(
-    "/api/v1/daily/progress?by=category",
-    { linux: 0, server: 0, network: 0 }
-  )
+  const cookieStore = cookies()
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join("; ")
+  const authInit: FetchInit | undefined = cookieHeader
+    ? {
+        headers: {
+          Cookie: cookieHeader,
+        },
+        credentials: "include",
+        cache: "no-store",
+      }
+    : undefined
 
-  function getPercent(key: string): number {
-    const v = (progress as any)[key]
-    const raw = typeof v === "number" ? v : typeof v?.percent === "number" ? v.percent : 0
-    return raw <= 1 ? raw * 100 : raw
+  const userStatePromise = authInit
+    ? tryFetchJson<UserState>("/api/v1/daily/user-state", { solved: [], favorites: [] }, authInit)
+    : Promise.resolve<UserState>({ solved: [], favorites: [] })
+
+  const [linux, database, network, server, userState] = await Promise.all([
+    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=linux", []),
+    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=database", []),
+    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=network", []),
+    tryFetchJson<TestItem[]>("/api/v1/daily/tests?category=server", []),
+    userStatePromise,
+  ])
+
+  const solvedSet = new Set((userState?.solved || []).map((value) => String(value)))
+  const catalogue: Record<string, TestItem[]> = {
+    linux,
+    database,
+    network,
+    server,
   }
 
-  const rows = [
-    { key: "linux", title: linux[0]?.title || "Linux", href: linux[0] ? `/daily/${linux[0].id}` : "/daily" },
-    { key: "server", title: server[0]?.title || "Server", href: server[0] ? `/daily/${server[0].id}` : "/daily" },
-    { key: "network", title: network[0]?.title || "Network", href: network[0] ? `/daily/${network[0].id}` : "/daily" },
-  ]
+  const cards = [
+    { key: "linux", label: "Linux" },
+    { key: "database", label: "Database" },
+    { key: "network", label: "Network" },
+    { key: "server", label: "Server" },
+  ].map((cfg) => {
+    const tests = catalogue[cfg.key] || []
+    const total = tests.length
+    const solved = tests.reduce((acc, item) => (solvedSet.has(String(item.id)) ? acc + 1 : acc), 0)
+    const percent = total > 0 ? Math.min(100, Math.round((solved / total) * 100)) : 0
+    const first = tests[0]
+    return {
+      ...cfg,
+      total,
+      solved,
+      percent,
+      title: first?.title || cfg.label,
+      href: first ? `/daily/${first.id}` : "/daily",
+    }
+  })
 
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow-sm">
       <div className="p-4 border-b flex items-center justify-between">
         <div className="font-semibold">간단한 테스트</div>
         <Link href="/daily" className="text-sm text-muted-foreground hover:underline">
-          더보기
+          전체보기
         </Link>
       </div>
-      <div className="p-4 space-y-4">
-        {rows.map((r) => (
-          <div key={r.key} className="flex items-center gap-3">
-            <span className="text-xs px-2 py-0.5 rounded-full border bg-gray-100 text-gray-700 border-gray-200 capitalize min-w-16 text-center">
-              {r.key}
-            </span>
-            <div className="flex-1 min-w-0">
-              <Link href={r.href} className="block font-medium text-foreground hover:underline truncate">
-                {r.title}
-              </Link>
-              <div className="mt-2">
-                <ProgressBar percent={getPercent(r.key)} />
-              </div>
+      <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {cards.map((card) => (
+          <div key={card.key} className="rounded-lg border bg-background/40 p-3 flex flex-col gap-2">
+            <div className="flex items-center justify-between text-xs text-muted-foreground uppercase">
+              <span>{card.label}</span>
+              <span>{card.total ? `${card.solved}/${card.total}` : "0/0"}</span>
             </div>
-            <div className="text-xs text-muted-foreground w-10 text-right">{Math.round(getPercent(r.key))}%</div>
+            <Link href={card.href} className="font-medium text-foreground hover:underline line-clamp-2">
+              {card.title}
+            </Link>
+            <ProgressBar percent={card.percent} />
+            <div className="text-right text-xs text-muted-foreground">{card.percent}%</div>
           </div>
         ))}
       </div>

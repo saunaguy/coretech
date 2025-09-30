@@ -887,7 +887,7 @@ def daily_progress(by: str = "category", user_id: int = 0, db: Session = Depends
             latest[cat] = int(pct or 0)
     # normalize keys we care about
     result = {k: max(0, min(100, int(v))) for k, v in latest.items()}
-    for key in ["linux", "server", "network"]:
+    for key in ["linux", "database", "network", "server"]:
         result.setdefault(key, 0)
     return result
 
