@@ -345,7 +345,7 @@ export default function DailySetsPage() {
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
               <Button
                 variant="secondary"
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto text-xs sm:text-sm"
                 onClick={() => router.push("/daily")}
               >
                 데일리로 돌아가기
@@ -353,7 +353,7 @@ export default function DailySetsPage() {
               <Button
                 variant={favoritesOnly ? "secondary" : "outline"}
                 className={cn(
-                  "w-full sm:w-auto",
+                  "w-full sm:w-auto text-xs sm:text-sm",
                   favoritesOnly
                     ? "bg-white text-slate-950 shadow-sm hover:bg-white/90"
                     : "border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white",

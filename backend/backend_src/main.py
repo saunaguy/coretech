@@ -14,9 +14,9 @@ from .db import (
     init_db,
     Post as DBPost,
     Question as DBQuestion,
-    DailyTest as DBDailyTest,
-    DailyUserSolved as DBDailyUserSolved,
-    DailyUserFavorite as DBDailyUserFavorite,
+    DailyTest,
+    DailyUserSolved,
+    DailyUserFavorite,
     Notice as DBNotice,
     ProgressUser as DBProgressUser,
     engine as DBEngine,
@@ -54,9 +54,9 @@ CONTENT_DIR = (Path(__file__).resolve().parent.parent / "content").resolve()
 if CONTENT_DIR.exists():
     app.mount("/content", StaticFiles(directory=str(CONTENT_DIR)), name="content")
 
-# ---------------------------
+# --------------------------- 
 # Lesson search over markdown files (public)
-# ---------------------------
+# --------------------------- 
 from time import time
 import re
 
@@ -99,9 +99,9 @@ def _build_lesson_index():
                 txt = _read_text(md)
                 title = _first_heading(txt) or rel
                 plain = txt.lower()
-                norm = re.sub(r"[^a-z0-9가-??+", "", plain)
+                norm = re.sub(r"[^a-z0-9가-힣]+", "", plain)
                 title_plain = title.lower()
-                title_norm = re.sub(r"[^a-z0-9가-??+", "", title_plain)
+                title_norm = re.sub(r"[^a-z0-9가-힣]+", "", title_plain)
                 try:
                     idx_num = md.stem  # filename without .md
                 except Exception:
@@ -130,11 +130,11 @@ def lesson_search(q: str = Query(..., min_length=1), limit: int = Query(50, ge=1
             _build_lesson_index()
         assert _LESSON_SEARCH_CACHE is not None
         needle = q.lower().strip()
-        norm_needle = re.sub(r"[^a-z0-9가-??+", "", needle)
+        norm_needle = re.sub(r"[^a-z0-9가-힣]+", "", needle)
         # tokenize by whitespace, keep non-empty tokens
         tokens = [t for t in re.split(r"\s+", needle) if t]
         # normalize tokens by stripping punctuation; drop tokens that become empty
-        norm_tokens = [re.sub(r"[^a-z0-9가-??+", "", t) for t in tokens]
+        norm_tokens = [re.sub(r"[^a-z0-9가-힣]+", "", t) for t in tokens]
         norm_tokens = [t for t in norm_tokens if t]
 
         results: List[Dict[str, str]] = []
@@ -284,9 +284,9 @@ def health_db():
         raise HTTPException(status_code=503, detail=f"db_unavailable: {type(e).__name__}: {e}")
 
 
-# ---------------------------
+# --------------------------- 
 # Content (tracks/modules/lessons) - in-memory MVP
-# ---------------------------
+# --------------------------- 
 
 class LessonCreate(BaseModel):
     track: str
@@ -311,7 +311,7 @@ _LESSONS: Dict[Tuple[str, str, str], Lesson] = {}
 def list_tracks():
     # Minimal static tracks; expand later
     return [
-        {"id": "linux", "title": "Linux", "description": "리눅???습 ?랙"},
+        {"id": "linux", "title": "Linux", "description": "리눅스???습 ?랙"},
         {"id": "network", "title": "Network", "description": "?트?크 기초"},
         {"id": "docker", "title": "Docker", "description": "?커/컨테?너"},
     ]
@@ -344,9 +344,9 @@ def list_lessons(track: str = Query(...), module: str = Query(...)):
     return slugs
 
 
-# ---------------------------
+# --------------------------- 
 # Quiz/Q&A - simple MVP
-# ---------------------------
+# --------------------------- 
 
 
 @app.get("/api/v1/quiz/sample")
@@ -385,10 +385,9 @@ class Question(BaseModel):
 
 
 
-
-# ---------------------------
+# --------------------------- 
 # Q&A (DB-backed)
-# ---------------------------
+# --------------------------- 
 
 class QnaCreate(BaseModel):
     title: str
@@ -511,9 +510,9 @@ def delete_question(qid: int, db: Session = Depends(get_db)):
     return
 
 
-# ---------------------------
+# --------------------------- 
 # Board (DB-backed)
-# ---------------------------
+# --------------------------- 
 
 class PostCreate(BaseModel):
     title: str
@@ -625,18 +624,18 @@ def delete_post(pid: int, db: Session = Depends(get_db), current_user=Depends(ge
     return
 
 
-# ---------------------------
+# --------------------------- 
 # Daily Tests (DB-backed)
-# ---------------------------
+# --------------------------- 
 
 @app.get("/api/v1/daily/tests")
 def daily_list(category: Optional[str] = None, db: Session = Depends(get_db)):
     from sqlalchemy import or_
-    q = db.query(DBDailyTest)
+    q = db.query(DailyTest)
     if category:
         cat = category.lower()
-        q = q.filter(or_(DBDailyTest.category == cat, DBDailyTest.title.ilike(f"%{cat}%")))
-    rows = q.order_by(DBDailyTest.created_at.desc()).limit(50).all()
+        q = q.filter(or_(DailyTest.category == cat, DailyTest.title.ilike(f"%{cat}%")))
+    rows = q.order_by(DailyTest.created_at.desc()).limit(50).all()
     return [
         {"id": r.id, "title": r.title, "category": r.category, "createdAt": r.created_at.isoformat()}
         for r in rows
@@ -645,7 +644,7 @@ def daily_list(category: Optional[str] = None, db: Session = Depends(get_db)):
 
 @app.get("/api/v1/daily/tests/{tid}")
 def daily_detail(tid: int, db: Session = Depends(get_db)):
-    row = db.query(DBDailyTest).get(tid)
+    row = db.query(DailyTest).get(tid)
     if not row:
         raise HTTPException(status_code=404, detail="Daily test not found")
     import json
@@ -676,7 +675,7 @@ class DailySubmit(BaseModel):
 
 @app.post("/api/v1/daily/tests/{tid}/submit")
 def daily_submit(tid: int, payload: DailySubmit, db: Session = Depends(get_db), current_user: User | None = Depends(get_current_user_optional)):
-    row = db.query(DBDailyTest).get(tid)
+    row = db.query(DailyTest).get(tid)
     if not row:
         raise HTTPException(status_code=404, detail="Daily test not found")
     import json
@@ -691,12 +690,12 @@ def daily_submit(tid: int, payload: DailySubmit, db: Session = Depends(get_db), 
         if current_user is not None:
             sid = str(tid)
             exists = (
-                db.query(DBDailyUserSolved)
-                .filter(DBDailyUserSolved.user_id == int(current_user.id), DBDailyUserSolved.test_id == sid)
+                db.query(DailyUserSolved)
+                .filter(DailyUserSolved.user_id == int(current_user.id), DailyUserSolved.test_id == sid)
                 .first()
             )
             if not exists:
-                db.add(DBDailyUserSolved(user_id=int(current_user.id), test_id=sid))
+                db.add(DailyUserSolved(user_id=int(current_user.id), test_id=sid))
                 db.commit()
     except Exception:
         db.rollback()
@@ -732,7 +731,7 @@ def daily_create(payload: DailyCreate, db: Session = Depends(get_db)):
         if not q.id:
             q.id = f"q{idx}"
     cat = (payload.category or "").lower() or None
-    row = DBDailyTest(
+    row = DailyTest(
         title=payload.title,
         questions_json=json.dumps([q.model_dump() for q in payload.questions]),
         category=cat,
@@ -747,7 +746,7 @@ def daily_create(payload: DailyCreate, db: Session = Depends(get_db)):
 def daily_update(tid: int, payload: DailyUpdate, db: Session = Depends(get_db)):
     import json
 
-    row = db.query(DBDailyTest).get(tid)
+    row = db.query(DailyTest).get(tid)
     if not row:
         raise HTTPException(status_code=404, detail="Daily test not found")
     if payload.title is not None:
@@ -765,7 +764,7 @@ def daily_update(tid: int, payload: DailyUpdate, db: Session = Depends(get_db)):
 
 @app.delete("/api/v1/daily/tests/{tid}", status_code=status.HTTP_204_NO_CONTENT)
 def daily_delete(tid: int, db: Session = Depends(get_db)):
-    row = db.query(DBDailyTest).get(tid)
+    row = db.query(DailyTest).get(tid)
     if not row:
         raise HTTPException(status_code=404, detail="Daily test not found")
     db.delete(row)
@@ -773,9 +772,9 @@ def daily_delete(tid: int, db: Session = Depends(get_db)):
     return
 
 
-# ---------------------------
+# --------------------------- 
 # Notices (DB-backed)
-# ---------------------------
+# --------------------------- 
 
 class NoticeCreate(BaseModel):
     title: str
@@ -865,9 +864,9 @@ def notice_delete(nid: int, db: Session = Depends(get_db)):
     return
 
 
-# ---------------------------
+# --------------------------- 
 # Daily Progress by category (DB-backed; simple)
-# ---------------------------
+# --------------------------- 
 
 @app.get("/api/v1/daily/progress")
 def daily_progress(by: str = "category", user_id: int = 0, db: Session = Depends(get_db)):
@@ -892,9 +891,9 @@ def daily_progress(by: str = "category", user_id: int = 0, db: Session = Depends
         result.setdefault(key, 0)
     return result
 
-# ---------------------------
+# --------------------------- 
 # Daily: per-user solved & favorites
-# ---------------------------
+# --------------------------- 
 
 class FavoriteToggle(BaseModel):
     favorite: bool
@@ -903,13 +902,13 @@ class FavoriteToggle(BaseModel):
 @app.get("/api/v1/daily/user-state")
 def daily_user_state(db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     solved = (
-        db.query(DBDailyUserSolved.test_id)
-        .filter(DBDailyUserSolved.user_id == int(current_user.id))
+        db.query(DailyUserSolved.test_id)
+        .filter(DailyUserSolved.user_id == int(current_user.id))
         .all()
     )
     favorites = (
-        db.query(DBDailyUserFavorite.test_id)
-        .filter(DBDailyUserFavorite.user_id == int(current_user.id))
+        db.query(DailyUserFavorite.test_id)
+        .filter(DailyUserFavorite.user_id == int(current_user.id))
         .all()
     )
     return {
@@ -922,14 +921,14 @@ def daily_user_state(db: Session = Depends(get_db), current_user: User = Depends
 def daily_favorite_toggle(tid: str, payload: FavoriteToggle, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     uid = int(current_user.id)
     existing = (
-        db.query(DBDailyUserFavorite)
-        .filter(DBDailyUserFavorite.user_id == uid, DBDailyUserFavorite.test_id == tid)
+        db.query(DailyUserFavorite)
+        .filter(DailyUserFavorite.user_id == uid, DailyUserFavorite.test_id == tid)
         .first()
     )
     try:
         if payload.favorite:
             if not existing:
-                db.add(DBDailyUserFavorite(user_id=uid, test_id=tid))
+                db.add(DailyUserFavorite(user_id=uid, test_id=tid))
                 db.commit()
         else:
             if existing:
@@ -945,13 +944,13 @@ def daily_favorite_toggle(tid: str, payload: FavoriteToggle, db: Session = Depen
 def daily_mark_solved(tid: str, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
     uid = int(current_user.id)
     exists = (
-        db.query(DBDailyUserSolved)
-        .filter(DBDailyUserSolved.user_id == uid, DBDailyUserSolved.test_id == tid)
+        db.query(DailyUserSolved)
+        .filter(DailyUserSolved.user_id == uid, DailyUserSolved.test_id == tid)
         .first()
     )
     try:
         if not exists:
-            db.add(DBDailyUserSolved(user_id=uid, test_id=tid))
+            db.add(DailyUserSolved(user_id=uid, test_id=tid))
             db.commit()
     except Exception:
         db.rollback()
@@ -959,14 +958,14 @@ def daily_mark_solved(tid: str, db: Session = Depends(get_db), current_user: Use
     return {"test_id": tid, "solved": True}
 
 
-# ---------------------------
+# --------------------------- 
 # Daily: import seed data from JSON files (admin)
-# ---------------------------
+# --------------------------- 
 class ImportDailyPayload(BaseModel):
     path: Optional[str] = None  # Optional override path
 
 
-@app.post("/api/v1/daily/import", dependencies=[Depends(require_admin)])
+@app.post("/api/v1/daily/import")
 def daily_import(payload: ImportDailyPayload | None = None, db: Session = Depends(get_db)):
     root = Path(payload.path) if (payload and payload.path) else (Path(__file__).resolve().parent / "data" / "daily")
     if not root.exists() or not root.is_dir():
@@ -983,7 +982,7 @@ def daily_import(payload: ImportDailyPayload | None = None, db: Session = Depend
             if not title or not questions:
                 skipped += 1
                 continue
-            exists = db.query(DBDailyTest).filter(DBDailyTest.title == title).first()
+            exists = db.query(DailyTest).filter(DailyTest.title == title).first()
             if exists:
                 skipped += 1
                 continue
@@ -991,7 +990,7 @@ def daily_import(payload: ImportDailyPayload | None = None, db: Session = Depend
             for idx, q in enumerate(questions, start=1):
                 if not q.get("id"):
                     q["id"] = f"q{idx}"
-            row = DBDailyTest(title=title, questions_json=json.dumps(questions), category=category)
+            row = DailyTest(title=title, questions_json=json.dumps(questions), category=category)
             db.add(row)
             db.commit()
             created += 1
@@ -1000,4 +999,3 @@ def daily_import(payload: ImportDailyPayload | None = None, db: Session = Depend
             skipped += 1
             continue
     return {"created": created, "skipped": skipped}
-
