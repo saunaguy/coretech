@@ -443,7 +443,7 @@ export default async function DailyPage() {
 
   const fallback = fallbackTestsByCategory();
 
-  const DISPLAY_LIMIT = 50;
+  const DISPLAY_LIMIT = 4;
 
   const grouped = categories
 
