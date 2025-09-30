@@ -6,6 +6,29 @@ type FetchInit = RequestInit & { next?: { revalidate?: number } }
 type TestItem = { id: number | string; title: string; category?: string }
 type UserState = { solved: Array<number | string>; favorites: Array<number | string> }
 
+function extractOrder(title: string | undefined, fallback: number): number {
+  if (!title) return fallback
+  const match = title.match(/(\d+)\s*$/)
+  if (!match) return fallback
+  const parsed = Number(match[1])
+  return Number.isFinite(parsed) ? parsed : fallback
+}
+
+function formatTitle(rawTitle: string | undefined, fallbackLabel: string, order: number): string {
+  const cleaned = (rawTitle || "").replace(/\?+/g, "").trim()
+  const indexLabel = String(order).padStart(2, "0")
+  if (!cleaned) {
+    return `${fallbackLabel} 테스트 ${indexLabel}`
+  }
+  if (/\d+$/.test(cleaned)) {
+    return cleaned.replace(/\d+$/, indexLabel)
+  }
+  if (cleaned.endsWith("테스트")) {
+    return `${cleaned} ${indexLabel}`
+  }
+  return `${cleaned} 테스트 ${indexLabel}`
+}
+
 async function fetchJson<T>(path: string, init?: FetchInit, revalidate = 30): Promise<T> {
   const base = process.env.INTERNAL_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000"
   const mergedInit: FetchInit = { ...(init || {}) }
@@ -76,18 +99,29 @@ export default async function QuickTestsCard() {
     { key: "network", label: "Network" },
     { key: "server", label: "Server" },
   ].map((cfg) => {
-    const tests = catalogue[cfg.key] || []
-    const total = tests.length
-    const solved = tests.reduce((acc, item) => (solvedSet.has(String(item.id)) ? acc + 1 : acc), 0)
+    const tests = (catalogue[cfg.key] || []).map((item, idx) => ({
+      ...item,
+      order: extractOrder(item.title, idx + 1),
+    }))
+    const sorted = [...tests].sort((a, b) => a.order - b.order)
+    const total = sorted.length
+    let solved = 0
+    for (const item of sorted) {
+      if (solvedSet.has(String(item.id))) solved += 1
+    }
     const percent = total > 0 ? Math.min(100, Math.round((solved / total) * 100)) : 0
-    const first = tests[0]
+    const next = sorted.find((item) => !solvedSet.has(String(item.id))) || sorted[0]
+    const href = next ? `/daily/${next.id}` : "/daily"
+    const displayOrder = next ? next.order : 0
+    const title = next ? formatTitle(next.title, cfg.label, displayOrder || 1) : cfg.label
     return {
       ...cfg,
       total,
       solved,
       percent,
-      title: first?.title || cfg.label,
-      href: first ? `/daily/${first.id}` : "/daily",
+      title,
+      href,
+      displayOrder,
     }
   })
 
@@ -110,7 +144,10 @@ export default async function QuickTestsCard() {
               {card.title}
             </Link>
             <ProgressBar percent={card.percent} />
-            <div className="text-right text-xs text-muted-foreground">{card.percent}%</div>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>{card.displayOrder ? `#${String(card.displayOrder).padStart(2, "0")}` : ""}</span>
+              <span>{card.percent}%</span>
+            </div>
           </div>
         ))}
       </div>
