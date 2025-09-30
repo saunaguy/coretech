@@ -32,6 +32,7 @@ export default function MobileSidebar() {
               </>
             ) : (
               <>
+                <Link href="/profile" className="text-lg font-medium hover:text-primary transition-colors" onClick={closeMobileSidebar}>프로필</Link>
                 {user?.role === 'admin' && (
                   <Link href="/admin" className="text-lg font-medium hover:text-primary transition-colors font-semibold text-yellow-500" onClick={closeMobileSidebar}>관리자</Link>
                 )}
