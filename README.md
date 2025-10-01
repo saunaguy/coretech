@@ -19,7 +19,7 @@ Linux · Server · Network 학습 플랫폼 🚀
 
 ## 📂 문서
 - [부하 테스트 보고서 (2025-10-01)](docs/test-report(10.01).md)
-- [패치 노트 (Patch Notes)](docs/patchnote.md)
+- [개발 일지 (Dev logs)](docs/developlog.md)
 
 
 ---
