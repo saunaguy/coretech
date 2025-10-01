@@ -11,6 +11,17 @@
 - ⭐ **학습 편의 기능**: 즐겨찾기, 오답노트, 난이도/정답률 기반 추천 문제, 강의-퀴즈-커뮤니티 연결, 다크 모드·반응형 UI  
 - 🐳 **개발 및 운영 환경**: FastAPI + Next.js 풀스택, Docker Compose, CI/CD, pytest 기반 개발/운영 환경 분리  
 
+
+
+# CoreTech
+
+Linux · Server · Network 학습 플랫폼 🚀
+
+## 📂 문서
+- [부하 테스트 보고서 (2025-10-01)](docs/test-report(10.01).md)
+
+
+
 ---
 
 ## 📂 저장소 구조
