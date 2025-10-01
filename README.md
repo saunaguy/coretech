@@ -45,15 +45,16 @@ npm & pip
 
 (선택) Docker Desktop
 
+🛠️ 기술 스택
 
-## 📂 Repository 구조
-- `ai-prompt-lab/` : Next.js 프론트엔드(디자인/컴포넌트/페이지)
-- `src/backend/` : FastAPI 백엔드
-- `tests/` : `src/` 미러 구조의 테스트 폴더
-- `docs/design.md` : 설계/결정 기록
-- `logs/` : 날짜·에이전트별 대화/결정 로그(JSONL)
-- `scripts/` : 로그 append/집계 유틸리티
-- `.github/` : 이슈/PR 템플릿 및 CI
+- 🎨 프론트엔드: Next.js 15, React 18, Tailwind CSS, shadcn/ui, Playwright
+
+- ⚙️ 백엔드: FastAPI, SQLAlchemy, Pydantic, JWT 인증, SQLite / PostgreSQL
+
+-🌐 리버스 프록시: Nginx (HTTPS 처리, 로드밸런싱, 정적 자원 서빙)
+
+-🧰 개발 도구: npm, pip, Docker Compose, pytest, Ruff / Black, eslint
+
 
 
 ## 📑 프론트엔드 라우트
@@ -68,24 +69,9 @@ npm & pip
 /admin/*	관리자 콘솔 (권한 필요)
 /login, /register, /profile	인증/회원 관련 페이지
 
-## 📡 API 참고
-메소드 & 경로	설명
-GET /health	서버 연결 체크
-POST /api/v1/auth/register	회원가입
-POST /api/v1/auth/login	로그인 (JWT + 쿠키 발급)
-POST /api/v1/auth/logout	로그아웃 (쿠키 제거)
-GET /api/v1/daily/tests	퀴즈 목록 조회 (카테고리 필터 지원)
-GET /api/v1/daily/tests/{id}	퀴즈 상세 조회
-POST /api/v1/daily/tests/{id}/submit	답안 제출 및 정답 체크
-GET /api/v1/daily/user-state	푼 문제 / 즐겨찾기 ID 조회
-GET /api/v1/daily/progress?by=category	카테고리별 진행률
-GET /api/v1/notice	공지사항 목록
-GET /api/v1/board/posts	게시글 목록
-GET /api/v1/qna/questions	Q&A 피드
-
 
 <details>
-<summary>📡 Full API Catalog (펼치기/접기)</summary>
+<summary> ## 📡 Full API Catalog (펼치기/접기)</summary>
 
 ### 🔑 Authentication
 - `POST /api/v1/auth/register`
