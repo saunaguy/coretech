@@ -52,14 +52,14 @@ services:
       - backend
 
   nginx:
-    image: nginx:stable-alpine
+    image: nginx:latest
     container_name: coretech-nginx
     ports:
       - "80:80"
       - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./nginx/certs:/etc/nginx/certs
     depends_on:
       - frontend
 

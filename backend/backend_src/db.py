@@ -26,7 +26,7 @@ DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./coretech.db")
 
 # Use SQLite-specific connect_args only for sqlite
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
+engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_size=50, max_overflow=100)
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 
 

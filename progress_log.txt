@@ -1,0 +1,12 @@
+[2025-10-01 11:45] - Action: Patched backend/backend_src/db.py to increase DB connection pool size.\n- Details: Set pool_size=50, max_overflow=100 in create_engine to handle higher load.
+\n[2025-10-01 11:48] - Action: Rebuilding and restarting the backend container to apply code changes.
+\n[2025-10-01 11:50] - Action: Re-running the high-concurrency load test (4000 requests, 400 concurrent users) to verify the fix.
+\n[2025-10-01 11:55] - Action: Second load test failed, but showed improvement.\n- Details: Handled 3796 requests (up from 1912) before crashing. The connection pool fix helped but another bottleneck exists.
+\n[2025-10-01 12:05] - Action: Increased Uvicorn worker timeout.\n- Details: Modified Dockerfile.backend to set --timeout-keep-alive to 65 seconds to prevent premature connection drops under load.
+\n[2025-10-01 12:08] - Action: Rebuilding backend container with increased Uvicorn timeout for final verification.
+\n[2025-10-01 12:10] - Action: Executing final verification load test (4000 requests, 400 concurrent users).
+\n[2025-10-01 12:15] - Action: Starting detailed analysis. Running load test while monitoring system resources with vmstat.
+\n[2025-10-01 12:25] - Action: Pivoting to 'sar' for monitoring due to tool limitations with 'vmstat'.\n- Details: Will capture the first 25 seconds of system stats during the load test.
+\n[2025-10-01 12:28] - Action: Installing 'sysstat' package to use 'sar' for system monitoring.
+\n[2025-10-01 12:30] - Action: Running final test. 'sar' will monitor resources while 'ab' runs the load test.
+\n[2025-10-01 12:35] - Action: Final analysis complete.\n- Details: The root cause was identified as a software bottleneck. The backend Uvicorn server was running with a single worker process, which was unable to utilize the server's 8 CPU cores. This caused a CPU bottleneck within the application, leading to timeouts under high load, even though the host machine's CPU was mostly idle.
