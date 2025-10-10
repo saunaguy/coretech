@@ -39,7 +39,7 @@ export default function BoardActions({ postId, author }: BoardActionsProps) {
   return (
     <>
       <Button asChild size="sm" variant="outline">
-        <Link href={`/board/${postId}/edit`} data-testid="board-edit-link">Edit</Link>
+        <Link href={`/board/${postId}/edit`} data-testid="board-edit-link">수정</Link>
       </Button>
       <DeleteButton id={postId} />
     </>

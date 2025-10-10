@@ -76,7 +76,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
     } catch (err: any) {
       console.error("Failed to fetch comments:", err)
       const message = typeof err?.message === "string" ? err.message : null
-      setError(maskErrorMessage(message, "Failed to load comments."))
+      setError(maskErrorMessage(message, "댓글을 불러오지 못했습니다."))
     } finally {
       setLoading(false)
     }
@@ -115,14 +115,14 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
     } catch (err: any) {
       console.error("Failed to submit comment:", err)
       const message = typeof err?.message === "string" ? err.message : null
-      setError(maskErrorMessage(message, "Failed to submit comment."))
+      setError(maskErrorMessage(message, "댓글을 등록하지 못했습니다."))
     } finally {
       setLoading(false)
     }
   }
 
   const handleDeleteComment = async (commentId: number) => {
-    if (!confirm("Are you sure you want to delete this comment?")) {
+    if (!confirm("정말 이 댓글을 삭제하시겠어요?")) {
       return
     }
     setPendingDeleteId(commentId)
@@ -135,7 +135,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
     } catch (err: any) {
       console.error("Failed to delete comment:", err)
       const message = typeof err?.message === "string" ? err.message : null
-      setError(maskErrorMessage(message, "Failed to delete comment."))
+      setError(maskErrorMessage(message, "댓글을 삭제하지 못했습니다."))
     } finally {
       setPendingDeleteId(null)
     }
@@ -148,13 +148,13 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
   return (
     <Card className="mt-8">
       <CardHeader>
-        <CardTitle>Comments</CardTitle>
+        <CardTitle>댓글</CardTitle>
       </CardHeader>
       <CardContent>
-        {loading && <p>Loading comments...</p>}
+        {loading && <p>댓글을 불러오는 중입니다...</p>}
         {error && <p className="text-red-500">{error}</p>}
         <div className="space-y-4">
-          {comments.length === 0 && !loading && !error && <p>No comments yet.</p>}
+          {comments.length === 0 && !loading && !error && <p>아직 댓글이 없습니다.</p>}
           {comments.map((comment) => {
             const canDelete = canDeleteComment(comment)
             const isDeleting = pendingDeleteId === comment.id
@@ -178,12 +178,12 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
                       {comment.content}
                     </ReactMarkdown>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Posted by {comment.author?.username || "Unknown user"}
+                      작성자: {comment.author?.username || "알 수 없는 사용자"}
                       <span className="ml-2">
                         {comment.created_at &&
                         !Number.isNaN(new Date(comment.created_at).getTime())
                           ? format(new Date(comment.created_at), "yyyy-MM-dd HH:mm")
-                          : "Invalid date"}
+                          : "날짜 정보 없음"}
                       </span>
                     </p>
                   </div>
@@ -195,7 +195,7 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
                       disabled={loading || isDeleting}
                       data-testid={`comment-delete-${comment.id}`}
                     >
-                      Delete
+                      삭제
                     </Button>
                   )}
                 </div>
@@ -205,13 +205,13 @@ export default function CommentSection({ parentId, parentType }: CommentSectionP
         </div>
         <div className="mt-6">
           <Textarea
-            placeholder="Write a comment..."
+            placeholder="댓글을 작성하세요..."
             value={newComment}
             onChange={(event) => setNewComment(event.target.value)}
             rows={3}
           />
           <Button onClick={handleSubmitComment} disabled={loading} className="mt-2">
-            Post comment
+            댓글 작성
           </Button>
         </div>
       </CardContent>
