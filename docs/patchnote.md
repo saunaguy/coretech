@@ -5,6 +5,11 @@
 
 ---
 
+<details>
+  <summary><strong>v1.1 — 2025-10-10 · QnA 라우트 · Board 버그 · UI 통일 · 로그아웃 24h</strong></summary>
+
+<br/>
+
 ## v1.1 — 2025-10-10
 ### ✅ 패치 내역 (ver 1.1)
 - **QnA 라우트 통합:** `qnatest` → `qna` (내비게이션/링크/SSR 모두 정합성 확보)
@@ -21,8 +26,9 @@
 - **세부 화면 레이아웃 통일:** `board / qna / notice` 상세 화면 폭 **`max-w-4xl`**로 통일
 
 ### 🔐 인증/세션
-- **자동 로그아웃:** 기본 **24시간(86,400초)**  
-  - 환경변수: `INACTIVITY_EXPIRE_SECONDS=86400`  
+- **자동 로그아웃:** 기본 **24시간(86,400초)**
+  - 환경변수: `INACTIVITY_EXPIRE_SECONDS=86400`
   - Docker/환경 설정 반영
 
+</details>
 ---
