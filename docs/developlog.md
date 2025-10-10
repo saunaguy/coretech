@@ -1,4 +1,4 @@
-# 📜 CoreTech Patch Notes
+# 📜 CoreTech Dev note
 
 > 이 문서는 CoreTech 프로젝트의 주요 개발 내역과 개선 사항을 기록한 문서입니다.  
 > 커밋 로그와 회의 기록, 테스트 결과를 기반으로 정리되었습니다.  
