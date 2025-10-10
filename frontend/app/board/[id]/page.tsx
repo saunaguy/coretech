@@ -75,7 +75,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
 
   if (!post) {
     return (
-      <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="text-muted-foreground">게시글을 찾을 수 없습니다. ID: {id}</div>
         {process.env.NODE_ENV !== 'production' && (
           <div className="text-sm text-red-500 mt-2">
@@ -94,7 +94,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
   // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인 (백엔드 응답은 author(username) 제공)
 
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between gap-3">

@@ -39,7 +39,7 @@ export const dynamic = 'force-dynamic'
 export default async function NoticeDetailPage({ params }: { params: { id: string } }) {
   const data = await fetchJson<NoticeDetail>(`/api/v1/notice/${params.id}`)
   return (
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
+    <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-4">
       <div className="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
         <div className="p-4 border-b flex items-start justify-between gap-3">
           <h1 className="text-xl font-semibold">{data.title}</h1>
