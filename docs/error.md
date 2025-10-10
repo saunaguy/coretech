@@ -1,26 +1,8 @@
-﻿# Error Log Notes
+﻿# 작업 메모 (2025-10-10)
 
-## 2025-10-10 Board Comment / Delete Fixes
-
-### Symptoms
-- Console showed `Failed to fetch comments: Error: API call failed with non-JSON response` (HTTP 500).
-- Deleting a board post returned 500 with backend log `AttributeError: 'Post' object has no attribute 'author_id'`.
-
-### Root Causes
-1. Comment responses omitted the `is_accepted` field, causing FastAPI response validation to raise and serve an HTML error page instead of JSON.
-2. Post deletion authorization checked a non-existent `author_id` column rather than `user_id`.
-
-### Fixes Applied
-- Updated `backend/backend_src/main.py` to fully populate post details, include comment author data, and validate delete permissions against `user_id`.
-- Added `is_accepted` to comment responses in `backend/backend_src/routers/likes_and_comments.py` so they match the schema.
-- Cleaned up frontend helpers (`CommentSection`, `BoardActions`, `DeleteButton`) so controls respect auth state and use consistent English copy.
-
-### Verification Steps
-1. `docker compose down && docker compose up -d --build db backend frontend`
-2. Visit `http://localhost:3000/board/{POST_ID}` and confirm:
-   - Comments load, submit, and delete without console errors.
-   - Deleting a post returns HTTP 204 and redirects back to the board list.
-
-### Notes
-- `API_BASE_URL` remains `http://localhost:8000`; when deploying to an IP/domain, add it to `CORS_ORIGINS`.
-- `INACTIVITY_EXPIRE_SECONDS` is fixed at 24 hours (86,400 seconds).
+- 댓글 API가 HTML을 반환하던 문제 해결: 응답 스키마에 `author`, `is_accepted` 추가.
+- 게시글 삭제 권한 검증 시 존재하지 않는 `author_id` 대신 `user_id` 사용.
+- 댓글/게시글 UI 한국어 문구 복원, 삭제 확인/경고 메시지 정비.
+- 게시판·공지·Q&A 상세 화면 폭을 `max-w-4xl`로 통일해 레이아웃 정렬.
+- 자동 로그아웃 기본 시간을 24시간(86,400초)으로 고정하고 docker/env 설정 반영.
+- Patch Notes는 `docs/patchnote.md`에서 관리, README에 링크 추가 예정.
