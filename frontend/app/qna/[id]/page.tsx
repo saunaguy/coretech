@@ -121,7 +121,7 @@ export default function QuestionDetailPage() {
       await authenticatedFetch(`/api/v1/qna/questions/${id}`, {
         method: "DELETE",
       })
-      router.push("/qnatest")
+      router.push("/qna")
     } catch (err) {
       setError("질문 삭제에 실패했습니다.")
       console.error(err)

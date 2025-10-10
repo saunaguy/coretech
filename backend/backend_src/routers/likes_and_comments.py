@@ -71,6 +71,7 @@ def get_comments(parent_type: str, parent_id: int, db: Session = Depends(get_db)
             "created_at": comment.created_at,
             "parent_id": comment.parent_id,
             "parent_type": comment.parent_type,
+            "is_accepted": comment.is_accepted,
             "author": {
                 "id": user.id,
                 "username": user.username
@@ -147,6 +148,7 @@ def update_comment(comment_id: int, payload: schemas.CommentUpdate, db: Session 
         "created_at": comment.created_at,
         "parent_id": comment.parent_id,
         "parent_type": comment.parent_type,
+        "is_accepted": comment.is_accepted,
         "author": {
             "id": author_info.id,
             "username": author_info.username

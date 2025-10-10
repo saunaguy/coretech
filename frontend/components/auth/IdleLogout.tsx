@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useAuth } from '@/components/auth/AuthProvider'
 
-const INACTIVITY_DEFAULT = 60
+const INACTIVITY_DEFAULT = 86400
 
 export default function IdleLogout() {
   const { isAuthenticated, logout } = useAuth()

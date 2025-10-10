@@ -1,14 +1,13 @@
 import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import DeleteButton from "@/components/board/DeleteButton"
+import BoardActions from "@/components/board/BoardActions"
 import CommentSection from "@/components/CommentSection" // CommentSection import
 import LikeButton from "@/components/LikeButton"         // LikeButton import
-import { authenticatedFetch, getUser } from '@/lib/auth' // getUser 함수 import
+import { authenticatedFetch } from '@/lib/auth'
 import { cookies, headers } from 'next/headers'
 import { format } from 'date-fns';
 
-// jwtDecode import not needed; using getUser()
 import ViewTracker from '@/components/ViewTracker';
 
 export const dynamic = "force-dynamic"
@@ -27,6 +26,27 @@ async function getPost(id: string, token: string | null, retries = 3, delay = 10
       });
 
       console.log(`[getPost] Attempt ${i + 1}: Fetched post data:`, data);
+      if (data && !data.author) {
+        try {
+          const list = await authenticatedFetch(`${base}/api/v1/board/posts`, token, {
+            cache: "no-store",
+          });
+          if (Array.isArray(list)) {
+            const matched = list.find((item: any) => {
+              try {
+                return Number(item?.id) === Number(data.id);
+              } catch {
+                return false;
+              }
+            });
+            if (matched?.author) {
+              data.author = matched.author;
+            }
+          }
+        } catch (listError) {
+          console.error(`[getPost] Failed to backfill author for post ${id}:`, listError);
+        }
+      }
       return data;
 
     } catch (error: any) {
@@ -53,18 +73,6 @@ export default async function BoardDetailPage({ params }: { params: { id: string
 
   const post = await getPost(id, token)
 
-  // 현재 로그인한 사용자 정보 가져오기 (서버 컴포넌트에서 쿠키를 통해 토큰 확인)
-  let currentUsername: string | null = null;
-  if (token) {
-    try {
-      const user = getUser(token); // Use getUser to decode JWT
-      // Backend token contains { id, username, sub(email) }
-      currentUsername = (user as any)?.username ?? null;
-    } catch (error) {
-      console.error("Error decoding token in server component:", error);
-    }
-  }
-
   if (!post) {
     return (
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">
@@ -84,7 +92,6 @@ export default async function BoardDetailPage({ params }: { params: { id: string
   }
 
   // 게시글 작성자와 현재 로그인한 사용자가 동일한지 확인 (백엔드 응답은 author(username) 제공)
-  const isAuthor = !!currentUsername && post.author?.username === currentUsername;
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:lg-8 py-8">
@@ -93,14 +100,7 @@ export default async function BoardDetailPage({ params }: { params: { id: string
           <div className="flex items-center justify-between gap-3">
             <CardTitle className="text-xl">{post.title}</CardTitle>
             <div className="flex gap-2">
-              {isAuthor && (
-                <>
-                  <Button asChild size="sm" variant="outline">
-                    <Link href={`/board/${id}/edit`}>수정</Link>
-                  </Button>
-                  <DeleteButton id={id} />
-                </>
-              )}
+              <BoardActions postId={id} author={post.author} />
               {/* LikeButton 추가 */}
               <LikeButton
                 parentId={post.id}

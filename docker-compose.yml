@@ -23,7 +23,7 @@ services:
     container_name: coretech-backend
     environment:
       SECRET_KEY: my-fixed-secret-key-for-dev
-      INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-1800}
+      INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-86400}
       COOKIE_MAX_AGE_SECONDS: ${COOKIE_MAX_AGE_SECONDS:-86400}
       COOKIE_SECURE: ${COOKIE_SECURE:-false}
       COOKIE_SAMESITE: ${COOKIE_SAMESITE:-lax}
@@ -42,7 +42,7 @@ services:
       dockerfile: frontend/Dockerfile.frontend
       args:
         NEXT_PUBLIC_API_BASE_URL: ${API_BASE_URL:-http://localhost:8000}
-        INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-60}
+        INACTIVITY_EXPIRE_SECONDS: ${INACTIVITY_EXPIRE_SECONDS:-86400}
     container_name: coretech-frontend
     environment:
       NODE_ENV: development

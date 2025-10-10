@@ -563,42 +563,65 @@ def list_posts(sort: str = "latest", db: Session = Depends(get_db)):
 
 @app.get("/api/v1/board/posts/{pid}")
 def get_post(pid: int, db: Session = Depends(get_db)):
-    p = db.query(DBPost).get(pid)
-    if not p:
+    post = (
+        db.query(DBPost)
+        .options(joinedload(DBPost.author))
+        .filter(DBPost.id == pid)
+        .first()
+    )
+    if not post:
         raise HTTPException(status_code=404, detail="Post not found")
 
-    comments = db.query(DBComment).filter(DBComment.parent_id == pid, DBComment.parent_type == 'post').all()
-    likes = db.query(DBLike).filter(DBLike.parent_id == pid, DBLike.parent_type == 'post').count()
+    comments = (
+        db.query(DBComment)
+        .options(joinedload(DBComment.user))
+        .filter(DBComment.parent_id == pid, DBComment.parent_type == "post")
+        .order_by(DBComment.created_at.asc())
+        .all()
+    )
+    likes = (
+        db.query(DBLike)
+        .filter(DBLike.parent_id == pid, DBLike.parent_type == "post")
+        .count()
+    )
 
-    # Resolve author username if available
-    author_name = None
-    try:
-        from .db import User
-        u = db.query(User).get(p.author_id) if p.author_id is not None else None
-        author_name = u.username if u else None
-    except Exception:
-        author_name = None
+    author_payload = None
+    if post.author:
+        author_payload = {"id": post.author.id, "username": post.author.username}
+
     comments_data = [
         {
-            "id": c.id,
-            "content": getattr(c, "content", None),
-            "user_id": getattr(c, "user_id", None),
-            "created_at": c.created_at.isoformat() if hasattr(c.created_at, "isoformat") else str(c.created_at),
-            "parent_id": getattr(c, "parent_id", None),
-            "parent_type": getattr(c, "parent_type", None),
+            "id": comment.id,
+            "content": comment.content,
+            "user_id": comment.user_id,
+            "created_at": comment.created_at.isoformat()
+            if hasattr(comment.created_at, "isoformat")
+            else str(comment.created_at),
+            "parent_id": comment.parent_id,
+            "parent_type": comment.parent_type,
+            "is_accepted": bool(getattr(comment, "is_accepted", False)),
+            "author": {
+                "id": comment.user.id,
+                "username": comment.user.username,
+            }
+            if comment.user
+            else None,
         }
-        for c in comments
+        for comment in comments
     ]
     return {
-        "id": p.id,
-        "title": p.title,
-        "body": p.body,
-        "views": p.views, # ?데?트??조회??반환
+        "id": post.id,
+        "title": post.title,
+        "body": post.body,
+        "views": post.views or 0,
         "likes": likes,
-        "createdAt": p.created_at.isoformat(),
-        "author": author_name,
+        "createdAt": post.created_at.isoformat()
+        if hasattr(post.created_at, "isoformat")
+        else str(post.created_at),
+        "author": author_payload,
         "comments": comments_data,
     }
+
 
 
 @app.post("/api/v1/board/posts/{pid}/increment_view")
@@ -617,7 +640,8 @@ def delete_post(pid: int, db: Session = Depends(get_db), current_user=Depends(ge
     p = db.query(DBPost).get(pid)
     if not p:
         raise HTTPException(status_code=404, detail="Post not found")
-    if p.author_id is not None and int(p.author_id) != int(getattr(current_user, "id", -1)):
+    owner_id = getattr(p, "user_id", None)
+    if owner_id is not None and int(owner_id) != int(getattr(current_user, "id", -1)):
         raise HTTPException(status_code=403, detail="Not allowed to delete this post")
     db.delete(p)
     db.commit()

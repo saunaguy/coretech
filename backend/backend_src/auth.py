@@ -16,7 +16,7 @@ from .db import SessionLocal, User, init_db
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-secret")
 ALGORITHM = "HS256"
 # Idle timeout for JWT (sliding session)
-INACTIVITY_EXPIRE_SECONDS = int(os.getenv("INACTIVITY_EXPIRE_SECONDS", "1800"))  # 30 minutes by default
+INACTIVITY_EXPIRE_SECONDS = int(os.getenv("INACTIVITY_EXPIRE_SECONDS", "86400"))  # 24 hours by default
 # Cookie settings
 COOKIE_MAX_AGE_SECONDS = int(os.getenv("COOKIE_MAX_AGE_SECONDS", "86400"))  # 1 day default
 COOKIE_SECURE = os.getenv("COOKIE_SECURE", "false").lower() == "true"
